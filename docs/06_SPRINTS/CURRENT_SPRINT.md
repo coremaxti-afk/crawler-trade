@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Construir a base historica SofaScore e preparar/importar os dados core para PostgreSQL.
+Construir a base historica SofaScore, importar os dados core para PostgreSQL e validar a qualidade inicial da base importada.
 
 ---
 
@@ -32,30 +32,53 @@ Construir a base historica SofaScore e preparar/importar os dados core para Post
 - [x] Popular PostgreSQL com dados SofaScore core
 - [x] Validar idempotencia do importer
 - [x] Validar integridade basica entre matches_master, match_statistics e match_incidents
+- [x] Concluir e validar a frente Importacao PostgreSQL SofaScore EPL pela area Data Engineer / Database
 
 ---
 
 ## Atualizacao Operacional Mais Recente
 
-Resultado observado:
+A etapa de importacao SofaScore EPL para PostgreSQL foi concluida e validada pela area Data Engineer / Database.
 
-- Coleta executada atraves de conexao 5G sem novo HTTP 403 em mais de 100 partidas.
-- Evidencia forte de que o bloqueio anterior estava associado a IP/conexao e volume de requests, nao a falha primaria do coletor.
-- Para reduzir volume, foi criado o coletor v3 em perfil core.
+Resumo operacional:
 
-Perfis de coleta:
+- `sofascore_importer.py` implementado e executado.
+- Importacao idempotente validada.
+- `docs/08_DATABASE/IMPORT_STATUS.md` atualizado pela area Data Engineer / Database.
 
-- Full: 5 JSONs por partida.
-  - `event.json`
-  - `statistics.json`
-  - `incidents.json`
-  - `lineups.json`
-  - `h2h.json`
+Cobertura EPL:
 
-- Core: 3 JSONs por partida.
-  - `event.json`
-  - `statistics.json`
-  - `incidents.json`
+- Inventory: 381 partidas.
+- Pastas locais: 381.
+- Importaveis: 380.
+- Partida descartada conhecida: `12436452` Liverpool.
+
+Banco populado:
+
+- `matches_master`: 380.
+- `match_statistics`: 380.
+- `match_incidents`: 7647.
+
+Validacoes de integridade:
+
+- Duplicatas em `matches_master`: 0.
+- Duplicatas em `match_statistics`: 0.
+- Orfaos em `match_statistics`: 0.
+- Orfaos em `match_incidents`: 0.
+- `12436452`: 0 registros nas tres tabelas.
+
+Rerun do importer:
+
+- processed: 380.
+- inserted: 0.
+- updated: 380.
+- failed: 0.
+- known_skipped: 1.
+
+Resultado:
+
+- As contagens permaneceram estaveis apos o rerun.
+- Importacao considerada idempotente e aprovada.
 
 ---
 
@@ -103,49 +126,59 @@ Fora do escopo:
 - dataset analitico
 - modelagem
 
-Resultado da primeira importacao:
+Status:
 
-- processed: 380
-- inserted: 380
-- updated: 0
-- failed: 0
-- known_skipped: 1
-
-Resultado da segunda execucao:
-
-- processed: 380
-- inserted: 0
-- updated: 380
-- failed: 0
-- known_skipped: 1
-
-Contagens finais no banco:
-
-- `matches_master`: 380 eventos distintos.
-- `match_statistics`: 380 eventos distintos.
-- `match_incidents`: 7647 registros, cobrindo 380 eventos.
-- Registros para `12436452`: 0.
-- Orfaos em `match_statistics`: 0.
-- Orfaos em `match_incidents`: 0.
-- Partidas importadas sem estatisticas: 0.
+- CONCLUIDO E VALIDADO.
 
 ---
 
 ## Em Andamento
 
+- [ ] Validar qualidade leve dos dados importados, ainda sem criar features
 - [ ] Validar amostras importadas por coluna
 - [ ] Revisar qualidade dos dados de `match_statistics`
 - [ ] Revisar qualidade dos dados de `match_incidents`
-- [ ] Definir proximo passo tecnico com CTO/Data Engineer
+
+---
+
+## Proxima Frente Aprovada pelo PM
+
+Antes de acionar Quant Research / Data Science, executar uma validacao leve de qualidade dos dados importados.
+
+Objetivo:
+
+Confirmar consistencia minima do banco SofaScore EPL core antes de iniciar dataset analitico, features ou modelagem.
+
+Escopo da validacao:
+
+- incidentes por partida;
+- distribuicao de tipos de incidentes;
+- partidas sem gols;
+- partidas com placar divergente entre `matches_master`/`event.json` e `match_incidents`;
+- estatisticas nulas ou ausentes em `match_statistics`;
+- distribuicao basica de estatisticas por partida.
+
+Responsavel recomendado:
+
+- Data Engineer / Database.
+
+CTO:
+
+- Acionar somente se a validacao indicar necessidade de ajuste estrutural, schema, importer ou arquitetura.
+
+Quant Research / Data Science:
+
+- Aguardar conclusao da validacao leve de qualidade antes de iniciar dataset analitico ou features.
 
 ---
 
 ## Proximos Passos
 
-- [ ] Conferir amostras de partidas full e core no PostgreSQL
-- [ ] Validar consistencia de placar e data em `matches_master`
-- [ ] Validar campos principais em `match_statistics`
-- [ ] Validar gols, cartoes e substituicoes em `match_incidents`
+- [ ] Acionar Data Engineer / Database para validacao leve de qualidade do banco
+- [ ] Gerar relatorio de qualidade dos dados importados
+- [ ] Corrigir problemas de importacao somente se houver inconsistencias reais
+- [ ] Acionar CTO se houver necessidade de ajuste estrutural
+- [ ] Acionar Quant Research / Data Science apos aprovacao da qualidade basica
 - [ ] Decidir se a proxima etapa sera graph, importacao complementar ou catalogo de features
 - [ ] Implementar coleta de graph em etapa posterior, se aprovada
 - [ ] Iniciar Feature Engineering somente apos aprovacao
@@ -154,10 +187,10 @@ Contagens finais no banco:
 
 ## Resultado Esperado
 
-Base historica SofaScore EPL core importada no PostgreSQL, validada e pronta para a proxima decisao de engenharia de dados.
+Base historica SofaScore EPL core importada no PostgreSQL, validada em qualidade minima e pronta para a proxima decisao de engenharia de dados/pesquisa quantitativa.
 
 ---
 
 ## Status
 
-EM EXECUCAO - COLETA CORE CONCLUIDA; IMPORTER SOFASCORE IMPLEMENTADO; POSTGRESQL POPULADO COM 380 PARTIDAS IMPORTAVEIS
+EM EXECUCAO - IMPORTACAO POSTGRESQL SOFASCORE EPL CONCLUIDA; PROXIMA FRENTE: VALIDACAO LEVE DE QUALIDADE DO BANCO
