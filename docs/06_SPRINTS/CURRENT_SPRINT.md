@@ -26,34 +26,41 @@ Construir a base histórica SofaScore e preparar a importação para PostgreSQL.
 
 ---
 
-## Em Andamento
+## Atualização Operacional Mais Recente
 
-- [ ] Decidir estratégia operacional após persistência do HTTP 403 na retomada
-- [ ] Finalizar coleta completa da EPL
+Resultado observado:
+
+- Coleta executada através de conexão 5G.
+- 107 partidas adicionais coletadas sem ocorrência de HTTP 403.
+- Evidência forte de que o bloqueio está relacionado ao IP/conexão anterior e não a uma falha primária do coletor.
+
+Marco atual da coleta:
+
+- Até a partida 194: coleta completa com 5 JSONs por partida.
+  - event.json
+  - statistics.json
+  - incidents.json
+  - lineups.json
+  - h2h.json
+
+- A partir da partida 195: coleta em perfil core.
+  - event.json
+  - statistics.json
+  - incidents.json
+
+Objetivo do perfil core:
+
+- reduzir volume de requests;
+- diminuir risco de novo HTTP 403;
+- priorizar os dados necessários para importer e primeiras análises.
 
 ---
 
-## Bloqueado / Atenção
+## Em Andamento
 
-### HTTP 403 SofaScore persiste
-
-Situação:
-
-- A correção técnica do coletor SofaScore v2 funcionou operacionalmente.
-- O coletor preservou o comportamento esperado de checkpoint, validação de JSONs, logs e interrupção segura.
-- Porém, na retomada da coleta a partir da partida 51, o SofaScore ainda retornou HTTP 403.
-
-Interpretação:
-
-- O problema não é mais tratado como falha primária do código do coletor.
-- O bloqueio externo da fonte permanece ativo.
-- A coleta SofaScore deve permanecer pausada até nova decisão operacional.
-
-Decisão provisória do PM:
-
-- Não retornar diretamente ao Codex neste momento.
-- Não executar coleta massiva.
-- Encaminhar para nova avaliação conjunta de Data Acquisition Engineer e CTO.
+- [ ] Finalizar coleta completa da EPL
+- [ ] Monitorar estabilidade da coleta em conexão 5G
+- [ ] Confirmar se a coleta ultrapassa 194 partidas sem retorno do HTTP 403
 
 ---
 
@@ -61,64 +68,26 @@ Decisão provisória do PM:
 
 Status:
 
-Implementado, revisado e testado operacionalmente.
+Implementado, revisado e validado operacionalmente.
 
 Commit:
 
 - `54bbb14` — Melhora robustez do coletor SofaScore v2
 
-Arquivo alterado:
+Observação atual:
 
-- `LateGoalResearch/Crawler/Sofascore/v2_sofascore_match_collector.py`
-
-Resumo:
-
-- Implementado checkpoint por endpoint.
-- A partida só é considerada completa quando os 5 JSONs existem e são válidos:
-  - `event.json`
-  - `statistics.json`
-  - `incidents.json`
-  - `lineups.json`
-  - `h2h.json`
-- JSON válido existente é pulado e não sobrescrito.
-- JSON inválido é movido para `_invalid_json_backup`.
-- Adicionado log auditável em `data/raw/sofascore/premier_league_61627/collection_log.jsonl`.
-- Adicionado retry/backoff para HTTP 429, HTTP 5xx, timeout e falhas temporárias.
-- HTTP 403 registra `blocked` e encerra o lote.
-- Adicionados parâmetros operacionais:
-  - `--limit`
-  - `--dry-run`
-  - `--list-pending`
-  - delay entre endpoints
-  - delay entre partidas
-  - jitter
-
-Escopo preservado:
-
-- schema do banco não alterado;
-- importer PostgreSQL não alterado;
-- features não alteradas;
-- modelagem não alterada;
-- outros collectors não alterados;
-- estrutura dos JSONs brutos preservada.
-
-Validação:
-
-- Data Acquisition Engineer aprovou para teste operacional controlado.
-- Coleta massiva ainda não deve ser executada.
-- Teste de retomada indicou persistência de HTTP 403 na partida 51.
+- A persistência anterior do HTTP 403 continua registrada.
+- Porém os testes recentes em 5G indicam que o problema está fortemente associado à origem da conexão/IP.
+- Não há evidência atual de falha estrutural do coletor.
 
 ---
 
 ## Próximos Passos
 
-- [ ] Enviar resultado do teste ao Data Acquisition Engineer
-- [ ] Solicitar análise operacional sobre alternativas seguras para retomada
-- [ ] Enviar recomendação do Data Acquisition ao CTO
-- [ ] CTO decidir se a coleta permanece pausada, se muda cadência operacional ou se prioriza outra frente
-- [ ] Considerar iniciar Data Engineer / Database com as 50 partidas já coletadas, se aprovado pelo CTO/PM
-- [ ] Finalizar coleta EPL completa somente após nova decisão operacional
-- [ ] Implementar sofascore_importer.py
+- [ ] Continuar coleta EPL até novo bloqueio ou conclusão da temporada
+- [ ] Registrar número final de partidas coletadas antes de qualquer novo 403
+- [ ] Consolidar inventário real de partidas completas (5 JSONs) e partidas core (3 JSONs)
+- [ ] Iniciar planejamento do sofascore_importer.py
 - [ ] Popular PostgreSQL
 - [ ] Validar match_statistics
 - [ ] Validar match_incidents
@@ -135,4 +104,4 @@ Base histórica consistente da Premier League disponível para integração mult
 
 ## Status
 
-EM EXECUÇÃO — COLETA SOFASCORE PAUSADA POR HTTP 403 PERSISTENTE
+EM EXECUÇÃO — COLETA SOFASCORE ATIVA EM 5G E PERFIL CORE A PARTIR DA PARTIDA 195
