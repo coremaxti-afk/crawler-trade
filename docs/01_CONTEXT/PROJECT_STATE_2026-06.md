@@ -1,6 +1,6 @@
 # PROJECT STATE 2026-06
 
-## Visão Geral
+## Visao Geral
 
 Projeto:
 
@@ -8,7 +8,7 @@ LateGoalResearch
 
 Objetivo:
 
-Descobrir padrões quantitativos capazes de antecipar gols tardios através da integração de múltiplas fontes de dados.
+Descobrir padroes quantitativos capazes de antecipar gols tardios atraves da integracao de multiplas fontes de dados.
 
 ---
 
@@ -18,7 +18,7 @@ Descobrir padrões quantitativos capazes de antecipar gols tardios através da i
 
 - PostgreSQL configurado.
 - SQLAlchemy configurado.
-- Configuração centralizada em config/database.py.
+- Configuracao centralizada em `config/database.py`.
 
 ### Fontes
 
@@ -29,18 +29,28 @@ Operacional.
 
 Uso atual:
 
-- fonte principal para xG, xGA, forecast, PPDA e métricas pré-jogo.
+- Fonte principal para xG, xGA, forecast, PPDA e metricas pre-jogo.
 
 #### SofaScore
 
 Status:
-Operacional em nível de collector, mas com bloqueio externo persistente.
+Operacional para base historica core EPL.
 
-Observação:
+Resumo atual:
 
-- O coletor SofaScore v2 foi endurecido operacionalmente contra falhas.
-- O HTTP 403 persistiu na retomada da partida 51.
-- A coleta massiva deve permanecer pausada até nova decisão operacional.
+- Temporada EPL 2024/25 descoberta com 381 partidas.
+- 381 pastas locais de partidas existentes.
+- 192 partidas full com 5 JSONs.
+- 188 partidas core com 3 JSONs.
+- 380 partidas importaveis.
+- 1 partida descartada da importacao atual: `12436452`.
+
+Observacoes:
+
+- O coletor v2 foi endurecido operacionalmente contra falhas.
+- O coletor v3 core foi criado para reduzir volume de requests.
+- A coleta via 5G rodou sem novo HTTP 403 em mais de 100 partidas.
+- O risco de novo bloqueio por volume/conexao ainda deve ser considerado em coletas futuras.
 
 #### FotMob
 
@@ -50,12 +60,12 @@ Parcialmente operacional.
 #### API-Football
 
 Status:
-Em avaliação como fonte alternativa/complementar.
+Em avaliacao como fonte alternativa/complementar.
 
-Observação:
+Observacao:
 
-- Possui plano gratuito limitado a 100 requests/dia.
-- Deve ser tratada inicialmente como spike controlado, não como substituição imediata do SofaScore.
+- Spikes controlados foram executados.
+- API-Football permanece como complemento candidato, nao como substituta oficial do SofaScore.
 
 ---
 
@@ -63,48 +73,25 @@ Observação:
 
 ### Implementado
 
-- sofascore_season_collector.py
-- sofascore_match_collector.py
-- v2_sofascore_match_collector.py
+- `sofascore_season_collector.py`
+- `sofascore_match_collector.py`
+- `v2_sofascore_match_collector.py`
+- `v3_sofascore_match_collector.py`
 
 ### Artefatos Gerados
 
-- inventory.json
-- rounds.json
-- round_XX_events.json
+- `inventory.json`
+- `rounds.json`
+- `round_XX_events.json`
+- `event.json`
+- `statistics.json`
+- `incidents.json`
+- `lineups.json`, quando em perfil full
+- `h2h.json`, quando em perfil full
 
-### Resultado Atual
+### Perfis de Coleta
 
-- 381 partidas descobertas da EPL.
-- 50 partidas coletadas com sucesso.
-- 250+ JSONs armazenados localmente.
-- Correção operacional do coletor v2 implementada no commit `54bbb14`.
-
-### Correção Operacional do Coletor v2
-
-Implementado:
-
-- checkpoint por endpoint;
-- validação de JSON existente;
-- skip de JSON válido sem sobrescrita;
-- backup de JSON inválido em `_invalid_json_backup`;
-- log auditável em `data/raw/sofascore/premier_league_61627/collection_log.jsonl`;
-- retry/backoff para HTTP 429, HTTP 5xx, timeout e falhas temporárias;
-- HTTP 403 registra `blocked` e encerra o lote;
-- parâmetros operacionais como `--limit`, `--dry-run`, `--list-pending`, delays e jitter.
-
-Resultado do teste:
-
-- A correção funcionou operacionalmente.
-- O SofaScore ainda retornou HTTP 403 na retomada da partida 51.
-
----
-
-## Perfis de Coleta SofaScore em Discussão
-
-### Perfil Full
-
-Coleta completa originalmente considerada:
+#### Perfil Full
 
 - `event.json`
 - `statistics.json`
@@ -112,44 +99,17 @@ Coleta completa originalmente considerada:
 - `lineups.json`
 - `h2h.json`
 
-### Perfil Core
-
-Perfil recomendado para avaliação operacional com menor volume de requests:
+#### Perfil Core
 
 - `event.json`
 - `statistics.json`
 - `incidents.json`
 
-Motivo:
+Motivo do perfil core:
 
 - reduz de 5 para 3 requests por partida;
-- representa aproximadamente 40% menos requests por partida;
-- preserva os dados essenciais para importer inicial, target de gols tardios e primeiras análises.
-
-Observação:
-
-- `lineups.json` e `h2h.json` não devem ser removidos da arquitetura.
-- Eles devem permanecer como complementares para coleta futura.
-
----
-
-## Coleta Minuto a Minuto / Graph
-
-Status:
-
-- Ainda não implementada.
-
-Interpretação operacional:
-
-- `incidents.json` fornece eventos com minuto, como gols, cartões e substituições.
-- Isso não equivale a série temporal minuto a minuto completa.
-- Momentum/pressão temporal depende de `graph.json` ou endpoint equivalente.
-
-Estimativa preliminar:
-
-- Se o graph/momentum vier em um único endpoint por partida, será aproximadamente 1 request adicional por partida.
-- Com perfil core + graph, a coleta passaria de 3 para 4 requests por partida.
-- A estimativa deve ser confirmada pelo Data Acquisition Engineer antes de implementação.
+- diminui risco operacional de novo HTTP 403;
+- preserva dados essenciais para importer inicial, target e primeiras validacoes.
 
 ---
 
@@ -157,31 +117,67 @@ Estimativa preliminar:
 
 Tabelas principais:
 
-- matches_master
-- match_statistics
-- match_incidents
-- match_graph
-- match_mapping
+- `matches_master`
+- `match_statistics`
+- `match_incidents`
+- `match_graph`
+- `match_mapping`
+
+### Importacao SofaScore Core
 
 Status:
-Estrutura pronta.
+Implementada e executada.
 
-Observação:
+Script:
 
-- `match_graph` está preparada, mas a coleta do endpoint graph ainda não foi implementada.
+- `LateGoalResearch/Crawler/Sofascore/sofascore_importer.py`
+
+Commit:
+
+- `84e641f` - Implementa importer SofaScore core
+
+Tabelas populadas:
+
+- `matches_master`
+- `match_statistics`
+- `match_incidents`
+
+Contagens finais:
+
+- `matches_master`: 380 eventos distintos.
+- `match_statistics`: 380 eventos distintos.
+- `match_incidents`: 7647 registros, cobrindo 380 eventos.
+- Registros para `12436452`: 0.
+- Orfaos em `match_statistics`: 0.
+- Orfaos em `match_incidents`: 0.
+
+Idempotencia:
+
+- Primeira execucao: 380 inserts, 0 falhas.
+- Segunda execucao: 380 updates, 0 inserts, 0 falhas.
+- Nao houve duplicacao de partidas/statistics.
+
+### match_graph
+
+Status:
+Estrutura pronta, mas nao populada.
+
+Observacao:
+
+- Ainda nao ha `graph.json` ou endpoint equivalente coletado/importado.
 
 ---
 
-## Hipóteses Ativas
+## Hipoteses Ativas
 
-- H1 xG Pré-Jogo
-- H2 Forecast Pré-Jogo
-- H3 Força Ofensiva
+- H1 xG Pre-Jogo
+- H2 Forecast Pre-Jogo
+- H3 Forca Ofensiva
 - H4 Fragilidade Defensiva
-- H5 Pressão Ofensiva In-Game
+- H5 Pressao Ofensiva In-Game
 - H6 Estado Atual da Partida
-- H7 Combinação Multi-Fonte
-- H8 Momentum e Pressão Temporal
+- H7 Combinacao Multi-Fonte
+- H8 Momentum e Pressao Temporal
 - H9 Eventos Alteram Probabilidade
 
 Documento principal:
@@ -190,40 +186,40 @@ Documento principal:
 
 ---
 
-## Bloqueios Atuais
+## Bloqueios / Atencao
 
-### HTTP 403 SofaScore
+### SofaScore HTTP 403
 
-Observado após alto volume de requisições e persistente na retomada controlada da partida 51.
+Historico:
 
-Hipóteses:
+- HTTP 403 apareceu apos alto volume de requisicoes.
+- Evidencia recente indica relacao forte com IP/conexao e volume.
+- Coleta via 5G e perfil core rodou sem novo bloqueio relevante.
 
-- Rate limiting
-- Session limiting
-- IP limiting
+Status atual:
+
+- Nao ha bloqueio ativo impedindo uso da base coletada/importada.
+- Coletas futuras ainda devem respeitar baixo volume, checkpoint, retry/backoff e perfil core quando possivel.
+
+### Graph / Momentum
 
 Status:
 
-- Bloqueio externo ainda ativo.
-- Coleta SofaScore massiva pausada.
-- Próxima decisão deve envolver Data Acquisition Engineer e CTO.
+- Pendente.
+- H8 depende de `match_graph` ou fonte equivalente para momentum/pressao temporal.
 
 ---
 
-## Próximo Marco
+## Proximo Marco
 
-1. Decidir estratégia operacional para SofaScore após persistência do 403.
-2. Avaliar coleta core de 3 JSONs por partida.
-3. Avaliar spike controlado da API-Football como fonte alternativa/complementar.
-4. Considerar iniciar importer PostgreSQL com as 50 partidas já coletadas.
-5. Finalizar EPL completa quando a coleta estiver operacionalmente estável.
-6. Implementar sofascore_importer.py.
-7. Popular PostgreSQL.
-8. Construir features.
-9. Validar hipóteses H1-H9.
+1. Validar amostras importadas no PostgreSQL.
+2. Revisar qualidade dos dados em `match_statistics` e `match_incidents`.
+3. Decidir com CTO/Data Engineer se a proxima frente sera graph, importacao complementar ou catalogo de features.
+4. Implementar novas etapas apenas apos aprovacao de escopo.
+5. Preparar base para features H1-H9 sem misturar coleta, importacao e modelagem.
 
 ---
 
-## Objetivo da Próxima Fase
+## Objetivo da Proxima Fase
 
-Transição controlada da fase de coleta para a fase de engenharia de dados e pesquisa quantitativa, sem depender de uma única fonte e sem pressionar fontes externas bloqueadas.
+Validar a base SofaScore core importada e preparar a transicao controlada para engenharia de features/dataset analitico, mantendo dados brutos preservados e evitando dependencia de uma unica fonte.
