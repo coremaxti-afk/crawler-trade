@@ -2,23 +2,29 @@
 
 ## Status
 
-Definido metodologicamente.
+Definido metodologicamente, implementado e gerado.
 
-Nao implementado.
+Status do dataset gerado:
 
-Marco PM:
+- APTO COM RESSALVAS.
 
-> Como PM, considero esta a primeira definicao metodologica formal do LateGoalResearch. A partir daqui, Quant Research pode comecar o desenho do Dataset Analitico v1 com uma base consistente e auditavel.
+Documento operacional complementar:
+
+- `docs/04_RESEARCH/DATASET_BUILDER_V1.md`
+
+Script:
+
+- `LateGoalResearch/Analytics/DatasetBuilder/dataset_builder_v1.py`
+
+Commit de implementacao:
+
+- `1a1404e09079f2a1a7958ae948fefdc667872a50` - Cria Dataset Builder V1.
 
 ---
 
 ## Contexto
 
 A fase de coleta, auditoria, importacao PostgreSQL e validacao leve de qualidade foi concluida.
-
-Status da base:
-
-- APTO COM RESSALVAS.
 
 Base disponivel:
 
@@ -36,11 +42,34 @@ Qualidade observada:
 
 ---
 
+## Dataset Gerado
+
+Arquivos locais gerados em `data/processed/datasets/`:
+
+- `late_goal_dataset_v1.csv`
+- `late_goal_dataset_v1.parquet`
+- `late_goal_dataset_v1_metadata.json`
+- `late_goal_dataset_v1_validation_report.json`
+
+Resumo validado:
+
+- linhas: 380.
+- grain: 1 linha por partida.
+- duplicatas por `match_id`: 0.
+- duplicatas por `sofascore_event_id`: 0.
+- status: APTO COM RESSALVAS.
+
+---
+
 ## 1. Target Principal
 
 Nome:
 
 - `target_late_goal_75`
+
+Alias operacional:
+
+- `has_late_goal`
 
 Definicao:
 
@@ -58,11 +87,19 @@ Unidade inicial:
 Regra temporal:
 
 - gols com minuto maior que 75 contam como gol tardio.
-- acrescimos do segundo tempo contam.
+- acrescimos do segundo tempo contam conforme minuto registrado em `match_incidents`.
+
+Distribuicao gerada:
+
+- positivos: 189.
+- negativos: 191.
+- taxa positiva: 0.497368.
 
 ---
 
 ## 2. Targets Alternativos
+
+Ainda nao implementados no Dataset Builder V1:
 
 - `target_late_goal_80`
 - `target_late_goal_85`
@@ -77,7 +114,7 @@ Regra temporal:
 
 ## 3. Horizonte Temporal
 
-### V1A - Pre-Jogo
+### V1A - Match-Level
 
 Grain:
 
@@ -87,17 +124,25 @@ Target:
 
 - `target_late_goal_75`.
 
-Uso:
+Uso permitido nesta etapa:
 
-- H1.
-- H2.
-- H3.
-- H4.
-- parte de H7.
+- auditoria de target;
+- analise descritiva;
+- preparacao metodologica para H1/H2/H6/H9.
+
+Nao permitido nesta etapa:
+
+- modelagem;
+- backtesting;
+- feature engineering avancada H1-H9.
 
 ### V1B - In-Game por Cutoff
 
-Grain:
+Status:
+
+- Nao implementado.
+
+Grain futuro:
 
 - 1 linha por partida por cutoff.
 
@@ -109,21 +154,13 @@ Cutoffs recomendados:
 - 75
 - 80
 
-Target:
+Target futuro:
 
 - `target_goal_after_cutoff_X`.
 
-Uso:
-
-- H5.
-- H6.
-- H7.
-- H8.
-- H9.
-
 ---
 
-## 4. Features Disponiveis Imediatamente
+## 4. Colunas Disponiveis no V1
 
 Fontes:
 
@@ -131,20 +168,15 @@ Fontes:
 - `match_statistics`.
 - `match_incidents`.
 
-Disponiveis para desenho imediato:
+Blocos incluidos:
 
 - identificadores de partida;
 - data/temporada/liga;
 - times mandante e visitante;
-- gols por minuto via incidentes;
-- placar ate cutoff;
-- estado do jogo ate cutoff;
-- cartoes ate cutoff;
-- substituicoes ate cutoff;
-- penaltis ate cutoff, se incident type permitir;
-- VAR ate cutoff, se incident type permitir;
-- tempo desde o ultimo gol;
-- gols recentes antes do cutoff.
+- placar final para auditoria;
+- estatisticas full-match;
+- agregados simples de incidentes;
+- target de gol tardio apos 75.
 
 Observacao importante:
 
@@ -153,7 +185,55 @@ Observacao importante:
 
 ---
 
-## 5. Features que Dependem de Graph / Momentum
+## 5. Colunas Target-Derived Proibidas como Features
+
+As colunas abaixo sao derivadas diretamente do target ou de eventos de gol futuros. Elas nao podem ser usadas como features preditivas:
+
+- `has_late_goal`
+- `target_late_goal_75`
+- `late_goal_count_75`
+- `home_late_goal_count_75`
+- `away_late_goal_count_75`
+- `first_late_goal_minute_75`
+
+Uso permitido:
+
+- auditoria;
+- validacao do target;
+- analise descritiva do alvo;
+- rotulagem.
+
+---
+
+## 6. Ressalvas de Data Leakage
+
+Toda feature deve informar:
+
+- fonte;
+- formula;
+- momento em que fica disponivel;
+- janela temporal;
+- risco de leakage.
+
+Proibido:
+
+- usar target como feature;
+- usar colunas target-derived como preditores;
+- usar placar final como preditor;
+- usar total de gols final como preditor;
+- usar estatisticas full-match como preditores in-game por cutoff;
+- usar historico futuro;
+- usar split aleatorio como validacao principal.
+
+Colunas de placar final presentes no V1 sao somente para auditoria e nao devem entrar como preditores:
+
+- `home_goals`
+- `away_goals`
+- `total_goals`
+
+---
+
+## 7. Features que Dependem de Graph / Momentum
 
 Nao fazem parte do core v1.
 
@@ -176,7 +256,7 @@ Hipotese principal:
 
 ---
 
-## 6. Features que Dependem de Lineups
+## 8. Features que Dependem de Lineups
 
 Nao fazem parte do core v1.
 
@@ -184,35 +264,19 @@ Motivo:
 
 - a base core nao possui lineups para todas as partidas.
 
-Exemplos futuros:
-
-- forca do XI inicial;
-- qualidade do banco;
-- substituicoes ofensivas;
-- substituicoes defensivas;
-- mudanca de formacao.
-
 ---
 
-## 7. Features que Dependem de H2H
+## 9. Features que Dependem de H2H
 
 Nao fazem parte do core v1.
 
-Prioridade:
-
-- baixa.
-
-Uso futuro:
-
-- bloco exploratorio opcional.
-
-Regra obrigatoria:
+Regra obrigatoria futura:
 
 - usar apenas confrontos anteriores a data da partida analisada.
 
 ---
 
-## 8. Estrategia de Validacao H1-H9
+## 10. Estrategia de Validacao H1-H9
 
 ### H1 - xG Pre-Jogo
 
@@ -222,7 +286,7 @@ Target recomendado:
 
 Validacao:
 
-- taxa de gol tardio por faixas/quartis de xG.
+- taxa de gol tardio por faixas/quartis de xG, apos revisao de leakage.
 
 ### H2 - Forecast Pre-Jogo
 
@@ -236,30 +300,17 @@ Validacao:
 
 ### H3 - Forca Ofensiva
 
-Targets recomendados:
+Status:
 
-- `target_home_late_goal_75`.
-- `target_away_late_goal_75`.
-
-Validacao:
-
-- medias historicas anteriores por time.
+- nao implementar features historicas ainda.
 
 ### H4 - Fragilidade Defensiva
 
-Targets recomendados:
+Status:
 
-- gol tardio sofrido por mandante/visitante.
-
-Validacao:
-
-- fragilidade defensiva historica anterior por time.
+- nao implementar features historicas ainda.
 
 ### H5 - Pressao Ofensiva In-Game
-
-Target recomendado:
-
-- `target_goal_after_cutoff_X`.
 
 Status:
 
@@ -267,29 +318,17 @@ Status:
 
 ### H6 - Estado Atual da Partida
 
-Target recomendado:
-
-- `target_goal_after_cutoff_X`.
-
 Status:
 
-- validavel imediatamente com `match_incidents`.
+- validavel futuramente com dataset por cutoff baseado em `match_incidents`.
 
 ### H7 - Combinacao Multi-Fonte
 
-Target recomendado:
-
-- `target_late_goal_75` e `target_goal_after_cutoff_X`.
-
 Status:
 
-- parcialmente validavel com pre-jogo + incidents.
+- parcialmente validavel em etapa futura.
 
 ### H8 - Momentum e Pressao Temporal
-
-Target recomendado:
-
-- `target_goal_after_cutoff_X`.
 
 Status:
 
@@ -297,63 +336,36 @@ Status:
 
 ### H9 - Eventos Alteram Probabilidade
 
-Target recomendado:
-
-- `target_goal_after_cutoff_X`.
-
 Status:
 
-- validavel parcialmente com `match_incidents`.
+- validavel parcialmente com `match_incidents`, em dataset por cutoff futuro.
 
 ---
 
-## 9. Ordem Recomendada de Testes
+## 11. Ordem Recomendada de Testes
 
 1. Auditoria do target.
-2. H6 - Estado Atual da Partida.
-3. H9 - Eventos Alteram Probabilidade.
-4. H1 - xG Pre-Jogo.
-5. H2 - Forecast Pre-Jogo.
-6. H3 - Forca Ofensiva.
-7. H4 - Fragilidade Defensiva.
-8. H7 - Combinacao Multi-Fonte.
-9. H5 - Pressao Ofensiva In-Game.
-10. H8 - Momentum e Pressao Temporal.
+2. Classificacao de colunas por risco de leakage.
+3. H6 - Estado Atual da Partida.
+4. H9 - Eventos Alteram Probabilidade.
+5. H1 - xG Pre-Jogo.
+6. H2 - Forecast Pre-Jogo.
+7. H3 - Forca Ofensiva.
+8. H4 - Fragilidade Defensiva.
+9. H7 - Combinacao Multi-Fonte.
+10. H5 - Pressao Ofensiva In-Game.
+11. H8 - Momentum e Pressao Temporal.
 
 ---
 
-## Regras de Data Leakage
+## Decisao Metodologica Atual
 
-Toda feature deve informar:
+O Dataset Analitico V1 foi gerado e esta apto com ressalvas para auditoria pelo Quant Research / Data Science.
 
-- fonte;
-- formula;
-- momento em que fica disponivel;
-- janela temporal;
-- risco de leakage.
+Nao iniciar ainda:
 
-Proibido:
-
-- usar placar final como preditor;
-- usar total de gols final como preditor;
-- usar estatisticas produzidas apos o cutoff;
-- usar historico futuro;
-- usar target como feature;
-- usar split aleatorio como validacao principal.
-
----
-
-## Decisao Metodologica
-
-O Dataset Analitico v1 sera desenhado em duas camadas:
-
-- V1A: match-level pre-jogo.
-- V1B: match-cutoff in-game baseado em incidentes.
-
-Nao criar nesta etapa:
-
-- codigo;
-- modelo;
-- feature engineering executavel;
+- modelagem;
+- backtesting;
+- feature engineering avancada;
 - alteracao de schema;
 - coleta adicional.
