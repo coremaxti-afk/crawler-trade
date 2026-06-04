@@ -23,6 +23,8 @@ Construir a base histórica SofaScore e preparar a importação para PostgreSQL.
 - [x] Coletar 50 partidas da EPL
 - [x] Implementar correção operacional para HTTP 403 no coletor SofaScore v2
 - [x] Executar teste operacional controlado de retomada
+- [x] Validar coleta via 5G sem novo HTTP 403
+- [x] Executar lote core com 188 partidas planejadas
 
 ---
 
@@ -31,10 +33,10 @@ Construir a base histórica SofaScore e preparar a importação para PostgreSQL.
 Resultado observado:
 
 - Coleta executada através de conexão 5G.
-- 107 partidas adicionais coletadas sem ocorrência de HTTP 403.
-- Evidência forte de que o bloqueio está relacionado ao IP/conexão anterior e não a uma falha primária do coletor.
+- 107 partidas adicionais foram coletadas inicialmente sem ocorrência de HTTP 403.
+- Evidência forte de que o bloqueio anterior estava relacionado ao IP/conexão anterior e não a uma falha primária do coletor.
 
-Marco atual da coleta:
+Marco de coleta por perfil:
 
 - Até a partida 194: coleta completa com 5 JSONs por partida.
   - event.json
@@ -56,11 +58,32 @@ Objetivo do perfil core:
 
 ---
 
+## Resumo Final do Lote Core
+
+Resultado informado:
+
+- Partidas planejadas: 188
+- Endpoints coletados: 558
+- Endpoints pulados: 6
+- Endpoints falhos: 0
+- Bloqueio operacional: False
+- Log: `data\raw\sofascore\premier_league_61627\collection_log_v3.jsonl`
+
+Interpretação:
+
+- O lote core foi executado com sucesso operacional.
+- Não houve falhas de endpoint.
+- Não houve novo bloqueio HTTP 403.
+- Os 6 endpoints pulados devem ser tratados como comportamento esperado se já existiam JSONs válidos.
+- A coleta core está aprovada como estratégia operacional para reduzir volume de requests.
+
+---
+
 ## Em Andamento
 
-- [ ] Finalizar coleta completa da EPL
-- [ ] Monitorar estabilidade da coleta em conexão 5G
-- [ ] Confirmar se a coleta ultrapassa 194 partidas sem retorno do HTTP 403
+- [ ] Consolidar inventário real de partidas completas (5 JSONs) e partidas core (3 JSONs)
+- [ ] Confirmar total final de partidas EPL coletadas contra o inventário de 381 partidas
+- [ ] Iniciar planejamento do sofascore_importer.py
 
 ---
 
@@ -76,22 +99,23 @@ Commit:
 
 Observação atual:
 
-- A persistência anterior do HTTP 403 continua registrada.
-- Porém os testes recentes em 5G indicam que o problema está fortemente associado à origem da conexão/IP.
+- A persistência anterior do HTTP 403 continua registrada historicamente.
+- Porém os testes em 5G e o lote core indicam que o problema estava fortemente associado à origem da conexão/IP e ao volume de requisições.
 - Não há evidência atual de falha estrutural do coletor.
 
 ---
 
 ## Próximos Passos
 
-- [ ] Continuar coleta EPL até novo bloqueio ou conclusão da temporada
-- [ ] Registrar número final de partidas coletadas antes de qualquer novo 403
-- [ ] Consolidar inventário real de partidas completas (5 JSONs) e partidas core (3 JSONs)
-- [ ] Iniciar planejamento do sofascore_importer.py
+- [ ] Validar contagem final de partidas coletadas
+- [ ] Validar consistência entre inventário, pastas locais e logs
+- [ ] Consolidar inventário real de partidas full e core
+- [ ] Acionar Data Engineer / Database para planejar importer com suporte a dados full/core
+- [ ] Implementar sofascore_importer.py
 - [ ] Popular PostgreSQL
 - [ ] Validar match_statistics
 - [ ] Validar match_incidents
-- [ ] Implementar coleta de graph
+- [ ] Implementar coleta de graph em etapa posterior
 - [ ] Iniciar Feature Engineering
 
 ---
@@ -104,4 +128,4 @@ Base histórica consistente da Premier League disponível para integração mult
 
 ## Status
 
-EM EXECUÇÃO — COLETA SOFASCORE ATIVA EM 5G E PERFIL CORE A PARTIR DA PARTIDA 195
+EM EXECUÇÃO — COLETA CORE SOFASCORE CONCLUÍDA COM SUCESSO OPERACIONAL; PRÓXIMA FRENTE: CONSOLIDAÇÃO E IMPORTER
