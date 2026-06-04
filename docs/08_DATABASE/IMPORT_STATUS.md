@@ -82,7 +82,7 @@ Observacao:
 ## SofaScore Importer
 
 Status:
-Implementado e executado.
+Implementado, executado e aprovado em validacao SQL.
 
 Script:
 
@@ -152,15 +152,71 @@ Resultado:
 - failed: 0
 - known_skipped: 1
 
-### Banco apos importacao
+### Validacao SQL antes do rerun final
 
-- `matches_master`: 380 eventos distintos.
-- `match_statistics`: 380 eventos distintos.
-- `match_incidents`: 7647 registros, cobrindo 380 eventos.
-- Registros para `12436452`: 0.
+Consultas executadas:
+
+```sql
+SELECT COUNT(*) FROM matches_master;
+SELECT COUNT(*) FROM match_statistics;
+SELECT COUNT(*) FROM match_incidents;
+```
+
+Resultado:
+
+- `matches_master`: 380
+- `match_statistics`: 380
+- `match_incidents`: 7647
+
+Duplicatas por `sofascore_event_id`:
+
+- `matches_master`: 0 grupos duplicados.
+- `match_statistics`: 0 grupos duplicados.
+
+Skip conhecido:
+
+- `matches_master` com `sofascore_event_id = 12436452`: 0.
+- `match_statistics` com `sofascore_event_id = 12436452`: 0.
+- `match_incidents` com `sofascore_event_id = 12436452`: 0.
+
+Integridade basica:
+
 - Orfaos em `match_statistics`: 0.
 - Orfaos em `match_incidents`: 0.
-- Partidas importadas sem estatisticas: 0.
+
+### Rerun final do importer
+
+Resultado:
+
+- processed: 380
+- inserted: 0
+- updated: 380
+- failed: 0
+- known_skipped: 1
+
+Interpretacao:
+
+- As 380 partidas importaveis ja existiam no banco.
+- O importer atualiza registros existentes de forma idempotente.
+- O comportamento `updated: 380` e esperado no rerun, pois a rotina atual executa update para eventos ja existentes, mesmo quando nao ha diferenca material de dados.
+- Isso nao gerou aumento de registros nem duplicatas.
+
+### Validacao SQL apos rerun final
+
+Resultado:
+
+- `matches_master`: 380
+- `match_statistics`: 380
+- `match_incidents`: 7647
+- Duplicatas em `matches_master`: 0.
+- Duplicatas em `match_statistics`: 0.
+- Registros para `12436452`: 0 nas tres tabelas.
+- Orfaos em `match_statistics`: 0.
+- Orfaos em `match_incidents`: 0.
+
+Conclusao:
+
+A importacao SofaScore core esta aprovada pelos criterios atuais: `failed = 0`, `known_skipped = 1`, sem duplicatas, sem crescimento indevido apos rerun e com as tres tabelas alvo populadas conforme esperado.
 
 ---
 
