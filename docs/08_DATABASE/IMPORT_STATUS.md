@@ -274,3 +274,90 @@ Preparar a proxima etapa de engenharia de dados:
 2. Revisar qualidade dos dados em `match_statistics` e `match_incidents`.
 3. Definir, com CTO/Data Engineer, se o proximo passo sera importacao complementar, graph ou inicio de catalogo de features.
 4. Manter `12436452` fora da importacao atual ate nova decisao.
+
+---
+
+## Validação Leve de Qualidade Pós-Importação
+
+Status:
+
+APTO COM RESSALVAS para início da fase Quant Research.
+
+Script:
+
+- `LateGoalResearch/Crawler/Sofascore/validate_sofascore_import_quality.py`
+
+Relatórios gerados localmente:
+
+- `data/reports/sofascore_import_quality_report.md`
+- `data/reports/sofascore_import_quality_report.json`
+
+Escopo:
+
+- Validação somente leitura.
+- Uso de `config.database.engine`.
+- Execução apenas de consultas `SELECT`.
+- Nenhuma alteração em schema, dados brutos, importer, collectors, features ou modelagem.
+
+Contagens validadas:
+
+- `matches_master`: 380 / 380.
+- `match_statistics`: 380 / 380.
+- `match_incidents`: 7647 / 7647.
+
+Incidentes por partida:
+
+- Mínimo: 12.
+- Máximo: 30.
+- Média: 20.1237.
+- Mediana: 20.0.
+- Partidas com 0 incidentes: 0.
+
+Tipos de incidentes:
+
+- Tipos nulos: 0.
+- Tipos raros <= 3: 0.
+
+Distribuição:
+
+- `substitution`: 3211.
+- `card`: 1681.
+- `goal`: 1115.
+- `period`: 760.
+- `injuryTime`: 755.
+- `varDecision`: 111.
+- `inGamePenalty`: 14.
+
+Partidas sem incidentes de gol:
+
+- Total: 16.
+- Partidas sem gol nos incidentes mas com placar com gols no `matches_master`: 0.
+
+Divergências entre `matches_master` e `match_incidents`:
+
+- Divergências encontradas: 0.
+
+`match_statistics`:
+
+- Linhas: 380.
+- Linhas vazias: 0.
+- Partidas sem estatísticas: 0.
+
+Campos nulos:
+
+- `possession_home`: 0.
+- `possession_away`: 0.
+- `shots_home`: 0.
+- `shots_away`: 0.
+- `shots_on_target_home`: 0.
+- `shots_on_target_away`: 0.
+- `corners_home`: 0.
+- `corners_away`: 0.
+- `big_chances_home`: 7.
+- `big_chances_away`: 7.
+- `xg_home`: 0.
+- `xg_away`: 0.
+
+Conclusão:
+
+A base SofaScore EPL importada está tecnicamente apta para iniciar Quant Research com ressalvas documentadas. A principal ressalva é a existência de 7 nulos em `big_chances_home` e 7 nulos em `big_chances_away`. Não foram encontradas divergências de placar, partidas sem incidentes, estatísticas ausentes, duplicatas ou órfãos. `match_graph` permanece fora do escopo até coleta/importação de `graph.json` ou fonte equivalente.
