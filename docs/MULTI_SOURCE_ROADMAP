@@ -1,0 +1,243 @@
+# Late Goal Research - Multi-Source Roadmap
+
+## Background
+
+The project successfully solved the Understat → FotMob mapping problem.
+
+Current status:
+
+### Completed
+
+- PostgreSQL infrastructure
+- Historical Understat ingestion
+- Match table structure
+- Understat → FotMob mapping
+- EPL 2024/2025 association
+- `fotmob_match_id` population
+
+### Partially Completed
+
+FotMob MatchDetails investigation.
+
+Results:
+
+- Endpoint identified
+- Historical payload validated
+- Previous successful captures confirmed
+
+Current blocker:
+
+```text
+403
+TURNSTILE_REQUIRED
+```
+
+Decision:
+
+The project must continue progressing regardless of the current FotMob MatchDetails limitation.
+
+---
+
+# Strategic Goal
+
+Build a multi-source football data platform capable of supporting quantitative research on late goals.
+
+The project must avoid dependency on any single provider.
+
+---
+
+# Research Priorities
+
+## Tier 1 - Immediate Investigation
+
+### SofaScore
+
+Primary candidate to replace the missing MatchDetails layer.
+
+Research goals:
+
+- Match events
+- Timeline data
+- Momentum indicators
+- Match statistics
+- Historical availability
+- Automation feasibility
+
+Success criteria:
+
+Obtain at least one complete historical match dataset.
+
+---
+
+### AiScore
+
+Secondary candidate.
+
+Research goals:
+
+- Dangerous attacks
+- Match events
+- Momentum-like indicators
+- Historical coverage
+
+Success criteria:
+
+Validate data richness and collection feasibility.
+
+---
+
+# Tier 2 - Historical Enrichment
+
+### StatsBomb Open Data
+
+Goals:
+
+- Event-level datasets
+- Pressures
+- Shots
+- xG
+- Spatial information
+
+Purpose:
+
+Improve historical modeling quality.
+
+---
+
+### FBref
+
+Goals:
+
+- Advanced team statistics
+- Historical league coverage
+- Pre-match features
+
+Purpose:
+
+Feature engineering and contextual variables.
+
+---
+
+# Tier 3 - Operational Redundancy
+
+### Flashscore
+
+Goals:
+
+- Events
+- Timeline
+- Match statistics
+- Dangerous attacks
+
+Purpose:
+
+Alternative source if primary providers become unavailable.
+
+---
+
+# Future Investigation
+
+### OddsPortal
+
+Current status:
+
+Not a priority.
+
+Future objective:
+
+Add market behavior and odds movement analysis.
+
+---
+
+# Target Architecture
+
+Providers
+
+- Understat
+- FotMob
+- SofaScore
+- AiScore
+- StatsBomb
+- FBref
+
+↓
+
+Normalization Layer
+
+↓
+
+PostgreSQL
+
+↓
+
+Research Layer
+
+↓
+
+Late Goal Models
+
+---
+
+# Target Data Structures
+
+## match_events
+
+Store event-level information.
+
+Examples:
+
+- goals
+- shots
+- cards
+- substitutions
+
+---
+
+## match_snapshots
+
+Store periodic match state snapshots.
+
+Examples:
+
+- possession
+- shots
+- dangerous attacks
+- corners
+
+---
+
+## match_momentum
+
+Store temporal pressure indicators.
+
+Examples:
+
+- momentum curves
+- attacking pressure
+- dominance metrics
+
+---
+
+# Next Milestone
+
+Complete SofaScore investigation and successfully ingest one full historical match including:
+
+- events
+- timeline
+- statistics
+- pressure indicators
+
+This milestone will define the first official provider integrated after FotMob.
+
+---
+
+# Long-Term Vision
+
+Create a provider-agnostic research platform capable of:
+
+- discovering late goal patterns
+- testing hypotheses
+- generating quantitative signals
+- supporting future live-trading research
+
+without dependency on any single external source.

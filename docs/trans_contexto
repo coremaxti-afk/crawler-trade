@@ -1,0 +1,608 @@
+# PARECER TÉCNICO – PROJETO LATE GOAL RESEARCH (TRANSFERÊNCIA DE CONTEXTO)
+
+## Objetivo do Projeto
+
+Construir uma base de dados histórica para pesquisa quantitativa de gols tardios ("Late Goals"), inicialmente focada em futebol, utilizando dados do Understat, FotMob e futuras fontes complementares.
+
+O objetivo final não é depender do FotMob, mas criar um laboratório de descoberta capaz de identificar padrões estatísticos associados a gols nos minutos finais das partidas.
+
+---
+
+# Estado Atual do Projeto
+
+## Banco de Dados
+
+Banco PostgreSQL:
+
+```sql
+late_goal_research
+```
+
+Tabela principal:
+
+```sql
+matches
+```
+
+Campos relevantes:
+
+```sql
+id
+understat_match_id
+league
+season
+match_date
+home_team
+away_team
+home_goals
+away_goals
+home_xg
+away_xg
+forecast_home_win
+forecast_draw
+forecast_away_win
+fotmob_match_id
+```
+
+Foi adicionada a coluna:
+
+```sql
+fotmob_match_id BIGINT
+```
+
+Também foi criado índice:
+
+```sql
+idx_matches_fotmob
+```
+
+Validação:
+
+```sql
+SELECT COUNT(*)
+FROM matches
+WHERE fotmob_match_id IS NOT NULL;
+```
+
+Resultado:
+
+```text
+369
+```
+
+---
+
+# Integração Understat → FotMob
+
+## Objetivo
+
+Relacionar:
+
+```text
+Understat Match
+↓
+FotMob Match ID
+```
+
+---
+
+## Primeira Tentativa
+
+Script:
+
+```text
+fotmob_match_mapper.py
+```
+
+Problema:
+
+```text
+psycopg is not installed
+```
+
+Investigação mostrou:
+
+```text
+psycopg instalado
+```
+
+mas:
+
+```text
+libpq library not found
+```
+
+Solução:
+
+Instalação da versão binary.
+
+---
+
+## Segundo Problema
+
+Endpoint antigo:
+
+```text
+https://www.fotmob.com/api/matches
+```
+
+Retornava:
+
+```text
+404
+HTML
+```
+
+Impossibilitando uso direto.
+
+---
+
+# Descoberta Importante
+
+Foi identificado endpoint funcional:
+
+```text
+https://www.fotmob.com/api/data/leagues?id=47&season=2024/2025
+```
+
+Liga:
+
+```text
+Premier League
+ID 47
+```
+
+---
+
+## Dados disponíveis
+
+Estrutura:
+
+```json
+fixtures
+allMatches
+table
+overview
+stats
+```
+
+Dentro de:
+
+```json
+fixtures.allMatches
+```
+
+existem:
+
+```json
+id
+home
+away
+utcTime
+pageUrl
+```
+
+O campo:
+
+```json
+id
+```
+
+é o:
+
+```text
+fotmob_match_id
+```
+
+---
+
+# Resultado
+
+Foi possível mapear:
+
+```text
+369 partidas
+```
+
+com sucesso.
+
+Exemplos:
+
+```text
+Manchester United x Fulham
+→ 4506263
+
+Ipswich x Liverpool
+→ 4506264
+
+Arsenal x Wolves
+→ 4506265
+```
+
+---
+
+# MatchDetails
+
+## Objetivo
+
+Capturar:
+
+```text
+momentum
+events
+shotmap
+attacking zones
+playerStats
+matchFacts
+```
+
+---
+
+## Endpoint identificado
+
+```text
+https://www.fotmob.com/api/data/matchDetails?matchId=4506263
+```
+
+---
+
+## Teste direto
+
+Requests:
+
+```python
+requests.get(...)
+```
+
+Resultado:
+
+```json
+{
+  "error":"Verification required",
+  "code":"TURNSTILE_REQUIRED"
+}
+```
+
+Status:
+
+```text
+403
+```
+
+---
+
+## Teste Playwright
+
+Foi criado:
+
+```text
+test_playwright_matchdetails.py
+```
+
+Resultado:
+
+```text
+403
+TURNSTILE_REQUIRED
+```
+
+---
+
+# Descoberta de MatchDetails Antigo
+
+Foi localizado arquivo:
+
+```text
+matchdetails.json
+```
+
+gerado anteriormente pelo Codex.
+
+Esse arquivo contém:
+
+```text
+momentum
+events
+shotmap
+attackingZones
+playerStats
+expectedGoals
+expectedGoalsOnTarget
+matchFacts
+```
+
+Portanto:
+
+```text
+MatchDetails já foi capturado com sucesso em algum momento.
+```
+
+---
+
+# Como o Codex capturou
+
+Script encontrado:
+
+```text
+playwright_capture_matchdetails.py
+```
+
+Método:
+
+```text
+1. Abrir página real da partida
+2. Interceptar tráfego
+3. Detectar URL contendo matchDetails
+4. Salvar JSON
+```
+
+Fluxo:
+
+```text
+Página da partida
+↓
+Playwright
+↓
+Interceptação
+↓
+matchdetails.json
+```
+
+---
+
+# Problema Atual
+
+Ao tentar reproduzir:
+
+```text
+Fulham x Manchester United
+matchId=4506263
+```
+
+resultado:
+
+```text
+URL encontrada
+STATUS 403
+```
+
+---
+
+# Investigação DevTools
+
+Foi aberto:
+
+```text
+F12
+Network
+matchDetails
+```
+
+Resultado observado:
+
+```text
+200 OK (from disk cache)
+```
+
+Importante:
+
+```text
+from disk cache
+```
+
+Isto sugere que o navegador estava utilizando cache local.
+
+---
+
+# Testes Realizados
+
+## Header x-mas
+
+Obtido através do:
+
+```text
+Copy as cURL
+```
+
+Header:
+
+```text
+x-mas
+```
+
+Foi reproduzido via requests.
+
+Resultado:
+
+```text
+403
+```
+
+Não resolveu.
+
+---
+
+## Janela anônima
+
+Acesso direto:
+
+```text
+matchDetails
+```
+
+Resultado:
+
+```text
+Erro imediato
+```
+
+Indica que o sucesso observado anteriormente provavelmente veio do cache local.
+
+---
+
+# Conclusão sobre MatchDetails
+
+Status atual:
+
+```text
+NÃO RESOLVIDO
+```
+
+Sabemos que:
+
+```text
+✓ endpoint existe
+✓ matchdetails.json válido existe
+✓ método funcionou anteriormente
+```
+
+Mas:
+
+```text
+✗ captura não é reproduzível atualmente
+✗ endpoint protegido por Turnstile
+```
+
+---
+
+# Descobertas do Codex
+
+O Codex também investigou:
+
+```text
+worldfootballR_data
+```
+
+Utilizando cache RDS.
+
+Resultado:
+
+```text
+10/10 partidas validadas
+```
+
+para EPL 2024/2025.
+
+Isto ajudou a confirmar IDs FotMob.
+
+---
+
+# Avaliação Estratégica
+
+Conclusão da investigação:
+
+O mapeamento:
+
+```text
+Understat → FotMob Match ID
+```
+
+está resolvido.
+
+O problema restante é exclusivamente:
+
+```text
+FotMob MatchDetails
+```
+
+---
+
+# Decisão Arquitetural
+
+Não bloquear o projeto por causa do FotMob.
+
+Prioridade passa a ser:
+
+```text
+1. Consolidar base histórica.
+2. Construir primeiro modelo quantitativo.
+3. Buscar snapshots em fontes alternativas.
+```
+
+---
+
+# Fontes Futuras para Pesquisa
+
+Possíveis substitutos ou complementos:
+
+```text
+SofaScore
+Flashscore
+FBref
+StatsBomb Open Data
+SoccerNet
+API-Football
+OddsPortal
+```
+
+---
+
+# Plano A
+
+Continuar tentando reproduzir:
+
+```text
+matchDetails
+↓
+fotmob_raw_matches
+```
+
+Automatização total.
+
+---
+
+# Plano B
+
+Captura manual.
+
+Fluxo:
+
+```text
+Abrir endpoint
+↓
+Salvar JSON
+↓
+Processar localmente
+```
+
+Reservado para casos específicos.
+
+---
+
+# Próximas Ações Recomendadas
+
+## Curto Prazo
+
+* Consolidar EPL 21/22 até 25/26.
+* Expandir para outras ligas.
+* Consolidar odds históricas.
+* Construir primeiro modelo de gols tardios.
+
+## Médio Prazo
+
+* Investigar snapshots alternativos.
+* Criar tabela comparativa de fontes.
+
+## Longo Prazo
+
+* Eliminar dependência exclusiva do FotMob.
+* Criar pipeline multi-fonte.
+
+---
+
+# Resumo Executivo
+
+Estado do projeto:
+
+```text
+Banco de dados ............ OK
+Understat ................. OK
+FotMob Match IDs .......... OK
+369 partidas mapeadas ..... OK
+
+MatchDetails FotMob ....... BLOQUEADO
+
+Projeto geral ............. SEGUIR EM FRENTE
+```
+
+A recomendação é continuar o desenvolvimento da pesquisa utilizando os dados já disponíveis e investigar novas fontes de snapshots em paralelo, sem interromper o progresso do laboratório de descoberta.
