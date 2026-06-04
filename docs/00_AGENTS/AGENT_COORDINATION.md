@@ -372,3 +372,13 @@ A coordenação estará funcionando bem quando:
 - o CTO aprovar mudanças estruturais;
 - especialistas não invadirem escopo uns dos outros;
 - a documentação refletir o progresso real do projeto.
+
+## Governança Documental
+
+Antes de iniciar qualquer análise:
+
+1. Ler documentos obrigatórios do seu papel.
+2. Verificar CURRENT_SPRINT.md.
+3. Verificar PROJECT_STATUS.md.
+4. Atualizar apenas os documentos sob sua responsabilidade.
+5. Não alterar documentação pertencente a outro agente sem autorização.
