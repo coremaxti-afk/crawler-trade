@@ -22,7 +22,7 @@
 - Estrutura documental do projeto consolidada.
 - Governanca de agentes criada em `docs/00_AGENTS/AGENT_COORDINATION.md`.
 - Perfil do PM criado em `docs/00_AGENTS/PM_PROFILE.md`.
-- Documento base de hipoteses criado em `docs/04_RESEARCH/LATE_GOAL_HYPOTHESES.md`.
+- Documento base de hipoteses criado em `docs/04_RESEARCH/ACTIVE/LATE_GOAL_HYPOTHESES.md`.
 - Understat integrado.
 - FotMob integrado parcialmente.
 - EPL 2024/2025 descoberta via SofaScore com 381 partidas no inventory.
@@ -37,6 +37,8 @@
 - `sofascore_importer.py` implementado no commit `84e641f`.
 - PostgreSQL populado com 380 partidas SofaScore importaveis.
 - Idempotencia do importer validada com segunda execucao sem duplicacao.
+- Validacao leve de qualidade concluida com status: APTO COM RESSALVAS.
+- Desenho metodologico do Dataset Analitico v1 definido em `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`.
 
 ---
 
@@ -71,9 +73,9 @@ Tabelas populadas nesta etapa:
 
 Contagens finais:
 
-- `matches_master`: 380 eventos distintos.
-- `match_statistics`: 380 eventos distintos.
-- `match_incidents`: 7647 registros, cobrindo 380 eventos.
+- `matches_master`: 380 partidas.
+- `match_statistics`: 380 partidas.
+- `match_incidents`: 7647 registros.
 - Registros para `12436452`: 0.
 - Orfaos em `match_statistics`: 0.
 - Orfaos em `match_incidents`: 0.
@@ -85,25 +87,50 @@ Fora do escopo desta importacao:
 - lineups
 - h2h
 - features
-- dataset analitico
 - modelagem
+
+---
+
+## Validacao Leve de Qualidade
+
+Status:
+
+- APTO COM RESSALVAS.
+
+Resultados:
+
+- Nao existem orfaos.
+- Nao existem divergencias entre placar e incidentes.
+- 16 partidas sem gols sao compativeis com o placar.
+- `big_chances_home` possui 7 nulos.
+- `big_chances_away` possui 7 nulos.
+
+Interpretacao:
+
+- A base esta apta para desenho metodologico do Dataset Analitico v1.
+- As colunas `big_chances_home` e `big_chances_away` devem ser tratadas com ressalva e nao devem ser usadas como feature obrigatoria sem regra documentada de nulos.
+- `match_graph`, lineups e h2h permanecem fora do core v1.
 
 ---
 
 ## Em Andamento
 
-### Validacao de Dados Importados
+### Dataset Analitico v1
 
 Objetivo:
 
-Validar qualidade, consistencia e completude dos dados SofaScore importados.
+Definir o desenho metodologico do Dataset Analitico v1 antes de criar codigo, features ou modelos.
 
-Pontos iniciais:
+Status:
 
-- Conferir amostras em `matches_master`.
-- Validar campos principais de `match_statistics`.
-- Validar gols, cartoes, substituicoes e eventos de periodo em `match_incidents`.
-- Confirmar que dados core sao suficientes para a proxima etapa autorizada.
+- Desenho metodologico definido.
+- Nenhum codigo criado nesta etapa.
+- Nenhum modelo criado nesta etapa.
+- Feature engineering ainda nao iniciada.
+
+Documento:
+
+- `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`
 
 ---
 
@@ -122,17 +149,16 @@ Status:
 
 ## Proximas Etapas
 
-1. Validar amostras importadas no PostgreSQL.
-2. Revisar qualidade de `match_statistics` e `match_incidents`.
-3. CTO/Data Engineer decidir proxima frente: graph, importacao complementar ou catalogo de features.
-4. Implementar coleta/importacao de graph apenas se aprovada.
-5. Consolidar integracao multi-fonte.
-6. Construir catalogo de features.
-7. Gerar dataset analitico.
-8. Pesquisa quantitativa.
-9. Modelagem preditiva.
-10. Backtesting.
-11. Producao.
+1. PM registrar conclusao da validacao leve e transicao para Dataset Analitico v1.
+2. Quant Research revisar o desenho metodologico do Dataset Analitico v1.
+3. CTO avaliar se o desenho exige impacto estrutural antes de qualquer implementacao.
+4. Codex somente deve ser acionado quando houver tarefa pequena, aprovada e com criterios de aceite.
+5. Construir catalogo de features sem usar dados futuros.
+6. Gerar Dataset Analitico v1 somente apos aprovacao metodologica.
+7. Validar H1-H9 na ordem recomendada.
+8. Iniciar modelagem apenas depois de dataset validado.
+9. Backtesting apenas depois de baseline validado.
+10. Producao apenas em etapa futura.
 
 ---
 
@@ -142,4 +168,7 @@ Status:
 - Perfil core reduziu volume de requests e funcionou operacionalmente via 5G.
 - A partida `12436452` deve permanecer fora da importacao atual.
 - Importer SofaScore core e retomavel/idempotente.
+- Base PostgreSQL esta apta com ressalvas para desenho do Dataset Analitico v1.
+- `big_chances_home` e `big_chances_away` possuem 7 nulos cada.
 - `match_graph` segue pendente porque ainda nao ha `graph.json` coletado.
+- Lineups e h2h permanecem complementares, fora do core v1.
