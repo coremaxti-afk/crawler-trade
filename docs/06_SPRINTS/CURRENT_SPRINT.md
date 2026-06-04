@@ -4,11 +4,11 @@
 
 Objetivo:
 
-Construir a base histórica SofaScore e preparar a importação para PostgreSQL.
+Construir a base historica SofaScore e preparar/importar os dados core para PostgreSQL.
 
 ---
 
-## Concluído
+## Concluido
 
 - [x] Criar sofascore_season_collector.py
 - [x] Criar sofascore_match_collector.py
@@ -21,111 +21,143 @@ Construir a base histórica SofaScore e preparar a importação para PostgreSQL.
 - [x] Coletar lineups.json
 - [x] Coletar h2h.json
 - [x] Coletar 50 partidas da EPL
-- [x] Implementar correção operacional para HTTP 403 no coletor SofaScore v2
+- [x] Implementar correcao operacional para HTTP 403 no coletor SofaScore v2
 - [x] Executar teste operacional controlado de retomada
 - [x] Validar coleta via 5G sem novo HTTP 403
+- [x] Criar coletor SofaScore v3 em perfil core
 - [x] Executar lote core com 188 partidas planejadas
+- [x] Consolidar inventario real de partidas full/core
+- [x] Confirmar total final contra o inventario de 381 partidas
+- [x] Implementar sofascore_importer.py
+- [x] Popular PostgreSQL com dados SofaScore core
+- [x] Validar idempotencia do importer
+- [x] Validar integridade basica entre matches_master, match_statistics e match_incidents
 
 ---
 
-## Atualização Operacional Mais Recente
+## Atualizacao Operacional Mais Recente
 
 Resultado observado:
 
-- Coleta executada através de conexão 5G.
-- 107 partidas adicionais foram coletadas inicialmente sem ocorrência de HTTP 403.
-- Evidência forte de que o bloqueio anterior estava relacionado ao IP/conexão anterior e não a uma falha primária do coletor.
+- Coleta executada atraves de conexao 5G sem novo HTTP 403 em mais de 100 partidas.
+- Evidencia forte de que o bloqueio anterior estava associado a IP/conexao e volume de requests, nao a falha primaria do coletor.
+- Para reduzir volume, foi criado o coletor v3 em perfil core.
 
-Marco de coleta por perfil:
+Perfis de coleta:
 
-- Até a partida 194: coleta completa com 5 JSONs por partida.
-  - event.json
-  - statistics.json
-  - incidents.json
-  - lineups.json
-  - h2h.json
+- Full: 5 JSONs por partida.
+  - `event.json`
+  - `statistics.json`
+  - `incidents.json`
+  - `lineups.json`
+  - `h2h.json`
 
-- A partir da partida 195: coleta em perfil core.
-  - event.json
-  - statistics.json
-  - incidents.json
-
-Objetivo do perfil core:
-
-- reduzir volume de requests;
-- diminuir risco de novo HTTP 403;
-- priorizar os dados necessários para importer e primeiras análises.
+- Core: 3 JSONs por partida.
+  - `event.json`
+  - `statistics.json`
+  - `incidents.json`
 
 ---
 
-## Resumo Final do Lote Core
+## Auditoria Local SofaScore EPL
 
-Resultado informado:
+Resultado confirmado:
 
-- Partidas planejadas: 188
-- Endpoints coletados: 558
-- Endpoints pulados: 6
-- Endpoints falhos: 0
-- Bloqueio operacional: False
-- Log: `data\raw\sofascore\premier_league_61627\collection_log_v3.jsonl`
+- Total no inventory: 381 partidas.
+- Total de pastas locais: 381.
+- Partidas full: 192.
+- Partidas core: 188.
+- Total importavel: 380.
+- Partidas faltantes: 0.
+- Partidas incompletas relevantes: 1.
+- Partida descartada da importacao atual: `12436452`.
 
-Interpretação:
+Observacao:
 
-- O lote core foi executado com sucesso operacional.
-- Não houve falhas de endpoint.
-- Não houve novo bloqueio HTTP 403.
-- Os 6 endpoints pulados devem ser tratados como comportamento esperado se já existiam JSONs válidos.
-- A coleta core está aprovada como estratégia operacional para reduzir volume de requests.
+- A partida `12436449` foi corrigida/coletada com os 3 dados core e foi considerada importavel.
+
+---
+
+## Importacao PostgreSQL
+
+Script:
+
+- `LateGoalResearch/Crawler/Sofascore/sofascore_importer.py`
+
+Commit:
+
+- `84e641f` - Implementa importer SofaScore core
+
+Escopo importado:
+
+- `matches_master`
+- `match_statistics`
+- `match_incidents`
+
+Fora do escopo:
+
+- `match_graph`
+- lineups
+- h2h
+- features
+- dataset analitico
+- modelagem
+
+Resultado da primeira importacao:
+
+- processed: 380
+- inserted: 380
+- updated: 0
+- failed: 0
+- known_skipped: 1
+
+Resultado da segunda execucao:
+
+- processed: 380
+- inserted: 0
+- updated: 380
+- failed: 0
+- known_skipped: 1
+
+Contagens finais no banco:
+
+- `matches_master`: 380 eventos distintos.
+- `match_statistics`: 380 eventos distintos.
+- `match_incidents`: 7647 registros, cobrindo 380 eventos.
+- Registros para `12436452`: 0.
+- Orfaos em `match_statistics`: 0.
+- Orfaos em `match_incidents`: 0.
+- Partidas importadas sem estatisticas: 0.
 
 ---
 
 ## Em Andamento
 
-- [ ] Consolidar inventário real de partidas completas (5 JSONs) e partidas core (3 JSONs)
-- [ ] Confirmar total final de partidas EPL coletadas contra o inventário de 381 partidas
-- [ ] Iniciar planejamento do sofascore_importer.py
+- [ ] Validar amostras importadas por coluna
+- [ ] Revisar qualidade dos dados de `match_statistics`
+- [ ] Revisar qualidade dos dados de `match_incidents`
+- [ ] Definir proximo passo tecnico com CTO/Data Engineer
 
 ---
 
-## Correção Operacional HTTP 403 SofaScore
+## Proximos Passos
 
-Status:
-
-Implementado, revisado e validado operacionalmente.
-
-Commit:
-
-- `54bbb14` — Melhora robustez do coletor SofaScore v2
-
-Observação atual:
-
-- A persistência anterior do HTTP 403 continua registrada historicamente.
-- Porém os testes em 5G e o lote core indicam que o problema estava fortemente associado à origem da conexão/IP e ao volume de requisições.
-- Não há evidência atual de falha estrutural do coletor.
-
----
-
-## Próximos Passos
-
-- [ ] Validar contagem final de partidas coletadas
-- [ ] Validar consistência entre inventário, pastas locais e logs
-- [ ] Consolidar inventário real de partidas full e core
-- [ ] Acionar Data Engineer / Database para planejar importer com suporte a dados full/core
-- [ ] Implementar sofascore_importer.py
-- [ ] Popular PostgreSQL
-- [ ] Validar match_statistics
-- [ ] Validar match_incidents
-- [ ] Implementar coleta de graph em etapa posterior
-- [ ] Iniciar Feature Engineering
+- [ ] Conferir amostras de partidas full e core no PostgreSQL
+- [ ] Validar consistencia de placar e data em `matches_master`
+- [ ] Validar campos principais em `match_statistics`
+- [ ] Validar gols, cartoes e substituicoes em `match_incidents`
+- [ ] Decidir se a proxima etapa sera graph, importacao complementar ou catalogo de features
+- [ ] Implementar coleta de graph em etapa posterior, se aprovada
+- [ ] Iniciar Feature Engineering somente apos aprovacao
 
 ---
 
 ## Resultado Esperado
 
-Base histórica consistente da Premier League disponível para integração multi-fonte e validação das hipóteses H1-H9.
+Base historica SofaScore EPL core importada no PostgreSQL, validada e pronta para a proxima decisao de engenharia de dados.
 
 ---
 
 ## Status
 
-EM EXECUÇÃO — COLETA CORE SOFASCORE CONCLUÍDA COM SUCESSO OPERACIONAL; PRÓXIMA FRENTE: CONSOLIDAÇÃO E IMPORTER
+EM EXECUCAO - COLETA CORE CONCLUIDA; IMPORTER SOFASCORE IMPLEMENTADO; POSTGRESQL POPULADO COM 380 PARTIDAS IMPORTAVEIS
