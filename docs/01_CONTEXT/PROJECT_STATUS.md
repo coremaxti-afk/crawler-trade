@@ -38,7 +38,9 @@
 - PostgreSQL populado com 380 partidas SofaScore importaveis.
 - Idempotencia do importer validada com segunda execucao sem duplicacao.
 - Validacao leve de qualidade concluida com status: APTO COM RESSALVAS.
-- Desenho metodologico do Dataset Analitico v1 definido em `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`.
+- Desenho metodologico do Dataset Analitico V1 definido em `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`.
+- Dataset Builder V1 implementado no commit `1a1404e09079f2a1a7958ae948fefdc667872a50`.
+- Dataset Analitico V1 gerado com 380 linhas e status APTO COM RESSALVAS.
 
 ---
 
@@ -86,7 +88,7 @@ Fora do escopo desta importacao:
 - `match_graph`
 - lineups
 - h2h
-- features
+- features avancadas
 - modelagem
 
 ---
@@ -107,30 +109,93 @@ Resultados:
 
 Interpretacao:
 
-- A base esta apta para desenho metodologico do Dataset Analitico v1.
+- A base esta apta com ressalvas para Dataset Analitico V1.
 - As colunas `big_chances_home` e `big_chances_away` devem ser tratadas com ressalva e nao devem ser usadas como feature obrigatoria sem regra documentada de nulos.
 - `match_graph`, lineups e h2h permanecem fora do core v1.
 
 ---
 
-## Em Andamento
-
-### Dataset Analitico v1
-
-Objetivo:
-
-Definir o desenho metodologico do Dataset Analitico v1 antes de criar codigo, features ou modelos.
+## Dataset Analitico V1
 
 Status:
 
-- Desenho metodologico definido.
-- Nenhum codigo criado nesta etapa.
-- Nenhum modelo criado nesta etapa.
-- Feature engineering ainda nao iniciada.
+- Gerado.
+- APTO COM RESSALVAS.
 
-Documento:
+Script:
+
+- `LateGoalResearch/Analytics/DatasetBuilder/dataset_builder_v1.py`
+
+Commit:
+
+- `1a1404e09079f2a1a7958ae948fefdc667872a50` - Cria Dataset Builder V1.
+
+Documentacao:
 
 - `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`
+- `docs/04_RESEARCH/DATASET_BUILDER_V1.md`
+
+Artefatos locais gerados:
+
+- `data/processed/datasets/late_goal_dataset_v1.csv`
+- `data/processed/datasets/late_goal_dataset_v1.parquet`
+- `data/processed/datasets/late_goal_dataset_v1_metadata.json`
+- `data/processed/datasets/late_goal_dataset_v1_validation_report.json`
+
+Resumo validado:
+
+- Linhas: 380.
+- Grain: 1 linha por partida.
+- Target principal: `target_late_goal_75`.
+- Alias operacional: `has_late_goal`.
+- Target positivo: 189.
+- Target negativo: 191.
+- Duplicatas por `match_id`: 0.
+- Duplicatas por `sofascore_event_id`: 0.
+
+Ressalvas:
+
+- Estatisticas full-match de `match_statistics` possuem risco de leakage para uso in-game.
+- Colunas target-derived nao podem ser usadas como features.
+- `big_chances_home` e `big_chances_away` possuem 7 nulos cada.
+
+---
+
+## Colunas Proibidas como Features nesta Etapa
+
+Target-derived:
+
+- `has_late_goal`
+- `target_late_goal_75`
+- `late_goal_count_75`
+- `home_late_goal_count_75`
+- `away_late_goal_count_75`
+- `first_late_goal_minute_75`
+
+Placar final / resultado final, proibidos como preditores:
+
+- `home_goals`
+- `away_goals`
+- `total_goals`
+
+---
+
+## Em Andamento
+
+### Auditoria Quant Research / Data Science
+
+Objetivo:
+
+Auditar o Dataset Analitico V1 antes de qualquer modelagem.
+
+Tarefas esperadas:
+
+- validar coerencia do target;
+- analisar distribuicao de positivos/negativos;
+- classificar colunas por risco de leakage;
+- separar colunas de auditoria, identificadores e potenciais features;
+- propor primeira bateria de analises exploratorias para H1/H2/H6/H9;
+- recomendar seguir, seguir com ressalvas ou revisar Dataset V1.
 
 ---
 
@@ -149,16 +214,14 @@ Status:
 
 ## Proximas Etapas
 
-1. PM registrar conclusao da validacao leve e transicao para Dataset Analitico v1.
-2. Quant Research revisar o desenho metodologico do Dataset Analitico v1.
-3. CTO avaliar se o desenho exige impacto estrutural antes de qualquer implementacao.
-4. Codex somente deve ser acionado quando houver tarefa pequena, aprovada e com criterios de aceite.
-5. Construir catalogo de features sem usar dados futuros.
-6. Gerar Dataset Analitico v1 somente apos aprovacao metodologica.
-7. Validar H1-H9 na ordem recomendada.
-8. Iniciar modelagem apenas depois de dataset validado.
-9. Backtesting apenas depois de baseline validado.
-10. Producao apenas em etapa futura.
+1. Quant Research / Data Science auditar o Dataset Analitico V1.
+2. Classificar colunas por uso permitido e risco de leakage.
+3. Revisar se o target `target_late_goal_75` esta metodologicamente aprovado.
+4. Definir primeira bateria exploratoria para H1/H2/H6/H9.
+5. Iniciar feature engineering somente apos aprovacao metodologica.
+6. Iniciar modelagem apenas depois de dataset e features aprovados.
+7. Backtesting apenas depois de baseline validado.
+8. Producao apenas em etapa futura.
 
 ---
 
@@ -168,7 +231,9 @@ Status:
 - Perfil core reduziu volume de requests e funcionou operacionalmente via 5G.
 - A partida `12436452` deve permanecer fora da importacao atual.
 - Importer SofaScore core e retomavel/idempotente.
-- Base PostgreSQL esta apta com ressalvas para desenho do Dataset Analitico v1.
-- `big_chances_home` e `big_chances_away` possuem 7 nulos cada.
+- Base PostgreSQL esta apta com ressalvas para Dataset Analitico V1.
+- Dataset Builder V1 gerou CSV, Parquet, metadata e validation report.
+- `target_late_goal_75` foi criado com 189 positivos e 191 negativos.
+- Estatisticas full-match exigem ressalva de leakage antes de qualquer uso preditivo.
+- Nenhuma modelagem foi iniciada.
 - `match_graph` segue pendente porque ainda nao ha `graph.json` coletado.
-- Lineups e h2h permanecem complementares, fora do core v1.
