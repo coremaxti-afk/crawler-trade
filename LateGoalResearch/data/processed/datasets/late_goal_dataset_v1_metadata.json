@@ -1,0 +1,67 @@
+{
+  "dataset_name": "late_goal_dataset_v1",
+  "dataset_version": "v1",
+  "generated_at": "2026-06-04T19:43:16",
+  "grain": "one row per match",
+  "source_tables": [
+    "matches_master",
+    "match_statistics",
+    "match_incidents"
+  ],
+  "known_skipped_match_ids": [
+    "12436452"
+  ],
+  "row_count": 380,
+  "columns": [
+    "match_id",
+    "sofascore_event_id",
+    "league",
+    "season",
+    "match_date",
+    "home_team",
+    "away_team",
+    "home_goals",
+    "away_goals",
+    "total_goals",
+    "possession_home",
+    "possession_away",
+    "shots_home",
+    "shots_away",
+    "shots_on_target_home",
+    "shots_on_target_away",
+    "corners_home",
+    "corners_away",
+    "big_chances_home",
+    "big_chances_away",
+    "xg_home",
+    "xg_away",
+    "incident_count",
+    "goal_count",
+    "late_goal_count_75",
+    "home_late_goal_count_75",
+    "away_late_goal_count_75",
+    "first_late_goal_minute_75",
+    "last_goal_minute",
+    "card_count",
+    "substitution_count",
+    "has_late_goal",
+    "target_late_goal_75"
+  ],
+  "target": {
+    "primary_name": "has_late_goal",
+    "alias": "target_late_goal_75",
+    "definition": "1 if at least one goal incident has minute > 75; otherwise 0.",
+    "source": "match_incidents"
+  },
+  "outputs": {
+    "csv": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1.csv",
+    "parquet": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1.parquet",
+    "metadata": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1_metadata.json",
+    "validation_report": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1_validation_report.json"
+  },
+  "caveats": [
+    "Full-match statistics are included as raw analytical columns and must not be used as in-game cutoff predictors without leakage review.",
+    "big_chances_home and big_chances_away contain known nulls and should remain optional in V1.",
+    "match_graph, lineups and h2h are outside Dataset V1 scope."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-06-04T19:43:16",
+  "dataset_version": "v1",
+  "late_minute_cutoff": 75,
+  "status": "APTO COM RESSALVAS",
+  "row_count": 380,
+  "expected_row_count": 380,
+  "source_table_counts": {
+    "matches_master": 380,
+    "match_statistics": 380,
+    "match_incidents": 7647
+  },
+  "source_count_mismatches": {},
+  "duplicate_match_id_count": 0,
+  "duplicate_sofascore_event_id_count": 0,
+  "required_null_counts": {
+    "match_id": 0,
+    "sofascore_event_id": 0,
+    "match_date": 0,
+    "home_team": 0,
+    "away_team": 0,
+    "has_late_goal": 0
+  },
+  "target_counts": {
+    "0": 191,
+    "1": 189
+  },
+  "target_positive_count": 189,
+  "target_negative_count": 191,
+  "target_positive_rate": 0.497368,
+  "big_chance_nulls": {
+    "big_chances_home": 7,
+    "big_chances_away": 7
+  },
+  "late_goal_minute_min": 76,
+  "late_goal_minute_max": 90,
+  "parquet_written": true,
+  "validation_errors": [],
+  "validation_warnings": [
+    "big_chances_home/big_chances_away contain known nulls and should be optional features only."
+  ]
+}
