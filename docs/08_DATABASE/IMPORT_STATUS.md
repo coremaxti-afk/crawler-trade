@@ -2,22 +2,20 @@
 
 ## Objetivo
 
-Acompanhar o estado da importação dos dados coletados para o PostgreSQL.
+Acompanhar o estado da importacao dos dados coletados para o PostgreSQL.
 
 ---
 
 ## Understat
 
 Status:
-Operacional
+Operacional.
 
-Origem:
-Understat
+Destino atual:
 
-Destino:
-matches_master
+- `matches_master`, via integracao/mapeamento especifico da fonte.
 
-Dados disponíveis:
+Dados disponiveis:
 
 - Match ID
 - Liga
@@ -38,116 +36,131 @@ Dados disponíveis:
 ### Season Collector
 
 Status:
-Implementado
+Implementado.
 
 Artefatos:
 
-- inventory.json
-- rounds.json
-- round_XX_events.json
+- `inventory.json`
+- `rounds.json`
+- `round_XX_events.json`
 
 ---
 
-### Match Collector
+### Match Collectors
 
 Status:
-Implementado e endurecido operacionalmente no v2
+Implementados e validados operacionalmente.
 
-Script relevante:
+Scripts relevantes:
 
 - `LateGoalResearch/Crawler/Sofascore/v2_sofascore_match_collector.py`
+- `LateGoalResearch/Crawler/Sofascore/v3_sofascore_match_collector.py`
 
-Commit relevante:
+Perfis de coleta:
 
-- `54bbb14` — Melhora robustez do coletor SofaScore v2
+- Full: `event.json`, `statistics.json`, `incidents.json`, `lineups.json`, `h2h.json`
+- Core: `event.json`, `statistics.json`, `incidents.json`
 
-Artefatos originalmente coletados:
+Estado local auditado:
 
-- event.json
-- statistics.json
-- incidents.json
-- lineups.json
-- h2h.json
+- Total no inventory: 381 partidas.
+- Total de pastas locais: 381.
+- Partidas full: 192.
+- Partidas core: 188.
+- Total importavel: 380.
+- Partidas faltantes: 0.
+- Partidas incompletas relevantes para importacao atual: 1.
+- Partida descartada da importacao atual: `12436452`.
 
-Comportamento do v2:
+Observacao:
 
-- checkpoint por endpoint;
-- validação de JSON existente;
-- skip de JSON válido;
-- backup de JSON inválido;
-- log auditável em `data/raw/sofascore/premier_league_61627/collection_log.jsonl`;
-- retry/backoff para falhas temporárias;
-- HTTP 403 registra `blocked` e encerra o lote.
-
-Status operacional:
-
-- A correção funcionou tecnicamente.
-- O HTTP 403 persistiu na retomada da partida 51.
-- Coleta massiva pausada até nova decisão operacional.
+- A partida `12436449` foi corrigida/coletada com os 3 JSONs core e esta importada.
+- `lineups.json` e `h2h.json` seguem preservados como dados brutos complementares, mas nao foram importados nesta etapa.
 
 ---
 
-### Perfil de Importação Inicial Recomendado
-
-Para destravar a engenharia de dados, o importer inicial deve priorizar os JSONs core:
-
-- event.json
-- statistics.json
-- incidents.json
-
-Motivo:
-
-- são suficientes para criar base inicial de partidas, estatísticas agregadas e eventos com minuto;
-- permitem validar target de gols tardios e primeiras hipóteses;
-- reduzem dependência de dados complementares;
-- são compatíveis com uma futura coleta core reduzida.
-
-JSONs complementares:
-
-- lineups.json
-- h2h.json
-
-Observação:
-
-- lineups e h2h não devem bloquear o importer inicial.
-- Devem ser tratados como complementares em etapa futura.
-
----
-
-### Graph / Minuto a Minuto
+## SofaScore Importer
 
 Status:
+Implementado e executado.
 
-- Estrutura `match_graph` pronta.
-- Coleta do endpoint graph ainda não implementada.
+Script:
 
-Interpretação:
+- `LateGoalResearch/Crawler/Sofascore/sofascore_importer.py`
 
-- `incidents.json` possui eventos com minuto.
-- Isso não equivale a dados minuto a minuto completos.
-- Para momentum e pressão temporal, será necessário `graph.json` ou endpoint equivalente.
+Commit:
 
-Impacto no importer:
+- `84e641f` - Implementa importer SofaScore core
 
-- `match_graph` não deve bloquear o importer inicial.
-- Importação de graph deve ser tratada como etapa posterior.
+Escopo da importacao:
+
+- `matches_master`
+- `match_statistics`
+- `match_incidents`
+
+Fora do escopo desta etapa:
+
+- `match_graph`
+- `lineups.json`
+- `h2h.json`
+- features H1-H9
+- dataset analitico
+- modelagem
+
+Regras aplicadas:
+
+- Usa `from config.database import engine`.
+- Usa SQLAlchemy com `engine.begin()` e `sqlalchemy.text`.
+- Classifica partidas em `full`, `core`, `incomplete` e `known_skipped`.
+- Pula `KNOWN_SKIPPED_MATCH_IDS = {"12436452"}`.
+- Importa apenas partidas full/core.
+- Erro por partida nao interrompe todo o lote.
+- Reexecucao nao duplica registros.
 
 ---
 
-### Importer
+## Validacao Executada
 
-Status:
-Não iniciado
+### Dry-run
 
-Script previsto:
+Resultado:
 
-- sofascore_importer.py
+- full: 192
+- core: 188
+- importable: 380
+- known_skipped: 1
+- incomplete: 0
+- missing: 0
 
-Prioridade sugerida:
+### Primeira importacao real
 
-1. Importer inicial para `event.json`, `statistics.json` e `incidents.json`.
-2. Importação complementar de `lineups.json` e `h2h.json`, se necessário.
-3. Importação de `graph.json` quando a coleta minuto a minuto for implementada.
+Resultado:
+
+- processed: 380
+- inserted: 380
+- updated: 0
+- failed: 0
+- known_skipped: 1
+
+### Segunda execucao / idempotencia
+
+Resultado:
+
+- processed: 380
+- inserted: 0
+- updated: 380
+- failed: 0
+- known_skipped: 1
+
+### Banco apos importacao
+
+- `matches_master`: 380 eventos distintos.
+- `match_statistics`: 380 eventos distintos.
+- `match_incidents`: 7647 registros, cobrindo 380 eventos.
+- Registros para `12436452`: 0.
+- Orfaos em `match_statistics`: 0.
+- Orfaos em `match_incidents`: 0.
+- Partidas importadas sem estatisticas: 0.
 
 ---
 
@@ -156,123 +169,52 @@ Prioridade sugerida:
 ### matches_master
 
 Status:
-Pronta
+Populada com 380 partidas SofaScore EPL importaveis.
 
-Uso inicial:
+Origem principal:
 
-- receber dados centrais de `event.json` e integração com Understat/match_mapping.
+- `event.json`
 
 ---
 
 ### match_statistics
 
 Status:
-Pronta
+Populada com 380 registros de estatisticas agregadas.
 
-Uso inicial:
+Origem principal:
 
-- receber estatísticas agregadas de `statistics.json`.
+- `statistics.json`
 
 ---
 
 ### match_incidents
 
 Status:
-Pronta
+Populada com 7647 incidentes.
 
-Uso inicial:
+Origem principal:
 
-- receber eventos de `incidents.json`, incluindo gols, cartões e substituições quando disponíveis.
+- `incidents.json`
 
 ---
 
 ### match_graph
 
 Status:
-Estrutura pronta
+Nao populada nesta etapa.
 
-Observação:
-Coleta do endpoint graph ainda não implementada.
+Motivo:
 
-Uso futuro:
-
-- armazenar momentum/pressão temporal minuto a minuto ou por janela temporal.
+- Nenhum `graph.json` ou fonte equivalente foi coletado/importado ainda.
 
 ---
 
-## Estado Atual do Projeto
+## Proximo Marco
 
-Temporadas descobertas:
+Preparar a proxima etapa de engenharia de dados:
 
-- Premier League 2024/25
-
-Partidas coletadas:
-
-- 50+
-
-JSONs coletados:
-
-- 250+
-
-Estado da coleta SofaScore:
-
-- pausada por HTTP 403 persistente após teste de retomada.
-
----
-
-## Próximo Marco
-
-Implementar:
-
-- sofascore_importer.py
-
-Objetivo inicial:
-
-Importar dados SofaScore core para:
-
-- matches_master
-- match_statistics
-- match_incidents
-
-Objetivo posterior:
-
-Importar dados complementares para:
-
-- match_graph, quando graph/minuto a minuto estiver disponível;
-- tabelas complementares, se CTO aprovar necessidade futura para lineups/h2h.
-
----
-
-## Bloqueios Conhecidos
-
-### HTTP 403 SofaScore
-
-Situação observada:
-
-- coleta funcional em amostra inicial;
-- bloqueio após grande volume de requisições;
-- correção operacional implementada;
-- HTTP 403 persistiu na retomada da partida 51.
-
-Hipóteses:
-
-- rate limiting
-- session limiting
-- IP limiting
-
-Status:
-
-- bloqueio externo ainda ativo;
-- coleta massiva pausada;
-- próxima decisão deve envolver Data Acquisition Engineer e CTO.
-
----
-
-## Decisão Pendente
-
-Avaliar se o projeto deve:
-
-1. tentar novo teste SofaScore com perfil core de 3 JSONs;
-2. iniciar importer com as 50 partidas já coletadas;
-3. executar spike controlado da API-Football;
-4. combinar as três frentes em sequência controlada.
+1. Validar amostras importadas por coluna.
+2. Revisar qualidade dos dados em `match_statistics` e `match_incidents`.
+3. Definir, com CTO/Data Engineer, se o proximo passo sera importacao complementar, graph ou inicio de catalogo de features.
+4. Manter `12436452` fora da importacao atual ate nova decisao.
