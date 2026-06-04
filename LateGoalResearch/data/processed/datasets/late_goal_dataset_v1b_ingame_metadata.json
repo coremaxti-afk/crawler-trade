@@ -1,0 +1,90 @@
+{
+  "dataset_name": "late_goal_dataset_v1b_ingame",
+  "dataset_version": "v1b",
+  "generated_at": "2026-06-04T20:44:24",
+  "status": "APTO COM RESSALVAS",
+  "grain": "one row per match_id + cutoff_minute",
+  "source_tables": [
+    "matches_master",
+    "match_incidents"
+  ],
+  "excluded_source_tables": [
+    "match_statistics",
+    "match_graph"
+  ],
+  "known_skipped_match_ids": [
+    "12436452"
+  ],
+  "cutoffs": [
+    60,
+    65,
+    70,
+    75,
+    80
+  ],
+  "row_count": 1900,
+  "columns": [
+    "match_id",
+    "sofascore_event_id",
+    "match_date",
+    "home_team",
+    "away_team",
+    "cutoff_minute",
+    "home_goals_until_cutoff",
+    "away_goals_until_cutoff",
+    "score_diff_home_until_cutoff",
+    "is_draw_until_cutoff",
+    "home_leading_until_cutoff",
+    "away_leading_until_cutoff",
+    "total_goals_until_cutoff",
+    "last_goal_minute_until_cutoff",
+    "time_since_last_goal_until_cutoff",
+    "red_cards_until_cutoff",
+    "yellow_cards_until_cutoff",
+    "cards_until_cutoff",
+    "substitutions_until_cutoff",
+    "goal_last_5m_until_cutoff",
+    "goal_last_10m_until_cutoff",
+    "target_goal_after_cutoff"
+  ],
+  "feature_columns_allowed_for_initial_h6_h9_validation": [
+    "home_goals_until_cutoff",
+    "away_goals_until_cutoff",
+    "score_diff_home_until_cutoff",
+    "is_draw_until_cutoff",
+    "home_leading_until_cutoff",
+    "away_leading_until_cutoff",
+    "total_goals_until_cutoff",
+    "last_goal_minute_until_cutoff",
+    "time_since_last_goal_until_cutoff",
+    "cards_until_cutoff",
+    "substitutions_until_cutoff",
+    "goal_last_5m_until_cutoff",
+    "goal_last_10m_until_cutoff"
+  ],
+  "unavailable_columns_kept_for_contract": [
+    "red_cards_until_cutoff",
+    "yellow_cards_until_cutoff"
+  ],
+  "target": {
+    "name": "target_goal_after_cutoff",
+    "definition": "1 if at least one goal incident has minute > cutoff_minute; otherwise 0.",
+    "source": "match_incidents",
+    "feature_use": "prohibited"
+  },
+  "leakage_rules": [
+    "Features are computed only from incidents with minute <= cutoff_minute.",
+    "target_goal_after_cutoff is computed from goal incidents with minute > cutoff_minute and must not be used as a feature.",
+    "No full-match statistics are used in Dataset V1B.",
+    "No final score columns from matches_master are used as predictors."
+  ],
+  "caveats": [
+    "Card color is not available in the imported match_incidents table; use cards_until_cutoff for current H9 validation.",
+    "red_cards_until_cutoff and yellow_cards_until_cutoff are null by design until importer/schema captures card color."
+  ],
+  "outputs": {
+    "csv": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1b_ingame.csv",
+    "metadata": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1b_ingame_metadata.json",
+    "validation_report": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1b_ingame_validation_report.json"
+  }
+}

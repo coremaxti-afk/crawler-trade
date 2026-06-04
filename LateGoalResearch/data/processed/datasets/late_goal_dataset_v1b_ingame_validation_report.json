@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-06-04T20:44:24",
+  "dataset_name": "late_goal_dataset_v1b_ingame",
+  "dataset_version": "v1b",
+  "status": "APTO COM RESSALVAS",
+  "grain": "one row per match_id + cutoff_minute",
+  "cutoffs": [
+    60,
+    65,
+    70,
+    75,
+    80
+  ],
+  "row_count": 1900,
+  "expected_row_count": 1900,
+  "unique_matches": 380,
+  "duplicate_match_cutoff_rows": 0,
+  "cutoff_counts": {
+    "60": 380,
+    "65": 380,
+    "70": 380,
+    "75": 380,
+    "80": 380
+  },
+  "target_counts": {
+    "0": 822,
+    "1": 1078
+  },
+  "target_positive_count": 1078,
+  "target_negative_count": 822,
+  "target_positive_rate": 0.567368,
+  "required_null_counts": {
+    "match_id": 0,
+    "sofascore_event_id": 0,
+    "match_date": 0,
+    "home_team": 0,
+    "away_team": 0,
+    "cutoff_minute": 0,
+    "target_goal_after_cutoff": 0
+  },
+  "red_cards_null_count": 1900,
+  "yellow_cards_null_count": 1900,
+  "cards_until_cutoff_max": 12,
+  "substitutions_until_cutoff_max": 10,
+  "validation_errors": [],
+  "validation_warnings": [
+    "Card color is not available in imported match_incidents; red_cards_until_cutoff and yellow_cards_until_cutoff are null by design. Use cards_until_cutoff for current H9 validation."
+  ]
+}
