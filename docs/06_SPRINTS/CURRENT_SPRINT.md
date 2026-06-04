@@ -22,13 +22,38 @@ Construir a base histórica SofaScore e preparar a importação para PostgreSQL.
 - [x] Coletar h2h.json
 - [x] Coletar 50 partidas da EPL
 - [x] Implementar correção operacional para HTTP 403 no coletor SofaScore v2
+- [x] Executar teste operacional controlado de retomada
 
 ---
 
 ## Em Andamento
 
-- [ ] Validar retomada controlada da coleta SofaScore v2
+- [ ] Decidir estratégia operacional após persistência do HTTP 403 na retomada
 - [ ] Finalizar coleta completa da EPL
+
+---
+
+## Bloqueado / Atenção
+
+### HTTP 403 SofaScore persiste
+
+Situação:
+
+- A correção técnica do coletor SofaScore v2 funcionou operacionalmente.
+- O coletor preservou o comportamento esperado de checkpoint, validação de JSONs, logs e interrupção segura.
+- Porém, na retomada da coleta a partir da partida 51, o SofaScore ainda retornou HTTP 403.
+
+Interpretação:
+
+- O problema não é mais tratado como falha primária do código do coletor.
+- O bloqueio externo da fonte permanece ativo.
+- A coleta SofaScore deve permanecer pausada até nova decisão operacional.
+
+Decisão provisória do PM:
+
+- Não retornar diretamente ao Codex neste momento.
+- Não executar coleta massiva.
+- Encaminhar para nova avaliação conjunta de Data Acquisition Engineer e CTO.
 
 ---
 
@@ -36,7 +61,7 @@ Construir a base histórica SofaScore e preparar a importação para PostgreSQL.
 
 Status:
 
-Implementado e revisado.
+Implementado, revisado e testado operacionalmente.
 
 Commit:
 
@@ -81,35 +106,18 @@ Validação:
 
 - Data Acquisition Engineer aprovou para teste operacional controlado.
 - Coleta massiva ainda não deve ser executada.
-
-Próxima validação operacional:
-
-```bash
-python LateGoalResearch/Crawler/Sofascore/v2_sofascore_match_collector.py --dry-run
-
-python LateGoalResearch/Crawler/Sofascore/v2_sofascore_match_collector.py --list-pending
-
-python LateGoalResearch/Crawler/Sofascore/v2_sofascore_match_collector.py \
-  --limit 1 \
-  --endpoint-delay 10 \
-  --match-delay 30 \
-  --jitter 10 \
-  --backoff 60 \
-  --max-retries 2
-```
+- Teste de retomada indicou persistência de HTTP 403 na partida 51.
 
 ---
 
 ## Próximos Passos
 
-- [ ] Executar `--dry-run`
-- [ ] Executar `--list-pending`
-- [ ] Executar coleta mínima com `--limit 1`
-- [ ] Validar `collection_log.jsonl`
-- [ ] Validar se não houve sobrescrita de JSON válido
-- [ ] Validar se nenhum novo HTTP 403 ocorreu no teste mínimo
-- [ ] Ampliar coleta gradualmente se teste mínimo for aprovado
-- [ ] Finalizar coleta EPL completa
+- [ ] Enviar resultado do teste ao Data Acquisition Engineer
+- [ ] Solicitar análise operacional sobre alternativas seguras para retomada
+- [ ] Enviar recomendação do Data Acquisition ao CTO
+- [ ] CTO decidir se a coleta permanece pausada, se muda cadência operacional ou se prioriza outra frente
+- [ ] Considerar iniciar Data Engineer / Database com as 50 partidas já coletadas, se aprovado pelo CTO/PM
+- [ ] Finalizar coleta EPL completa somente após nova decisão operacional
 - [ ] Implementar sofascore_importer.py
 - [ ] Popular PostgreSQL
 - [ ] Validar match_statistics
@@ -127,4 +135,4 @@ Base histórica consistente da Premier League disponível para integração mult
 
 ## Status
 
-EM EXECUÇÃO
+EM EXECUÇÃO — COLETA SOFASCORE PAUSADA POR HTTP 403 PERSISTENTE
