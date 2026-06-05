@@ -1,7 +1,7 @@
 """Playwright-based H8 graph/momentum collector with optional manual warmup.
 
 This collector is intentionally isolated from v2/v3 and from the urllib H8 collector.
-It keeps the same 5-match cap, checkpoint, validation, logging, and 403 stop rules.
+It keeps a 20-match cap, checkpoint, validation, logging, and 403 stop rules.
 """
 from __future__ import annotations
 
@@ -27,6 +27,10 @@ if str(SCRIPT_DIR) not in sys.path:
 import h8_graph_momentum_collector as base  # noqa: E402
 
 COLLECTION_LOG_FILE = base.LEAGUE_DIR / "collection_log_graph_playwright.jsonl"
+MAX_LIMIT = 20
+DEFAULT_LIMIT = 20
+DEFAULT_LATE_GOAL_TARGET_COUNT = 10
+DEFAULT_NO_LATE_GOAL_TARGET_COUNT = 10
 REQUEST_TIMEOUT_MS = 60000
 RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 
@@ -45,8 +49,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Playwright H8 graph/momentum collector with manual warmup support."
     )
-    parser.add_argument("--limit", type=int, default=base.DEFAULT_LIMIT, help="Maximum matches to process. Hard-capped at 5.")
-    parser.add_argument("--event-ids", nargs="*", default=None, help="Optional explicit SofaScore event ids. Max 5.")
+    parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="Maximum matches to process. Hard-capped at 20.")
+    parser.add_argument("--event-ids", nargs="*", default=None, help="Optional explicit SofaScore event ids. Max 20.")
     parser.add_argument("--list-pending", action="store_true", help="List selected matches without requests.")
     parser.add_argument("--dry-run", action="store_true", help="Show plan without requests.")
     parser.add_argument("--execute", action="store_true", help="Actually perform browser requests.")
@@ -171,6 +175,67 @@ def warmup_context(page: Any, context: Any, args: argparse.Namespace) -> None:
         print(f"Saved storage state: {args.storage_state}")
 
 
+def select_rows_by_event_ids(event_ids: list[str]) -> list[dict[str, Any]]:
+    rows = base.load_dataset_rows()
+    by_event = {base.row_event_id(row): row for row in rows}
+    selected = []
+    for event_id in event_ids[:MAX_LIMIT]:
+        row = by_event.get(str(event_id), {})
+        selected.append(base.make_candidate(event_id=str(event_id), row=row, reason="explicit_event_id"))
+    return selected
+
+
+def auto_select_candidates(limit: int) -> list[dict[str, Any]]:
+    rows = sorted(base.load_dataset_rows(), key=lambda row: (row.get("match_date", ""), row.get("match_id", "")))
+    selected: list[dict[str, Any]] = []
+    desired = {
+        1: min(DEFAULT_LATE_GOAL_TARGET_COUNT, (limit + 1) // 2),
+        0: min(DEFAULT_NO_LATE_GOAL_TARGET_COUNT, limit // 2),
+    }
+    target_counts = {1: 0, 0: 0}
+
+    for target_value in (1, 0):
+        for row in rows:
+            event_id = base.row_event_id(row)
+            if not event_id or event_id in base.KNOWN_SKIPPED_EVENT_IDS:
+                continue
+            try:
+                row_target = int(float(row.get("target_late_goal_75", "")))
+            except ValueError:
+                continue
+            if row_target != target_value:
+                continue
+            if not base.has_core_files(event_id):
+                continue
+            if any(item["event_id"] == event_id for item in selected):
+                continue
+            selected.append(base.make_candidate(event_id=event_id, row=row, reason="auto_selected_core_complete_playwright_20"))
+            target_counts[target_value] += 1
+            if target_counts[target_value] >= desired[target_value]:
+                break
+
+    if len(selected) < limit:
+        for row in rows:
+            event_id = base.row_event_id(row)
+            if not event_id or event_id in base.KNOWN_SKIPPED_EVENT_IDS:
+                continue
+            if not base.has_core_files(event_id):
+                continue
+            if any(item["event_id"] == event_id for item in selected):
+                continue
+            selected.append(base.make_candidate(event_id=event_id, row=row, reason="auto_selected_core_complete_fill"))
+            if len(selected) >= limit:
+                break
+    return selected[:limit]
+
+
+def selected_candidates(args: argparse.Namespace) -> list[dict[str, Any]]:
+    limit = min(args.limit or DEFAULT_LIMIT, MAX_LIMIT)
+    if args.event_ids:
+        return select_rows_by_event_ids(args.event_ids)[:limit]
+    return auto_select_candidates(limit)
+
+
 def execute_collection(candidates: list[dict[str, Any]], args: argparse.Namespace) -> None:
     processed = 0
     successes = 0
@@ -188,7 +253,7 @@ def execute_collection(candidates: list[dict[str, Any]], args: argparse.Namespac
         try:
             warmup_context(page, context, args)
             for index, candidate in enumerate(candidates, start=1):
-                if processed >= base.DEFAULT_LIMIT:
+                if processed >= MAX_LIMIT:
                     break
                 processed += 1
                 print(f"[{index}/{len(candidates)}] collecting graph for {candidate['event_id']}")
@@ -223,9 +288,9 @@ def execute_collection(candidates: list[dict[str, Any]], args: argparse.Namespac
 
 def main() -> None:
     args = parse_args()
-    candidates = base.selected_candidates(args)
-    if len(candidates) > base.DEFAULT_LIMIT:
-        raise SystemExit("Refusing to process more than 5 matches.")
+    candidates = selected_candidates(args)
+    if len(candidates) > MAX_LIMIT:
+        raise SystemExit("Refusing to process more than 20 matches.")
     base.print_candidates(candidates)
     if args.list_pending or args.dry_run or not args.execute:
         print("\nSAFE MODE: no HTTP requests were made. Pass --execute in an authorized local browser session to collect.")
