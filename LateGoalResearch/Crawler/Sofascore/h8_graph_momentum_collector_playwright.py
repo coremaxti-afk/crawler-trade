@@ -1,7 +1,7 @@
 """Playwright-based H8 graph/momentum collector with optional manual warmup.
 
 This collector is intentionally isolated from v2/v3 and from the urllib H8 collector.
-It keeps a 50-match cap, checkpoint, validation, logging, start-index support, and 403 stop rules.
+It keeps checkpoint, validation, logging, start-index support, optional limit support, and 403 stop rules.
 """
 from __future__ import annotations
 
@@ -27,8 +27,7 @@ if str(SCRIPT_DIR) not in sys.path:
 import h8_graph_momentum_collector as base  # noqa: E402
 
 COLLECTION_LOG_FILE = base.LEAGUE_DIR / "collection_log_graph_playwright.jsonl"
-MAX_LIMIT = 50
-DEFAULT_LIMIT = 50
+DEFAULT_LIMIT = None
 DEFAULT_LATE_GOAL_TARGET_COUNT = 25
 DEFAULT_NO_LATE_GOAL_TARGET_COUNT = 25
 REQUEST_TIMEOUT_MS = 60000
@@ -49,8 +48,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Playwright H8 graph/momentum collector with manual warmup support."
     )
-    parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="Maximum matches to process. Hard-capped at 50.")
-    parser.add_argument("--event-ids", nargs="*", default=None, help="Optional explicit SofaScore event ids. Max 50.")
+    parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="Maximum matches to process. Omit for no limit.")
+    parser.add_argument("--event-ids", nargs="*", default=None, help="Optional explicit SofaScore event ids.")
     parser.add_argument("--start-index", type=int, default=1, help="1-based index in the selected candidate list to start from.")
     parser.add_argument("--list-pending", action="store_true", help="List selected matches without requests.")
     parser.add_argument("--dry-run", action="store_true", help="Show plan without requests.")
@@ -180,18 +179,19 @@ def select_rows_by_event_ids(event_ids: list[str]) -> list[dict[str, Any]]:
     rows = base.load_dataset_rows()
     by_event = {base.row_event_id(row): row for row in rows}
     selected = []
-    for event_id in event_ids[:MAX_LIMIT]:
+    for event_id in event_ids:
         row = by_event.get(str(event_id), {})
         selected.append(base.make_candidate(event_id=str(event_id), row=row, reason="explicit_event_id"))
     return selected
 
 
-def auto_select_candidates(limit: int) -> list[dict[str, Any]]:
+def auto_select_candidates(limit: int | None) -> list[dict[str, Any]]:
     rows = sorted(base.load_dataset_rows(), key=lambda row: (row.get("match_date", ""), row.get("match_id", "")))
     selected: list[dict[str, Any]] = []
+    initial_pool_size = limit if limit is not None else len(rows)
     desired = {
-        1: min(DEFAULT_LATE_GOAL_TARGET_COUNT, (limit + 1) // 2),
-        0: min(DEFAULT_NO_LATE_GOAL_TARGET_COUNT, limit // 2),
+        1: min(DEFAULT_LATE_GOAL_TARGET_COUNT, (initial_pool_size + 1) // 2),
+        0: min(DEFAULT_NO_LATE_GOAL_TARGET_COUNT, initial_pool_size // 2),
     }
     target_counts = {1: 0, 0: 0}
 
@@ -210,23 +210,25 @@ def auto_select_candidates(limit: int) -> list[dict[str, Any]]:
                 continue
             if any(item["event_id"] == event_id for item in selected):
                 continue
-            selected.append(base.make_candidate(event_id=event_id, row=row, reason="auto_selected_core_complete_playwright_50"))
+            selected.append(base.make_candidate(event_id=event_id, row=row, reason="auto_selected_core_complete_playwright_balanced_seed"))
             target_counts[target_value] += 1
             if target_counts[target_value] >= desired[target_value]:
                 break
 
-    if len(selected) < limit:
-        for row in rows:
-            event_id = base.row_event_id(row)
-            if not event_id or event_id in base.KNOWN_SKIPPED_EVENT_IDS:
-                continue
-            if not base.has_core_files(event_id):
-                continue
-            if any(item["event_id"] == event_id for item in selected):
-                continue
-            selected.append(base.make_candidate(event_id=event_id, row=row, reason="auto_selected_core_complete_fill"))
-            if len(selected) >= limit:
-                break
+    for row in rows:
+        event_id = base.row_event_id(row)
+        if not event_id or event_id in base.KNOWN_SKIPPED_EVENT_IDS:
+            continue
+        if not base.has_core_files(event_id):
+            continue
+        if any(item["event_id"] == event_id for item in selected):
+            continue
+        selected.append(base.make_candidate(event_id=event_id, row=row, reason="auto_selected_core_complete_fill"))
+        if limit is not None and len(selected) >= limit:
+            break
+
+    if limit is None:
+        return selected
     return selected[:limit]
 
 
@@ -236,12 +238,18 @@ def apply_start_index(candidates: list[dict[str, Any]], start_index: int) -> lis
 
 
 def selected_candidates(args: argparse.Namespace) -> list[dict[str, Any]]:
-    limit = min(args.limit or DEFAULT_LIMIT, MAX_LIMIT)
+    limit = args.limit
+    if limit is not None and limit < 1:
+        raise SystemExit("--limit must be greater than zero when provided.")
     start_index = max(1, args.start_index)
     if args.event_ids:
-        return apply_start_index(select_rows_by_event_ids(args.event_ids), start_index)[:limit]
-    pool_limit = limit + start_index - 1
-    return apply_start_index(auto_select_candidates(pool_limit), start_index)[:limit]
+        candidates = apply_start_index(select_rows_by_event_ids(args.event_ids), start_index)
+    else:
+        pool_limit = None if limit is None else limit + start_index - 1
+        candidates = apply_start_index(auto_select_candidates(pool_limit), start_index)
+    if limit is None:
+        return candidates
+    return candidates[:limit]
 
 
 def execute_collection(candidates: list[dict[str, Any]], args: argparse.Namespace) -> None:
@@ -261,8 +269,6 @@ def execute_collection(candidates: list[dict[str, Any]], args: argparse.Namespac
         try:
             warmup_context(page, context, args)
             for index, candidate in enumerate(candidates, start=1):
-                if processed >= MAX_LIMIT:
-                    break
                 processed += 1
                 print(f"[{index}/{len(candidates)}] collecting graph for {candidate['event_id']}")
                 try:
@@ -297,8 +303,6 @@ def execute_collection(candidates: list[dict[str, Any]], args: argparse.Namespac
 def main() -> None:
     args = parse_args()
     candidates = selected_candidates(args)
-    if len(candidates) > MAX_LIMIT:
-        raise SystemExit("Refusing to process more than 50 matches.")
     base.print_candidates(candidates)
     if args.list_pending or args.dry_run or not args.execute:
         print("\nSAFE MODE: no HTTP requests were made. Pass --execute in an authorized local browser session to collect.")
