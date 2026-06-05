@@ -95,7 +95,65 @@ Baseline 1B nao substitui Baseline 1A. Se autorizado, deve ser reportado separad
 
 ---
 
-## 3. Estrutura de Diretorios Recomendada
+## 3. Baseline Nulo
+
+Baseline nulo e a referencia probabilistica minima do experimento.
+
+Definicao operacional:
+
+- a probabilidade prevista para todas as partidas deve ser constante;
+- essa probabilidade constante deve ser igual a prevalencia observada de `target_late_goal_75` no conjunto de treino;
+- a prevalencia deve ser calculada somente depois do split temporal;
+- a prevalencia de validacao ou teste nao pode ser usada para ajustar o baseline nulo.
+
+O baseline nulo deve ser avaliado em treino, validacao e teste usando a mesma probabilidade constante aprendida no treino.
+
+Metricas obrigatorias do baseline nulo:
+
+- ROC-AUC do baseline nulo;
+- PR-AUC do baseline nulo;
+- Brier Score do baseline nulo;
+- Log Loss do baseline nulo.
+
+Nenhum valor fixo deve ser predefinido nesta especificacao. Todos os valores devem ser calculados durante a execucao futura.
+
+---
+
+## 4. Hierarquia Oficial das Metricas
+
+A avaliacao do Baseline 1 deve seguir a hierarquia abaixo.
+
+Metrica principal:
+
+- ROC-AUC Test.
+
+Criterio co-obrigatorio:
+
+- PR-AUC Test.
+
+Metricas secundarias:
+
+- Brier Score;
+- Log Loss;
+- Lift@Top20%;
+- Calibration by bins.
+
+Regra de aprovacao:
+
+- a aprovacao exige analise conjunta da metrica principal e do criterio co-obrigatorio;
+- ROC-AUC Test deve indicar capacidade minima de ranking;
+- PR-AUC Test deve superar a prevalencia do teste pelo criterio aprovado no plano;
+- metricas secundarias nao aprovam o baseline sozinhas, mas podem bloquear, qualificar ou enfraquecer a interpretacao se indicarem ma calibracao ou ganho operacional insuficiente.
+
+Criterios minimos mantidos do plano:
+
+- `ROC-AUC Test > 0.55`;
+- `PR-AUC Test > prevalence_test + 0.03`;
+- estabilidade recomendada: `abs(ROC-AUC Validation - ROC-AUC Test) <= 0.07`, salvo justificativa documentada.
+
+---
+
+## 5. Estrutura de Diretorios Recomendada
 
 Estrutura recomendada para implementacao futura:
 
@@ -133,7 +191,7 @@ Observacao: caminhos exatos podem ser ajustados pelo CTO antes da implementacao,
 
 ---
 
-## 4. Estrutura dos Arquivos da Futura Implementacao
+## 6. Estrutura dos Arquivos da Futura Implementacao
 
 ### `Analytics/Baseline/baseline_config.py`
 
@@ -141,8 +199,8 @@ Responsabilidade:
 
 - centralizar constantes operacionais;
 - definir caminhos de input/output;
-- definir whitelist de features permitidas;
-- definir blacklist de features proibidas;
+- definir whitelist oficial de features permitidas;
+- definir blacklist auxiliar de features proibidas;
 - definir parametros de split temporal;
 - definir nome do target;
 - definir versao do experimento.
@@ -177,8 +235,9 @@ Responsabilidade:
 - validar grain team-level de origem;
 - converter team-level para match-level;
 - anexar target match-level;
-- aplicar whitelist de features;
-- rejeitar features proibidas;
+- aplicar whitelist oficial de features;
+- rejeitar features nao aprovadas;
+- registrar colunas removidas e motivo da remocao;
 - gerar dataset baseline match-level antes do split.
 
 Nao deve:
@@ -197,7 +256,8 @@ Responsabilidade:
 - ordenar por `match_date`, horario e `match_id`;
 - criar split cronologico 60/20/20;
 - validar ausencia de sobreposicao temporal;
-- reportar periodo e prevalencia por split.
+- reportar periodo e prevalencia por split;
+- reportar quantidade de linhas com `history_matches_available = 0` ou flags equivalentes por split, quando disponivel.
 
 Nao deve:
 
@@ -215,7 +275,8 @@ Responsabilidade:
 - calcular mediana do treino por feature permitida;
 - aplicar medianas de treino em treino, validacao e teste;
 - registrar nulos antes/depois por split e feature;
-- exportar manifest de imputacao.
+- exportar manifest de imputacao;
+- preservar observacoes sem historico no experimento principal.
 
 Nao deve:
 
@@ -246,8 +307,9 @@ Observacao: esta especificacao nao define o modelo final. A escolha do modelo de
 
 Responsabilidade futura:
 
-- avaliar baseline constante;
+- avaliar baseline nulo;
 - avaliar baseline treinado;
+- comparar modelo contra baseline nulo;
 - calcular metricas por split;
 - gerar tabelas de calibracao;
 - gerar Lift@Top20%;
@@ -269,6 +331,7 @@ Responsabilidade:
 - chamar construcao do dataset;
 - chamar split temporal;
 - chamar imputacao;
+- calcular baseline nulo;
 - chamar treinamento, somente quando modelo estiver aprovado;
 - chamar avaliacao;
 - salvar artefatos e reports;
@@ -282,7 +345,7 @@ Nao deve:
 
 ---
 
-## 5. Inputs Necessarios
+## 7. Inputs Necessarios
 
 Inputs obrigatorios:
 
@@ -322,7 +385,7 @@ Campos opcionais para auditoria:
 
 ---
 
-## 6. Outputs Esperados
+## 8. Outputs Esperados
 
 Outputs minimos da implementacao futura:
 
@@ -349,7 +412,7 @@ Todos os outputs devem ser derivados. Nenhum output deve substituir ou modificar
 
 ---
 
-## 7. Pipeline Operacional Completo
+## 9. Pipeline Operacional Completo
 
 Ordem operacional completa:
 
@@ -365,23 +428,27 @@ Ordem operacional completa:
 10. Converter team-level para match-level.
 11. Aplicar prefixos `home_` e `away_`.
 12. Anexar target por `match_id`.
-13. Aplicar whitelist de features do Baseline 1A.
-14. Executar scanner de features proibidas.
-15. Ordenar cronologicamente por `match_date` e `match_id`.
-16. Criar split temporal 60/20/20 sem shuffle.
-17. Ajustar imputacao por mediana apenas no treino.
-18. Aplicar imputacao em treino, validacao e teste.
-19. Salvar datasets derivados de baseline.
-20. Treinar modelo somente se a tarefa futura autorizar explicitamente.
-21. Avaliar baseline constante.
-22. Avaliar baseline treinado, se houver modelo aprovado.
-23. Gerar reports JSON.
-24. Gerar relatorio Markdown final.
-25. Encerrar com resumo executivo.
+13. Aplicar whitelist oficial de features do Baseline 1A.
+14. Executar scanner auxiliar de features proibidas.
+15. Registrar auditoria final das colunas usadas em `X`, target, colunas removidas e motivo.
+16. Ordenar cronologicamente por `match_date` e `match_id`.
+17. Criar split temporal 60/20/20 sem shuffle.
+18. Reportar observacoes sem historico por split.
+19. Ajustar imputacao por mediana apenas no treino.
+20. Aplicar imputacao em treino, validacao e teste.
+21. Salvar datasets derivados de baseline.
+22. Calcular baseline nulo com prevalencia do target no treino.
+23. Treinar modelo somente se a tarefa futura autorizar explicitamente.
+24. Avaliar baseline nulo.
+25. Avaliar baseline treinado, se houver modelo aprovado.
+26. Comparar modelo contra baseline nulo, incluindo Brier Score e Log Loss.
+27. Gerar reports JSON.
+28. Gerar relatorio Markdown final.
+29. Encerrar com resumo executivo.
 
 ---
 
-## 8. Conversao Team-Level para Match-Level
+## 10. Conversao Team-Level para Match-Level
 
 Entrada: `historical_prematch_features_v1.csv`, uma linha por time por partida.
 
@@ -413,7 +480,30 @@ Validacoes obrigatorias da conversao:
 
 ---
 
-## 9. Estrategia de Imputacao Operacional
+## 11. Regra para `history_matches_available = 0`
+
+Observacoes sem historico anterior devem permanecer no experimento principal.
+
+Regras operacionais:
+
+- manter observacoes no experimento principal;
+- nao remover partidas por ausencia de historico;
+- imputar valores ausentes usando estatisticas aprendidas apenas no treino;
+- reportar quantidade de observacoes com historico ausente por split;
+- reportar quantidade de nulos imputados por split e feature;
+- permitir analise de sensibilidade futura, se aprovada, excluindo partidas sem historico minimo.
+
+A ausencia de historico no inicio da temporada e uma condicao operacional esperada, nao motivo automatico para remover partidas do experimento principal.
+
+Analise de sensibilidade futura permitida, somente se aprovada:
+
+- excluir partidas em que pelo menos um time tenha `history_matches_available < 3`;
+- reportar resultados separadamente;
+- nao substituir o resultado principal.
+
+---
+
+## 12. Estrategia de Imputacao Operacional
 
 Problema esperado:
 
@@ -453,6 +543,7 @@ Relatorio de imputacao deve conter:
 - nulos antes por split;
 - nulos depois por split;
 - percentual imputado por split;
+- quantidade de linhas com `history_matches_available = 0` ou equivalente por split;
 - alerta para features com alta taxa de imputacao.
 
 Limiar de alerta sugerido:
@@ -461,7 +552,7 @@ Limiar de alerta sugerido:
 
 ---
 
-## 10. Estrategia de Split Temporal Operacional
+## 13. Estrategia de Split Temporal Operacional
 
 Split aprovado:
 
@@ -494,6 +585,7 @@ Passos obrigatorios:
 9. Validar monotonicidade temporal entre splits.
 10. Registrar datas minima/maxima por split.
 11. Registrar prevalencia do target por split.
+12. Registrar quantidade de observacoes com historico ausente por split.
 
 Com 380 partidas, divisao esperada:
 
@@ -505,7 +597,28 @@ Se a contagem final for diferente de 380, a regra 60/20/20 deve ser aplicada ao 
 
 ---
 
-## 11. Relatorios Obrigatorios
+## 14. Comparacao Contra Baseline Nulo
+
+A avaliacao futura deve comparar o modelo treinado contra o baseline nulo.
+
+Comparacoes obrigatorias:
+
+- Brier Score do modelo vs Brier Score do baseline nulo;
+- Log Loss do modelo vs Log Loss do baseline nulo.
+
+O relatorio final deve apresentar ambas as comparacoes por split, no minimo para validacao e teste.
+
+A comparacao deve deixar claro:
+
+- se o modelo melhora a qualidade probabilistica contra a probabilidade constante do treino;
+- se a melhora em ranking tambem vem acompanhada de melhora ou degradacao probabilistica;
+- se o modelo tem ROC-AUC/PR-AUC promissores, mas Brier Score ou Log Loss piores que o baseline nulo.
+
+A aprovacao final nao deve ser baseada apenas em Brier Score ou Log Loss, mas esses indicadores devem qualificar a decisao.
+
+---
+
+## 15. Relatorios Obrigatorios
 
 ### `baseline_1_prematch_feature_manifest.json`
 
@@ -516,8 +629,11 @@ Deve conter:
 - arquivos de entrada;
 - features permitidas;
 - features finais usadas;
+- whitelist oficial aplicada;
 - features proibidas verificadas;
 - target;
+- colunas removidas;
+- motivo da remocao quando aplicavel;
 - grain;
 - status do scanner anti-leakage.
 
@@ -530,6 +646,7 @@ Deve conter:
 - datas minima/maxima por split;
 - positivos/negativos por split;
 - prevalencia por split;
+- quantidade de observacoes sem historico por split;
 - validacao de ausencia de overlap;
 - validacao de ordem temporal.
 
@@ -541,13 +658,14 @@ Deve conter:
 - estatisticas ajustadas somente no treino;
 - nulos antes/depois por split;
 - medianas por feature;
+- quantidade imputada por split;
 - alertas.
 
 ### `baseline_1_prematch_metrics.json`
 
 Deve conter, para treino, validacao e teste:
 
-- baseline constante;
+- baseline nulo;
 - modelo treinado, se autorizado;
 - ROC-AUC;
 - PR-AUC;
@@ -555,7 +673,9 @@ Deve conter, para treino, validacao e teste:
 - Brier Score;
 - Log Loss;
 - Lift@Top20%;
-- calibration bins.
+- calibration bins;
+- comparacao modelo vs baseline nulo em Brier Score;
+- comparacao modelo vs baseline nulo em Log Loss.
 
 ### `baseline_1_prematch_validation_report.json`
 
@@ -568,7 +688,11 @@ Deve conter:
 - checks de split;
 - checks de imputacao;
 - checks de target;
-- checks de features proibidas.
+- checks de features proibidas;
+- lista completa das colunas usadas em `X`;
+- target utilizado;
+- colunas removidas;
+- motivo da remocao quando aplicavel.
 
 ### `docs/04_RESEARCH/BASELINE_PREMATCH_H3_H4_RESULTS.md`
 
@@ -580,19 +704,24 @@ Deve conter:
 4. metodologia;
 5. features usadas;
 6. features proibidas verificadas;
-7. split temporal;
-8. imputacao;
-9. metricas por split;
-10. comparacao com baseline constante;
-11. calibracao;
-12. Lift@Top20%;
-13. decisao final;
-14. limitacoes;
-15. recomendacoes.
+7. auditoria final das colunas de `X`;
+8. target utilizado;
+9. colunas removidas e motivo;
+10. split temporal;
+11. quantidade de observacoes sem historico por split;
+12. imputacao;
+13. baseline nulo;
+14. metricas por split;
+15. comparacao com baseline nulo;
+16. calibracao;
+17. Lift@Top20%;
+18. decisao final;
+19. limitacoes;
+20. recomendacoes.
 
 ---
 
-## 12. Artefatos Gerados
+## 16. Artefatos Gerados
 
 Artefatos de dados derivados:
 
@@ -621,7 +750,7 @@ Nenhum artefato pode substituir arquivos de entrada.
 
 ---
 
-## 13. Validacoes Obrigatorias
+## 17. Validacoes Obrigatorias
 
 Validacoes de entrada:
 
@@ -644,12 +773,14 @@ Validacoes de grain:
 Validacoes de features:
 
 - todas as features obrigatorias existem;
+- whitelist oficial aplicada antes da matriz `X`;
 - nenhuma feature fora da whitelist entra no treino;
 - nenhuma feature proibida entra no treino;
 - target nao entra em `X`;
 - colunas derivadas do target nao entram em `X`;
 - colunas in-game nao entram em `X`;
-- xG/xGA/forecast nao entram em `X`.
+- xG/xGA/forecast nao entram em `X`;
+- auditoria final lista todas as colunas usadas em `X`.
 
 Validacoes temporais:
 
@@ -665,7 +796,8 @@ Validacoes de imputacao:
 - medianas registradas;
 - validacao/teste usam medianas do treino;
 - nulos restantes iguais a zero nas features finais;
-- taxa de imputacao registrada.
+- taxa de imputacao registrada;
+- observacoes sem historico mantidas no experimento principal.
 
 Validacoes de metricas:
 
@@ -673,26 +805,44 @@ Validacoes de metricas:
 - PR-AUC comparado contra prevalencia do split;
 - Brier Score calculado com probabilidades;
 - Log Loss com probabilidades clipadas para evitar infinito;
-- Lift@Top20% documentado com tamanho do top bucket.
+- Lift@Top20% documentado com tamanho do top bucket;
+- baseline nulo reportado com ROC-AUC, PR-AUC, Brier Score e Log Loss;
+- modelo comparado ao baseline nulo em Brier Score e Log Loss.
 
 ---
 
-## 14. Controles Anti-Leakage
+## 18. Controles Anti-Leakage
+
+Regra oficial:
+
+- whitelist oficial prevalece sobre blacklist;
+- apenas features explicitamente aprovadas podem entrar em `X`;
+- blacklist e scanner de nomes proibidos sao controles auxiliares, nao mecanismo de autorizacao.
 
 Controles obrigatorios antes de qualquer fit:
 
-1. Scanner de nomes de colunas proibidas.
-2. Whitelist fechada de features permitidas.
-3. Rejeicao automatica de colunas target-derived.
-4. Rejeicao automatica de features in-game.
-5. Rejeicao automatica de xG/xGA da propria partida.
-6. Rejeicao automatica de forecast.
-7. Confirmacao de que feature set historico foi validado com `shift(1)`.
-8. Split temporal antes de imputacao.
-9. Fit do imputador somente no treino.
-10. Fit do modelo somente no treino.
-11. Validacao/teste usados apenas para avaliacao.
-12. Relatorio explicito de todas as colunas usadas em `X`.
+1. Aplicar whitelist fechada de features permitidas.
+2. Rejeitar automaticamente qualquer coluna fora da whitelist.
+3. Rodar scanner auxiliar de nomes proibidos.
+4. Rejeitar colunas target-derived.
+5. Rejeitar features in-game.
+6. Rejeitar xG/xGA da propria partida.
+7. Rejeitar forecast.
+8. Confirmar que feature set historico foi validado com `shift(1)`.
+9. Fazer split temporal antes de imputacao.
+10. Ajustar imputador somente no treino.
+11. Ajustar modelo somente no treino.
+12. Usar validacao/teste apenas para avaliacao.
+13. Gerar auditoria final das colunas usadas em `X`.
+
+Auditoria final obrigatoria:
+
+- lista completa das colunas usadas em `X`;
+- target utilizado;
+- colunas removidas;
+- motivo da remocao quando aplicavel;
+- confirmacao de que nenhuma coluna fora da whitelist entrou em `X`;
+- confirmacao de que nenhuma coluna de target entrou em `X`.
 
 Padroes proibidos em nomes de colunas:
 
@@ -721,7 +871,7 @@ Observacao: a implementacao futura deve aplicar blacklist com cuidado para nao b
 
 ---
 
-## 15. Ordem de Execucao dos Componentes
+## 19. Ordem de Execucao dos Componentes
 
 Ordem exata recomendada:
 
@@ -741,31 +891,40 @@ Na execucao via orquestrador:
 run_baseline_1_prematch.py
   -> load config
   -> build match-level dataset
-  -> validate feature whitelist
+  -> apply official whitelist
   -> validate forbidden features
+  -> write X-column audit
   -> temporal split
+  -> report history_matches_available = 0 by split
   -> fit train-only imputer
   -> transform splits
+  -> compute null baseline from train prevalence
   -> train approved model, if authorized
-  -> evaluate constant baseline
+  -> evaluate null baseline
   -> evaluate trained baseline, if authorized
+  -> compare model vs null baseline
   -> write artifacts
   -> write reports
 ```
 
 ---
 
-## 16. Criterios de Aprovacao do Baseline Futuro
+## 20. Criterios de Aprovacao do Baseline Futuro
 
 O baseline futuro so pode ser considerado aprovado se, no teste temporal:
 
 1. `ROC-AUC Test > 0.55`.
 2. `PR-AUC Test > prevalence_test + 0.03`.
-3. `abs(ROC-AUC Validation - ROC-AUC Test) <= 0.07` ou divergencia justificada.
-4. Nenhuma feature proibida foi usada.
-5. Split temporal foi documentado.
-6. Imputacao foi ajustada somente no treino.
-7. Relatorios obrigatorios foram gerados.
+3. A analise conjunta da metrica principal e do criterio co-obrigatorio for positiva.
+4. `abs(ROC-AUC Validation - ROC-AUC Test) <= 0.07` ou divergencia justificada.
+5. Nenhuma feature proibida foi usada.
+6. Apenas features explicitamente aprovadas entraram em `X`.
+7. Split temporal foi documentado.
+8. Imputacao foi ajustada somente no treino.
+9. Observacoes sem historico foram mantidas no experimento principal e reportadas por split.
+10. Baseline nulo foi reportado.
+11. Modelo foi comparado contra baseline nulo em Brier Score e Log Loss.
+12. Relatorios obrigatorios foram gerados.
 
 Se falhar:
 
@@ -776,7 +935,7 @@ Se falhar:
 
 ---
 
-## 17. Fora de Escopo
+## 21. Fora de Escopo
 
 Esta especificacao nao autoriza:
 
@@ -798,7 +957,7 @@ Esta especificacao nao autoriza:
 
 ---
 
-## 18. Checklist para Tarefa Futura ao Codex
+## 22. Checklist para Tarefa Futura ao Codex
 
 Antes de implementar, a tarefa futura deve declarar explicitamente:
 
@@ -822,9 +981,14 @@ Baseline 1 fica especificado operacionalmente como:
 - target `target_late_goal_75`;
 - conversao team-level para match-level;
 - split temporal cronologico 60/20/20;
+- observacoes sem historico mantidas e imputadas no experimento principal;
 - imputacao por mediana fitada apenas no treino;
-- scanner anti-leakage obrigatorio;
+- baseline nulo calculado pela prevalencia do treino;
+- hierarquia oficial com ROC-AUC Test como metrica principal e PR-AUC Test como criterio co-obrigatorio;
+- whitelist oficial prevalecendo sobre blacklist;
+- auditoria final obrigatoria das colunas de `X`;
+- comparacao contra baseline nulo em Brier Score e Log Loss;
 - relatorios JSON e Markdown obrigatorios;
 - nenhuma implementacao ou treinamento autorizado por este documento.
 
-Status: pronto para revisao do PM/CTO antes de qualquer implementacao.
+Status: pronto para aprovacao final do PM antes de qualquer implementacao.
