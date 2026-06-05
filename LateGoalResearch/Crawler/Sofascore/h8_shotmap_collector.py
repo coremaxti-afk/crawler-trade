@@ -49,7 +49,7 @@ class OperationalBlock(Exception):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Controlled H8 shotmap collector for existing EPL matches.")
-    parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="Maximum matches to process in this run.")
+    parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="Maximum matches to process in this run. Use 0 to process from start-index to the end.")
     parser.add_argument("--start-index", type=int, default=1, help="1-based index in the inventory candidate list to start from.")
     parser.add_argument("--dry-run", action="store_true", help="List pending matches without HTTP requests.")
     parser.add_argument("--request-delay", type=float, default=DEFAULT_REQUEST_DELAY_SECONDS, help="Base delay before each request in seconds.")
@@ -168,8 +168,8 @@ def make_candidate(row: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def selected_candidates(limit: int, start_index: int) -> list[dict[str, Any]]:
-    if limit < 1:
-        raise SystemExit("--limit must be >= 1")
+    if limit < 0:
+        raise SystemExit("--limit must be >= 0")
     if start_index < 1:
         raise SystemExit("--start-index must be >= 1")
     candidates: list[dict[str, Any]] = []
@@ -178,6 +178,8 @@ def selected_candidates(limit: int, start_index: int) -> list[dict[str, Any]]:
         if candidate is None:
             continue
         candidates.append(candidate)
+    if limit == 0:
+        return candidates[start_index - 1:]
     return candidates[start_index - 1:start_index - 1 + limit]
 
 
