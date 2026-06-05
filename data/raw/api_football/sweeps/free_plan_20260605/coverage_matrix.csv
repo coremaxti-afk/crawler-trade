@@ -1,0 +1,6 @@
+fixture_id,league,country,season,date,status,score,fixture,fixture_events,fixture_statistics,fixture_lineups,fixture_players,predictions,injuries,odds,live_odds,head_to_head
+1490721,1. Liga U19,Czech-Republic,2025,2026-06-05T09:00:00+00:00,FT,2-1,util,util,vazio,vazio,vazio,util,vazio,vazio,vazio,util
+1489726,3. liga - CFL A,Czech-Republic,2025,2026-06-05T14:00:00+00:00,FT,0-3,util,util,vazio,vazio,vazio,util,vazio,vazio,vazio,util
+1487603,4. liga - Divizie D,Czech-Republic,2025,2026-06-05T15:00:00+00:00,FT,5-1,util,vazio,vazio,vazio,vazio,util,vazio,vazio,vazio,util
+1547213,ASEAN Championship U19,World,2025,2026-06-05T09:00:00+00:00,FT,0-4,util,util,vazio,vazio,vazio,util,vazio,vazio,vazio,util
+1542893,Friendlies,World,2026,2026-06-05T00:00:00+00:00,FT,3-1,util,util,vazio,util,vazio,util,vazio,util,vazio,util
