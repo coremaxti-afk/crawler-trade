@@ -4,219 +4,130 @@
 
 Objetivo:
 
-Concluir a transicao da base SofaScore EPL core importada para o primeiro Dataset Analitico V1 e preparar auditoria Quant Research / Data Science sem iniciar modelagem.
+Consolidar o primeiro conjunto mínimo de features candidatas do LateGoalResearch e preparar a transição controlada para planejamento de baseline, sem iniciar modelagem ou backtesting.
 
 ---
 
-## Concluido
+## Concluído
 
-- [x] Criar sofascore_season_collector.py
-- [x] Criar sofascore_match_collector.py
-- [x] Descobrir temporada EPL
-- [x] Gerar inventory.json
-- [x] Gerar rounds.json
-- [x] Gerar event.json
-- [x] Gerar statistics.json
-- [x] Gerar incidents.json
-- [x] Gerar lineups.json quando disponivel
-- [x] Gerar h2h.json quando disponivel
-- [x] Implementar correcao operacional para HTTP 403 no coletor SofaScore v2
-- [x] Executar teste operacional controlado de retomada
-- [x] Validar coleta via 5G sem novo HTTP 403
-- [x] Criar coletor SofaScore v3 em perfil core
-- [x] Consolidar inventario real de partidas full/core
-- [x] Confirmar total final contra o inventario de 381 partidas
-- [x] Implementar sofascore_importer.py
-- [x] Popular PostgreSQL com dados SofaScore core
-- [x] Validar idempotencia do importer
-- [x] Validar integridade basica entre matches_master, match_statistics e match_incidents
-- [x] Concluir e validar a frente Importacao PostgreSQL SofaScore EPL pela area Data Engineer / Database
-- [x] Criar validacao leve de qualidade pos-importacao
-- [x] Gerar relatorio de qualidade dos dados importados
-- [x] Definir desenho metodologico do Dataset Analitico V1
-- [x] Implementar Dataset Builder V1
-- [x] Gerar Dataset Analitico V1 com CSV, Parquet, metadata e validation report
-- [x] Documentar Dataset Builder V1
+- [x] Criar collectors SofaScore.
+- [x] Resolver robustez operacional do HTTP 403 com coleta core.
+- [x] Coletar/auditar EPL SofaScore com 381 partidas no inventário.
+- [x] Consolidar 380 partidas importáveis.
+- [x] Implementar `sofascore_importer.py`.
+- [x] Popular PostgreSQL com dados core SofaScore.
+- [x] Validar idempotência do importer.
+- [x] Validar integridade básica entre `matches_master`, `match_statistics` e `match_incidents`.
+- [x] Executar validação leve de qualidade pós-importação.
+- [x] Definir metodologia do Dataset Analítico V1.
+- [x] Implementar Dataset Builder V1.
+- [x] Gerar Dataset Analítico V1.
+- [x] Executar Target Audit.
+- [x] Validar estatisticamente H6/H9.
+- [x] Bloquear H1/H2 por risco confirmado de data leakage.
+- [x] Construir feature set histórico pré-jogo H3/H4.
+- [x] Validar estatisticamente H3/H4.
+- [x] Produzir e aprovar `FEATURE_CANDIDATE_SET_V1.md`.
 
 ---
 
-## Atualizacao Operacional Mais Recente
+## Estado Atual
 
-O Dataset Analitico V1 foi gerado a partir do PostgreSQL local, sem escrita no banco, sem alteracao de schema, sem coleta adicional, sem importer e sem modelagem.
+Documento aprovado:
 
-Script:
-
-- `LateGoalResearch/Analytics/DatasetBuilder/dataset_builder_v1.py`
+- `docs/04_RESEARCH/FEATURE_CANDIDATE_SET_V1.md`
 
 Commit:
 
-- `1a1404e09079f2a1a7958ae948fefdc667872a50` - Cria Dataset Builder V1.
-
-Artefatos locais gerados:
-
-- `data/processed/datasets/late_goal_dataset_v1.csv`
-- `data/processed/datasets/late_goal_dataset_v1.parquet`
-- `data/processed/datasets/late_goal_dataset_v1_metadata.json`
-- `data/processed/datasets/late_goal_dataset_v1_validation_report.json`
+- `2e94f3dc2b00480bbbe5582f7b9fa91d4e533f14`
 
 Status:
 
-- APTO COM RESSALVAS.
-
-Resumo:
-
-- Linhas: 380.
-- Grain: 1 linha por partida.
-- Target principal: `target_late_goal_75`.
-- Alias operacional: `has_late_goal`.
-- Target positivo: 189.
-- Target negativo: 191.
-- Duplicatas por `match_id`: 0.
-- Duplicatas por `sofascore_event_id`: 0.
+- APROVADO pelo PM.
 
 ---
 
-## Auditoria Local SofaScore EPL
+## Status das Hipóteses
 
-Resultado confirmado:
-
-- Total no inventory: 381 partidas.
-- Total de pastas locais: 381.
-- Partidas full: 192.
-- Partidas core: 188.
-- Total importavel: 380.
-- Partidas faltantes: 0.
-- Partidas incompletas relevantes: 1.
-- Partida descartada da importacao atual: `12436452`.
-
-Observacao:
-
-- A partida `12436449` foi corrigida/coletada com os 3 dados core e foi considerada importavel.
+- H1 — BLOQUEADA por data leakage.
+- H2 — BLOQUEADA por data leakage.
+- H3 — MANTER COMO CANDIDATA.
+- H4 — MANTER COMO CANDIDATA FORTE.
+- H5 — NÃO VALIDADA.
+- H6 — VALIDADA INICIALMENTE.
+- H7 — NÃO VALIDADA COMO HIPÓTESE INDEPENDENTE.
+- H8 — BLOQUEADA/PENDENTE de graph/momentum.
+- H9 — VALIDADA INICIALMENTE.
 
 ---
 
-## Importacao PostgreSQL
+## Conjunto Mínimo de Features Candidatas V1
 
-Script:
+### Pré-jogo
 
-- `LateGoalResearch/Crawler/Sofascore/sofascore_importer.py`
+- `goals_for_avg_last_3`
+- `goals_for_avg_last_10`
+- `shots_on_target_for_avg_last_5`
+- `shots_against_avg_last_5`
+- `shots_on_target_against_avg_last_5`
+- `big_chances_against_avg_last_5`
 
-Commit:
+### In-game
 
-- `84e641f` - Implementa importer SofaScore core.
-
-Escopo importado:
-
-- `matches_master`
-- `match_statistics`
-- `match_incidents`
-
-Banco populado:
-
-- `matches_master`: 380.
-- `match_statistics`: 380.
-- `match_incidents`: 7647.
-
-Validacoes de integridade:
-
-- Duplicatas em `matches_master`: 0.
-- Duplicatas em `match_statistics`: 0.
-- Orfaos em `match_statistics`: 0.
-- Orfaos em `match_incidents`: 0.
-- `12436452`: 0 registros nas tres tabelas.
-
-Fora do escopo:
-
-- `match_graph`
-- lineups
-- h2h
-- features avancadas
-- modelagem
-
-Status:
-
-- CONCLUIDO E VALIDADO.
+- `score_diff_home_until_cutoff`
+- `score_state_group`
+- `cards_until_cutoff`
+- `substitutions_until_cutoff`
 
 ---
 
-## Dataset Analitico V1
+## Restrições Ativas
 
-Documentacao:
-
-- `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`
-- `docs/04_RESEARCH/DATASET_BUILDER_V1.md`
-
-Ressalvas:
-
-- Estatisticas full-match de `match_statistics` possuem risco de leakage para uso in-game.
-- `big_chances_home` possui 7 nulos.
-- `big_chances_away` possui 7 nulos.
-- Colunas target-derived nao podem ser usadas como features.
-
-Colunas target-derived proibidas como features:
-
-- `has_late_goal`
-- `target_late_goal_75`
-- `late_goal_count_75`
-- `home_late_goal_count_75`
-- `away_late_goal_count_75`
-- `first_late_goal_minute_75`
-
-Colunas de placar final proibidas como preditores:
-
-- `home_goals`
-- `away_goals`
-- `total_goals`
+- Não iniciar modelagem ainda.
+- Não executar baseline sem plano aprovado.
+- Não executar backtesting.
+- Não usar features bloqueadas.
+- Manter separação entre bloco pré-jogo e bloco in-game.
+- Não usar estatísticas finais da própria partida como preditores.
+- Não usar xG/xGA/forecast sem comprovação temporal segura.
 
 ---
 
-## Em Andamento
+## Próxima Frente Oficial
 
-- [ ] Auditoria Quant Research / Data Science do Dataset Analitico V1
-- [ ] Validar coerencia do target `target_late_goal_75`
-- [ ] Classificar colunas por risco de leakage
-- [ ] Separar identificadores, colunas de auditoria e potenciais features
-- [ ] Propor primeira bateria exploratoria para H1/H2/H6/H9
-- [ ] Recomendar seguir, seguir com ressalvas ou revisar Dataset V1
-
----
-
-## Proxima Frente Aprovada pelo PM
-
-Acionar Quant Research / Data Science para auditoria exploratoria inicial do Dataset V1.
+Baseline Preparation.
 
 Objetivo:
 
-Confirmar que o target e a estrutura do dataset estao adequados para a proxima decisao metodologica.
+Produzir um plano formal de experimento antes de qualquer treino ou baseline executável.
 
-Restricoes:
+Documento esperado:
 
-- Nao iniciar modelagem.
-- Nao iniciar backtesting.
-- Nao criar features avancadas H1-H9 sem aprovacao.
-- Nao alterar banco.
-- Nao alterar schema.
-- Nao alterar collectors, importers ou dados brutos.
+- `docs/04_RESEARCH/BASELINE_EXPERIMENT_PLAN.md`
 
----
+Conteúdo esperado:
 
-## Proximos Passos
-
-- [ ] Quant Research / Data Science auditar o Dataset Analitico V1
-- [ ] Registrar resultado da auditoria do target
-- [ ] Atualizar documentacao de pesquisa com classificacao de colunas
-- [ ] Definir se o Dataset V1 pode seguir para analises exploratorias
-- [ ] Iniciar feature engineering somente apos aprovacao metodologica
-- [ ] Iniciar modelagem apenas depois de dataset e features aprovados
+- dataset a ser usado;
+- features permitidas;
+- features proibidas;
+- separação pré-jogo vs in-game;
+- split temporal;
+- métricas;
+- critérios de sucesso;
+- regras anti-leakage;
+- escopo do primeiro baseline.
 
 ---
 
-## Resultado Esperado
+## Próximos Passos
 
-Dataset Analitico V1 auditado, com target validado e riscos de leakage documentados antes de qualquer feature engineering avancada ou modelagem.
+- [ ] Acionar CTO para revisar a transição para baseline.
+- [ ] Acionar Quant Research para desenhar `BASELINE_EXPERIMENT_PLAN.md`.
+- [ ] Só após aprovação do plano, preparar tarefa controlada para Codex.
+- [ ] Manter modelagem bloqueada até aprovação formal do plano.
 
 ---
 
 ## Status
 
-EM EXECUCAO - DATASET ANALITICO V1 GERADO; PROXIMA FRENTE: AUDITORIA QUANT RESEARCH / DATA SCIENCE.
+EM EXECUÇÃO — FEATURE_CANDIDATE_SET_V1 APROVADO; PRÓXIMA FRENTE: BASELINE PREPARATION.
