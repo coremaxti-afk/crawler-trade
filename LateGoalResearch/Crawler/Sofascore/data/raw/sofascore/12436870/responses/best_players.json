@@ -1,0 +1,73 @@
+{
+  "bestHomeTeamPlayer": {
+    "value": "8.4",
+    "label": "rating",
+    "player": {
+      "name": "Casemiro",
+      "firstName": "Carlos Henrique",
+      "lastName": "Casemiro",
+      "slug": "casemiro",
+      "shortName": "Casemiro",
+      "position": "M",
+      "jerseyNumber": "18",
+      "height": 185,
+      "userCount": 98881,
+      "gender": "M",
+      "sofascoreId": "Casemiro",
+      "id": 122951,
+      "marketValueCurrency": "EUR",
+      "dateOfBirthTimestamp": 698803200,
+      "proposedMarketValueRaw": {
+        "value": 7300000,
+        "currency": "EUR"
+      },
+      "fieldTranslations": {
+        "nameTranslation": {
+          "ar": "كاسيميرو",
+          "bn": "ক্যাসেমিরো",
+          "hi": "कैसेमिरो"
+        },
+        "shortNameTranslation": {
+          "ar": "كاسيميرو",
+          "bn": "ক্যাসেমিরো",
+          "hi": "कैसेमिरो"
+        }
+      }
+    }
+  },
+  "bestAwayTeamPlayer": {
+    "value": "7.3",
+    "label": "rating",
+    "player": {
+      "name": "Antonee Robinson",
+      "firstName": "Antonee",
+      "lastName": "Robinson",
+      "slug": "antonee-robinson",
+      "shortName": "A. Robinson",
+      "position": "D",
+      "jerseyNumber": "33",
+      "height": 183,
+      "userCount": 3101,
+      "gender": "M",
+      "id": 803174,
+      "marketValueCurrency": "EUR",
+      "dateOfBirthTimestamp": 870998400,
+      "proposedMarketValueRaw": {
+        "value": 27000000,
+        "currency": "EUR"
+      },
+      "fieldTranslations": {
+        "nameTranslation": {
+          "ar": "أنتوني روبنسون",
+          "bn": "অ্যান্টনি রবিনসন",
+          "hi": "एंटोनी रॉबिन्सन"
+        },
+        "shortNameTranslation": {
+          "ar": "أ. روبنسون",
+          "bn": "এ. রবিনসন",
+          "hi": "ए. रॉबिन्सन"
+        }
+      }
+    }
+  }
+}

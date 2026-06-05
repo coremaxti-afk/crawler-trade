@@ -1,0 +1,20 @@
+{
+  "vote": {
+    "vote1": 124336,
+    "vote2": 14001,
+    "voteX": 18006
+  },
+  "bothTeamsToScoreVote": {
+    "voteYes": 25420,
+    "voteNo": 7851
+  },
+  "firstTeamToScoreVote": {
+    "voteHome": 24090,
+    "voteNoGoal": 880,
+    "voteAway": 4214
+  },
+  "whoShouldHaveWonVote": {
+    "vote1": 0,
+    "vote2": 0
+  }
+}
