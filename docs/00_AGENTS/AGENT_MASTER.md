@@ -4,6 +4,20 @@
 
 Late Goal Research é um projeto de pesquisa quantitativa para identificar padrões associados a gols tardios no futebol através da integração de múltiplas fontes de dados.
 
+## Governança
+
+Documento oficial:
+
+- docs/00_AGENTS/GOVERNANCE_V2.md
+
+Princípios:
+
+- Chat = Comunicação Executiva
+- GitHub = Fonte Oficial da Verdade
+- Em caso de conflito, GitHub prevalece
+
+Todos os agentes devem seguir a GOVERNANCE_V2 enquanto ela estiver ativa.
+
 ## Fontes Principais
 
 1. Understat
