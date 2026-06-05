@@ -1,0 +1,92 @@
+{
+  "generated_at": "2026-06-05T01:44:41",
+  "status": "APTO COM RESSALVAS",
+  "errors": [],
+  "warnings": [
+    "Baseline did not meet all approval thresholds in the controlled run."
+  ],
+  "checks": {
+    "anti_leakage": {
+      "official_whitelist_precedence": true,
+      "target": "target_late_goal_75",
+      "all_x_columns_from_whitelist": true,
+      "x_columns": [
+        "home_goals_for_avg_last_3",
+        "home_goals_for_avg_last_10",
+        "home_shots_on_target_for_avg_last_5",
+        "home_shots_against_avg_last_5",
+        "home_shots_on_target_against_avg_last_5",
+        "home_big_chances_against_avg_last_5",
+        "away_goals_for_avg_last_3",
+        "away_goals_for_avg_last_10",
+        "away_shots_on_target_for_avg_last_5",
+        "away_shots_against_avg_last_5",
+        "away_shots_on_target_against_avg_last_5",
+        "away_big_chances_against_avg_last_5"
+      ],
+      "removed_columns": [
+        {
+          "column": "home_team_from_features",
+          "reason": "identifier or audit column, not predictive X"
+        },
+        {
+          "column": "home_opponent_from_features",
+          "reason": "identifier or audit column, not predictive X"
+        },
+        {
+          "column": "away_team_from_features",
+          "reason": "identifier or audit column, not predictive X"
+        },
+        {
+          "column": "away_opponent_from_features",
+          "reason": "identifier or audit column, not predictive X"
+        }
+      ]
+    },
+    "split": {
+      "shuffle": false,
+      "ratios": {
+        "train": 0.6,
+        "validation": 0.2,
+        "test": 0.2
+      },
+      "total_rows": 380,
+      "split_counts": {
+        "train": 228,
+        "validation": 76,
+        "test": 76
+      },
+      "temporal_order_valid": true,
+      "overlaps": {
+        "train_validation": 0,
+        "train_test": 0,
+        "validation_test": 0
+      },
+      "history_absent_rows": {
+        "train": 10,
+        "validation": 0,
+        "test": 0
+      }
+    },
+    "imputation": {
+      "method": "median fitted on train only",
+      "fit_split": "train",
+      "nulls_after_total": {
+        "train": 0,
+        "validation": 0,
+        "test": 0
+      }
+    },
+    "metrics_approval": {
+      "roc_auc_test": 0.4909722222222222,
+      "roc_auc_test_min": 0.55,
+      "roc_auc_test_pass": false,
+      "pr_auc_test": 0.5363551338684726,
+      "pr_auc_test_required": 0.5563157894736842,
+      "pr_auc_test_pass": false,
+      "roc_auc_validation_test_gap": 0.02808529683529687,
+      "roc_auc_gap_pass": true,
+      "baseline_status": "NAO APROVADO"
+    }
+  }
+}
