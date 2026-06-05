@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-06-05T02:29:18",
+  "numeric_imputation": {
+    "method": "median fitted on train only",
+    "fit_split": "train",
+    "medians": {
+      "score_diff_home_until_cutoff": 0.0,
+      "cards_until_cutoff": 3.0,
+      "substitutions_until_cutoff": 4.0
+    }
+  },
+  "categorical_encoding": {
+    "method": "one-hot fitted on train only",
+    "fit_split": "train",
+    "handle_unknown": "ignore",
+    "train_categories": {
+      "score_state_group": [
+        "away_leading",
+        "draw",
+        "home_leading"
+      ]
+    },
+    "category_counts_by_split": {
+      "train": {
+        "home_leading": 90,
+        "away_leading": 80,
+        "draw": 58
+      },
+      "validation": {
+        "home_leading": 33,
+        "away_leading": 25,
+        "draw": 18
+      },
+      "test": {
+        "home_leading": 35,
+        "away_leading": 21,
+        "draw": 20
+      }
+    }
+  },
+  "transformed_feature_names": [
+    "score_diff_home_until_cutoff",
+    "cards_until_cutoff",
+    "substitutions_until_cutoff",
+    "score_state_group_away_leading",
+    "score_state_group_draw",
+    "score_state_group_home_leading"
+  ],
+  "nulls_before_total": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "nulls_after_total": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "warnings": []
+}
