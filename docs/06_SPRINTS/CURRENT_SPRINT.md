@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Consolidar o primeiro conjunto mínimo de features candidatas do LateGoalResearch, planejar e executar de forma controlada o primeiro baseline exploratório, sem iniciar backtesting ou produção.
+Consolidar o primeiro conjunto mínimo de features candidatas do LateGoalResearch, registrar o resultado do Baseline 1A e executar de forma controlada o Baseline In-Game V1, sem iniciar backtesting ou produção.
 
 ---
 
@@ -32,45 +32,23 @@ Consolidar o primeiro conjunto mínimo de features candidatas do LateGoalResearc
 - [x] Produzir e revisar `BASELINE_IMPLEMENTATION_SPEC.md`.
 - [x] Implementar e executar Baseline 1A Pre-Match H3/H4.
 - [x] Revisar resultado quantitativo do Baseline 1A.
+- [x] Produzir `BASELINE_INGAME_IMPLEMENTATION_SPEC.md`.
+- [x] Aprovar Baseline In-Game V1 para implementação controlada.
 
 ---
 
 ## Estado Atual
 
-Documento de features aprovado:
+### Baseline 1A — Pre-Match H3/H4
 
-- `docs/04_RESEARCH/FEATURE_CANDIDATE_SET_V1.md`
+Resultado:
 
-Plano de baseline:
-
-- `docs/04_RESEARCH/BASELINE_EXPERIMENT_PLAN.md`
-
-Especificação operacional:
-
-- `docs/04_RESEARCH/BASELINE_IMPLEMENTATION_SPEC.md`
-
-Resultado do baseline:
-
-- `docs/04_RESEARCH/BASELINE_PREMATCH_H3_H4_RESULTS.md`
-
-Status do Baseline 1A:
-
+- Documento: `docs/04_RESEARCH/BASELINE_PREMATCH_H3_H4_RESULTS.md`
 - Operacional: APTO COM RESSALVAS.
-- Quantitativo: NAO APROVADO.
-- Decisão Quant: não avançar para backtesting, produção ou sistema decisório.
+- Quantitativo: NÃO APROVADO.
+- Decisão: não avançar para backtesting, produção ou sistema decisório.
 
----
-
-## Resultado Quantitativo do Baseline 1A
-
-Dataset:
-
-- 380 partidas.
-- Split temporal: 228 treino / 76 validação / 76 teste.
-- Target: `target_late_goal_75`.
-- Features finais em `X`: 12.
-
-Teste:
+Métricas no teste:
 
 - ROC-AUC Test: 0.4910.
 - PR-AUC Test: 0.5364.
@@ -79,16 +57,48 @@ Teste:
 - Brier modelo vs baseline nulo: piorou +0.0089.
 - Log Loss modelo vs baseline nulo: piorou +0.0180.
 
-Critérios:
-
-- ROC-AUC Test > 0.55: FALHOU.
-- PR-AUC Test > prevalence_test + 0.03: FALHOU.
-
 Interpretação:
 
-- O ganho em treino não sustentou em validação/teste.
-- O baseline nulo foi superior em qualidade probabilística no teste.
-- O artefato permanece útil como referência exploratória controlada, mas não autoriza avanço metodológico.
+- H3/H4 pré-jogo isoladas não sustentaram um baseline preditivo útil no teste temporal.
+- O pipeline foi validado, mas o experimento falhou quantitativamente.
+
+### Baseline In-Game V1 — H6/H9
+
+Status:
+
+- Aprovado para implementação controlada.
+
+Documento aprovado:
+
+- `docs/04_RESEARCH/BASELINE_INGAME_IMPLEMENTATION_SPEC.md`
+
+Commit:
+
+- `31db699a2e80c2ed11fed4672db8a785ce2b65b2`
+
+Configuração aprovada:
+
+- Target: `target_late_goal_75`.
+- Cutoff: 75 minutos.
+- Tipo: in-game snapshot.
+- Features permitidas:
+  - `score_diff_home_until_cutoff`
+  - `score_state_group`
+  - `cards_until_cutoff`
+  - `substitutions_until_cutoff`
+
+Proibições:
+
+- H1/H2/H8.
+- xG/xGA/forecast.
+- eventos após cutoff.
+- target-derived features.
+- estatísticas full-match.
+- produção, automação operacional e backtesting financeiro.
+
+Plano futuro documentado:
+
+- Baseline In-Game V2 com cutoffs 60, 65, 70 e 75 para medir trade-off entre antecedência operacional e ganho informacional.
 
 ---
 
@@ -99,30 +109,10 @@ Interpretação:
 - H3 — MANTER COMO CANDIDATA, mas Baseline 1A Pre-Match não aprovou no teste temporal.
 - H4 — MANTER COMO CANDIDATA FORTE, mas Baseline 1A Pre-Match não aprovou no teste temporal.
 - H5 — NÃO VALIDADA.
-- H6 — VALIDADA INICIALMENTE.
+- H6 — VALIDADA INICIALMENTE e autorizada para Baseline In-Game V1.
 - H7 — NÃO VALIDADA COMO HIPÓTESE INDEPENDENTE.
 - H8 — BLOQUEADA/PENDENTE de graph/momentum.
-- H9 — VALIDADA INICIALMENTE.
-
----
-
-## Conjunto Mínimo de Features Candidatas V1
-
-### Pré-jogo
-
-- `goals_for_avg_last_3`
-- `goals_for_avg_last_10`
-- `shots_on_target_for_avg_last_5`
-- `shots_against_avg_last_5`
-- `shots_on_target_against_avg_last_5`
-- `big_chances_against_avg_last_5`
-
-### In-game
-
-- `score_diff_home_until_cutoff`
-- `score_state_group`
-- `cards_until_cutoff`
-- `substitutions_until_cutoff`
+- H9 — VALIDADA INICIALMENTE e autorizada para Baseline In-Game V1.
 
 ---
 
@@ -132,35 +122,39 @@ Interpretação:
 - Não usar o Baseline 1A em produção.
 - Não transformar o Baseline 1A em sistema decisório.
 - Não usar features bloqueadas.
-- Manter separação entre bloco pré-jogo e bloco in-game.
 - Não usar estatísticas finais da própria partida como preditores.
 - Não usar xG/xGA/forecast sem comprovação temporal segura.
+- Não usar eventos após cutoff como features in-game.
+- Manter backtesting e produção bloqueados.
 - Qualquer nova iteração de baseline precisa de autorização do PM/CTO.
 
 ---
 
 ## Próxima Frente Oficial
 
-A definir pelo PM.
+Implementação controlada do Baseline In-Game V1.
 
-Opções candidatas:
+Próximo agente:
 
-1. Revisar formulação do baseline pré-jogo.
-2. Avaliar Baseline 1B com diferenças home-away, se PM/CTO autorizarem.
-3. Planejar baseline in-game separado com H6/H9.
-4. Aguardar ampliação multi-temporada antes de nova modelagem.
+- Codex Developer.
+
+Objetivo:
+
+Executar o Baseline In-Game V1 conforme `BASELINE_INGAME_IMPLEMENTATION_SPEC.md`, gerar relatório completo e retornar para revisão do Quant Research e do PM.
 
 ---
 
 ## Próximos Passos
 
-- [ ] PM decidir a próxima frente oficial.
-- [ ] Se houver nova iteração, CTO revisar escopo técnico antes de Codex.
-- [ ] Quant Research desenhar novo plano metodológico antes de implementação.
+- [ ] Acionar Codex para implementar o Baseline In-Game V1.
+- [ ] Gerar relatório com métricas train/validation/test.
+- [ ] Comparar contra baseline nulo.
+- [ ] Auditar features utilizadas em X.
+- [ ] Enviar resultado ao Quant Research para revisão.
 - [ ] Manter backtesting e produção bloqueados.
 
 ---
 
 ## Status
 
-EM EXECUÇÃO — BASELINE 1A EXECUTADO; RESULTADO QUANTITATIVO NAO APROVADO; PROXIMA FRENTE DEPENDE DO PM.
+EM EXECUÇÃO — BASELINE 1A NÃO APROVADO; BASELINE IN-GAME V1 APROVADO PARA IMPLEMENTAÇÃO CONTROLADA.
