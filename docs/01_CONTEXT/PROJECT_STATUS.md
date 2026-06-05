@@ -41,6 +41,9 @@
 - Desenho metodologico do Dataset Analitico V1 definido em `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`.
 - Dataset Builder V1 implementado no commit `1a1404e09079f2a1a7958ae948fefdc667872a50`.
 - Dataset Analitico V1 gerado com 380 linhas e status APTO COM RESSALVAS.
+- Target Audit concluido: `target_late_goal_75` com 189 positivos e 191 negativos.
+- Validacao Estatistica Inicial H6/H9 concluida e revisada pelo Quant Research.
+- Validacao H1/H2 preparada e corretamente bloqueada por risco confirmado de data leakage.
 
 ---
 
@@ -178,24 +181,128 @@ Placar final / resultado final, proibidos como preditores:
 - `away_goals`
 - `total_goals`
 
+Estatisticas finais da propria partida sao proibidas como preditores in-game.
+
+---
+
+## Validacao Estatistica Inicial H6/H9
+
+Status:
+
+- Concluida e aprovada pelo PM.
+
+Documento:
+
+- `docs/04_RESEARCH/INITIAL_STATISTICAL_VALIDATION_H6_H9.md`
+
+Dataset utilizado:
+
+- `late_goal_dataset_v1b_ingame`
+- 1900 linhas
+- 380 partidas
+- cutoffs: 60, 65, 70, 75, 80
+- target: `target_goal_after_cutoff`
+
+Resultado H6 — Estado da Partida:
+
+Manter:
+
+- `score_diff_home_until_cutoff`
+- `score_state_group`
+
+Observar:
+
+- `total_goals_until_cutoff`
+- `time_since_last_goal_until_cutoff`
+
+Descartar nesta amostra:
+
+- `is_draw_until_cutoff`
+- `home_leading_until_cutoff`
+- `away_leading_until_cutoff`
+
+Resultado H9 — Eventos:
+
+Manter:
+
+- `cards_until_cutoff`
+- `substitutions_until_cutoff`
+
+Observar:
+
+- `goal_last_10m_until_cutoff`
+
+Descartar nesta amostra:
+
+- `goal_last_5m_until_cutoff`
+
+Ressalva:
+
+- `red_cards_until_cutoff` e `yellow_cards_until_cutoff` nao foram usados porque estao nulos por design.
+
+---
+
+## Validacao Estatistica H1/H2
+
+Status:
+
+- BLOQUEADA.
+
+Documento:
+
+- `docs/04_RESEARCH/STATISTICAL_VALIDATION_H1_H2.md`
+
+Conclusao Quant:
+
+- H1/H2 nao devem ser testadas estatisticamente ainda.
+
+Motivo:
+
+- Risco confirmado de data leakage.
+
+Variaveis bloqueadas:
+
+- `matches.home_xg`
+- `matches.away_xg`
+- `team_match_stats.xg`
+- `team_match_stats.xga`
+- `forecast_*`
+
+Detalhes:
+
+- `matches.home_xg` e `matches.away_xg` representam xG final da propria partida.
+- `team_match_stats.xg/xga` sao estatisticas finais por time por partida.
+- `forecast_*` vem junto do registro final Understat e nao foi comprovado como pre-kickoff.
+- `matches_master` possui 0 valores nao nulos em xG/forecast.
+- Nao ha probabilidades pre-jogo seguras nos artefatos atuais.
+
+Decisao do PM:
+
+- H1 bloqueada.
+- H2 bloqueada.
+- Nao usar xG da propria partida como feature pre-jogo.
+- Nao usar forecast sem comprovacao pre-kickoff.
+- Nao iniciar modelagem.
+
+Nova exigencia:
+
+- H1/H2 somente poderao ser retomadas apos construcao de dataset historico pre-jogo sem leakage.
+
 ---
 
 ## Em Andamento
 
-### Auditoria Quant Research / Data Science
+### Avaliacao Metodologica H3/H4
 
 Objetivo:
 
-Auditar o Dataset Analitico V1 antes de qualquer modelagem.
+Determinar se H3 e H4 podem ser implementadas sem leakage utilizando apenas historico anterior ao jogo.
 
-Tarefas esperadas:
+Regras:
 
-- validar coerencia do target;
-- analisar distribuicao de positivos/negativos;
-- classificar colunas por risco de leakage;
-- separar colunas de auditoria, identificadores e potenciais features;
-- propor primeira bateria de analises exploratorias para H1/H2/H6/H9;
-- recomendar seguir, seguir com ressalvas ou revisar Dataset V1.
+- H3/H4 nao podem usar estatisticas finais da propria partida.
+- H3/H4 so podem utilizar rolling windows, medias historicas ou metricas acumuladas ate antes da data da partida.
+- Nao criar codigo, datasets executaveis ou modelagem antes de aprovacao metodologica.
 
 ---
 
@@ -214,14 +321,13 @@ Status:
 
 ## Proximas Etapas
 
-1. Quant Research / Data Science auditar o Dataset Analitico V1.
-2. Classificar colunas por uso permitido e risco de leakage.
-3. Revisar se o target `target_late_goal_75` esta metodologicamente aprovado.
-4. Definir primeira bateria exploratoria para H1/H2/H6/H9.
-5. Iniciar feature engineering somente apos aprovacao metodologica.
-6. Iniciar modelagem apenas depois de dataset e features aprovados.
-7. Backtesting apenas depois de baseline validado.
-8. Producao apenas em etapa futura.
+1. Quant Research / Data Science avaliar H3/H4 sob regra anti-leakage.
+2. Definir se forca ofensiva e fragilidade defensiva podem ser construidas usando historico anterior ao jogo.
+3. Manter H1/H2 bloqueadas ate existir dataset pre-jogo seguro.
+4. Iniciar feature engineering somente apos aprovacao metodologica.
+5. Iniciar modelagem apenas depois de dataset e features aprovados.
+6. Backtesting apenas depois de baseline validado.
+7. Producao apenas em etapa futura.
 
 ---
 
@@ -234,6 +340,8 @@ Status:
 - Base PostgreSQL esta apta com ressalvas para Dataset Analitico V1.
 - Dataset Builder V1 gerou CSV, Parquet, metadata e validation report.
 - `target_late_goal_75` foi criado com 189 positivos e 191 negativos.
+- H6/H9 apresentaram primeiras features promissoras em dados reais.
+- H1/H2 foram corretamente bloqueadas por data leakage.
 - Estatisticas full-match exigem ressalva de leakage antes de qualquer uso preditivo.
 - Nenhuma modelagem foi iniciada.
 - `match_graph` segue pendente porque ainda nao ha `graph.json` coletado.
