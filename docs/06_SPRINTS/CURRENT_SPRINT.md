@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Consolidar o primeiro conjunto mínimo de features candidatas do LateGoalResearch e preparar a transição controlada para planejamento de baseline, sem iniciar modelagem ou backtesting.
+Consolidar o primeiro conjunto mínimo de features candidatas do LateGoalResearch, planejar e executar de forma controlada o primeiro baseline exploratório, sem iniciar backtesting ou produção.
 
 ---
 
@@ -28,22 +28,67 @@ Consolidar o primeiro conjunto mínimo de features candidatas do LateGoalResearc
 - [x] Construir feature set histórico pré-jogo H3/H4.
 - [x] Validar estatisticamente H3/H4.
 - [x] Produzir e aprovar `FEATURE_CANDIDATE_SET_V1.md`.
+- [x] Produzir `BASELINE_EXPERIMENT_PLAN.md`.
+- [x] Produzir e revisar `BASELINE_IMPLEMENTATION_SPEC.md`.
+- [x] Implementar e executar Baseline 1A Pre-Match H3/H4.
+- [x] Revisar resultado quantitativo do Baseline 1A.
 
 ---
 
 ## Estado Atual
 
-Documento aprovado:
+Documento de features aprovado:
 
 - `docs/04_RESEARCH/FEATURE_CANDIDATE_SET_V1.md`
 
-Commit:
+Plano de baseline:
 
-- `2e94f3dc2b00480bbbe5582f7b9fa91d4e533f14`
+- `docs/04_RESEARCH/BASELINE_EXPERIMENT_PLAN.md`
 
-Status:
+Especificação operacional:
 
-- APROVADO pelo PM.
+- `docs/04_RESEARCH/BASELINE_IMPLEMENTATION_SPEC.md`
+
+Resultado do baseline:
+
+- `docs/04_RESEARCH/BASELINE_PREMATCH_H3_H4_RESULTS.md`
+
+Status do Baseline 1A:
+
+- Operacional: APTO COM RESSALVAS.
+- Quantitativo: NAO APROVADO.
+- Decisão Quant: não avançar para backtesting, produção ou sistema decisório.
+
+---
+
+## Resultado Quantitativo do Baseline 1A
+
+Dataset:
+
+- 380 partidas.
+- Split temporal: 228 treino / 76 validação / 76 teste.
+- Target: `target_late_goal_75`.
+- Features finais em `X`: 12.
+
+Teste:
+
+- ROC-AUC Test: 0.4910.
+- PR-AUC Test: 0.5364.
+- Prevalência Test: 0.5263.
+- PR-AUC mínimo exigido: 0.5563.
+- Brier modelo vs baseline nulo: piorou +0.0089.
+- Log Loss modelo vs baseline nulo: piorou +0.0180.
+
+Critérios:
+
+- ROC-AUC Test > 0.55: FALHOU.
+- PR-AUC Test > prevalence_test + 0.03: FALHOU.
+
+Interpretação:
+
+- O ganho em treino não sustentou em validação/teste.
+- O baseline nulo foi superior em qualidade probabilística no teste.
+- O artefato permanece útil como referência exploratória controlada, mas não autoriza avanço metodológico.
 
 ---
 
@@ -51,8 +96,8 @@ Status:
 
 - H1 — BLOQUEADA por data leakage.
 - H2 — BLOQUEADA por data leakage.
-- H3 — MANTER COMO CANDIDATA.
-- H4 — MANTER COMO CANDIDATA FORTE.
+- H3 — MANTER COMO CANDIDATA, mas Baseline 1A Pre-Match não aprovou no teste temporal.
+- H4 — MANTER COMO CANDIDATA FORTE, mas Baseline 1A Pre-Match não aprovou no teste temporal.
 - H5 — NÃO VALIDADA.
 - H6 — VALIDADA INICIALMENTE.
 - H7 — NÃO VALIDADA COMO HIPÓTESE INDEPENDENTE.
@@ -83,51 +128,39 @@ Status:
 
 ## Restrições Ativas
 
-- Não iniciar modelagem ainda.
-- Não executar baseline sem plano aprovado.
-- Não executar backtesting.
+- Não avançar o Baseline 1A para backtesting.
+- Não usar o Baseline 1A em produção.
+- Não transformar o Baseline 1A em sistema decisório.
 - Não usar features bloqueadas.
 - Manter separação entre bloco pré-jogo e bloco in-game.
 - Não usar estatísticas finais da própria partida como preditores.
 - Não usar xG/xGA/forecast sem comprovação temporal segura.
+- Qualquer nova iteração de baseline precisa de autorização do PM/CTO.
 
 ---
 
 ## Próxima Frente Oficial
 
-Baseline Preparation.
+A definir pelo PM.
 
-Objetivo:
+Opções candidatas:
 
-Produzir um plano formal de experimento antes de qualquer treino ou baseline executável.
-
-Documento esperado:
-
-- `docs/04_RESEARCH/BASELINE_EXPERIMENT_PLAN.md`
-
-Conteúdo esperado:
-
-- dataset a ser usado;
-- features permitidas;
-- features proibidas;
-- separação pré-jogo vs in-game;
-- split temporal;
-- métricas;
-- critérios de sucesso;
-- regras anti-leakage;
-- escopo do primeiro baseline.
+1. Revisar formulação do baseline pré-jogo.
+2. Avaliar Baseline 1B com diferenças home-away, se PM/CTO autorizarem.
+3. Planejar baseline in-game separado com H6/H9.
+4. Aguardar ampliação multi-temporada antes de nova modelagem.
 
 ---
 
 ## Próximos Passos
 
-- [ ] Acionar CTO para revisar a transição para baseline.
-- [ ] Acionar Quant Research para desenhar `BASELINE_EXPERIMENT_PLAN.md`.
-- [ ] Só após aprovação do plano, preparar tarefa controlada para Codex.
-- [ ] Manter modelagem bloqueada até aprovação formal do plano.
+- [ ] PM decidir a próxima frente oficial.
+- [ ] Se houver nova iteração, CTO revisar escopo técnico antes de Codex.
+- [ ] Quant Research desenhar novo plano metodológico antes de implementação.
+- [ ] Manter backtesting e produção bloqueados.
 
 ---
 
 ## Status
 
-EM EXECUÇÃO — FEATURE_CANDIDATE_SET_V1 APROVADO; PRÓXIMA FRENTE: BASELINE PREPARATION.
+EM EXECUÇÃO — BASELINE 1A EXECUTADO; RESULTADO QUANTITATIVO NAO APROVADO; PROXIMA FRENTE DEPENDE DO PM.
