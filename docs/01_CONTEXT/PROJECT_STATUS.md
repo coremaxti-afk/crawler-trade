@@ -44,6 +44,7 @@
 - Target Audit concluido: `target_late_goal_75` com 189 positivos e 191 negativos.
 - Validacao Estatistica Inicial H6/H9 concluida e revisada pelo Quant Research.
 - Validacao H1/H2 preparada e corretamente bloqueada por risco confirmado de data leakage.
+- Feature set historico pre-jogo `historical_prematch_features_v1` criado e validado como APTO para H3/H4, com ressalvas controladas.
 
 ---
 
@@ -290,19 +291,92 @@ Nova exigencia:
 
 ---
 
+## Feature Set Historico Pre-Jogo H3/H4
+
+Status:
+
+- Gerado.
+- APTO.
+- Liberado para validacao estatistica H3/H4, com ressalvas controladas.
+
+Artefatos:
+
+- `LateGoalResearch/data/processed/features/historical_prematch_features_v1.csv`
+- `LateGoalResearch/data/processed/features/historical_prematch_features_v1.parquet`
+- `LateGoalResearch/data/processed/features/historical_prematch_features_v1_metadata.json`
+- `LateGoalResearch/data/processed/features/historical_prematch_features_v1_validation_report.json`
+
+Grain:
+
+- 1 linha por time por partida.
+- Cada partida gera uma linha para o mandante e uma linha para o visitante.
+
+Resumo validado:
+
+- Linhas: 760.
+- Partidas: 380.
+- Times: 20.
+- Duplicatas match+team: 0.
+- Partidas sem duas linhas de time: 0.
+- `history_rows_without_prior_match`: 20.
+- `history_window_3_complete_count`: 700.
+- `history_window_5_complete_count`: 660.
+- `history_window_10_complete_count`: 560.
+- `early_season_rows`: 100.
+
+Anti-leakage:
+
+- Regra documentada: `groupby(season, team_name).shift(1)` aplicado antes de rolling/expanding.
+- Validacao temporal: 24320 checks, 0 mismatches.
+- Colunas target-derived excluidas: `has_late_goal`, `target_late_goal_75`, `target_goal_after_cutoff`.
+
+Features H3 ofensivas disponiveis:
+
+- `goals_for_avg_last_3`
+- `goals_for_avg_last_5`
+- `goals_for_avg_last_10`
+- `shots_for_avg_last_5`
+- `shots_on_target_for_avg_last_5`
+- `big_chances_for_avg_last_5`
+
+Features H4 defensivas disponiveis:
+
+- `goals_against_avg_last_3`
+- `goals_against_avg_last_5`
+- `goals_against_avg_last_10`
+- `shots_against_avg_last_5`
+- `shots_on_target_against_avg_last_5`
+- `big_chances_against_avg_last_5`
+
+Ressalvas Quant:
+
+- O feature set atual ainda nao possui xG/xGA historico.
+- H3/H4 podem ser validadas agora como historico pre-jogo de gols, finalizacoes, chutes no alvo e big chances.
+- Nao declarar ainda H3/H4 como validadas via xG/xGA historico.
+- Primeira linha de cada time possui nulos esperados por ausencia de historico anterior.
+- Big chances podem carregar nulos por limitacao da fonte.
+
+---
+
 ## Em Andamento
 
-### Avaliacao Metodologica H3/H4
+### Validacao Estatistica H3/H4
 
 Objetivo:
 
-Determinar se H3 e H4 podem ser implementadas sem leakage utilizando apenas historico anterior ao jogo.
+Validar estatisticamente se features historicas pre-jogo de forca ofensiva e fragilidade defensiva apresentam associacao com gols tardios marcados/sofridos.
+
+Documento esperado:
+
+- `docs/04_RESEARCH/STATISTICAL_VALIDATION_H3_H4.md`
 
 Regras:
 
-- H3/H4 nao podem usar estatisticas finais da propria partida.
-- H3/H4 so podem utilizar rolling windows, medias historicas ou metricas acumuladas ate antes da data da partida.
-- Nao criar codigo, datasets executaveis ou modelagem antes de aprovacao metodologica.
+- Nao criar modelo.
+- Nao alterar datasets existentes.
+- Nao alterar PostgreSQL/schema/crawlers/importers.
+- Nao usar dados da propria partida.
+- Nao usar xG/xGA nesta etapa, pois ainda nao existem como historico pre-jogo nesse feature set.
 
 ---
 
@@ -321,13 +395,12 @@ Status:
 
 ## Proximas Etapas
 
-1. Quant Research / Data Science avaliar H3/H4 sob regra anti-leakage.
-2. Definir se forca ofensiva e fragilidade defensiva podem ser construidas usando historico anterior ao jogo.
-3. Manter H1/H2 bloqueadas ate existir dataset pre-jogo seguro.
-4. Iniciar feature engineering somente apos aprovacao metodologica.
-5. Iniciar modelagem apenas depois de dataset e features aprovados.
-6. Backtesting apenas depois de baseline validado.
-7. Producao apenas em etapa futura.
+1. Executar Validacao Estatistica H3/H4 usando `historical_prematch_features_v1`.
+2. Manter H1/H2 bloqueadas ate existir dataset pre-jogo seguro com xG/xGA/forecast comprovadamente pre-kickoff.
+3. Manter H6/H9 como primeiras hipoteses com sinais estatisticos iniciais aceitos.
+4. Iniciar modelagem apenas depois de consolidar validacoes estatisticas e aprovar conjunto minimo de features.
+5. Backtesting apenas depois de baseline validado.
+6. Producao apenas em etapa futura.
 
 ---
 
@@ -342,6 +415,7 @@ Status:
 - `target_late_goal_75` foi criado com 189 positivos e 191 negativos.
 - H6/H9 apresentaram primeiras features promissoras em dados reais.
 - H1/H2 foram corretamente bloqueadas por data leakage.
+- Feature set historico pre-jogo H3/H4 foi criado com validacao temporal sem mismatches.
 - Estatisticas full-match exigem ressalva de leakage antes de qualquer uso preditivo.
 - Nenhuma modelagem foi iniciada.
 - `match_graph` segue pendente porque ainda nao ha `graph.json` coletado.
