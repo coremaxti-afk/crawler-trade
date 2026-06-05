@@ -30,92 +30,44 @@
 - PostgreSQL configurado.
 - SQLAlchemy configurado.
 - Tabelas `match_mapping`, `matches_master`, `match_statistics`, `match_incidents` e `match_graph` criadas.
-- Coletor SofaScore v2 endurecido operacionalmente no commit `54bbb14`.
-- Coletor SofaScore v3 core criado para reduzir volume de requests.
-- Coleta SofaScore validada via 5G sem novo HTTP 403 em mais de 100 partidas.
-- Auditoria local SofaScore EPL concluida.
+- Coleta SofaScore core/full auditada com 380 partidas importaveis.
 - `sofascore_importer.py` implementado no commit `84e641f`.
 - PostgreSQL populado com 380 partidas SofaScore importaveis.
-- Idempotencia do importer validada com segunda execucao sem duplicacao.
+- Idempotencia do importer validada.
 - Validacao leve de qualidade concluida com status: APTO COM RESSALVAS.
-- Desenho metodologico do Dataset Analitico V1 definido em `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`.
 - Dataset Builder V1 implementado no commit `1a1404e09079f2a1a7958ae948fefdc667872a50`.
 - Dataset Analitico V1 gerado com 380 linhas e status APTO COM RESSALVAS.
 - Target Audit concluido: `target_late_goal_75` com 189 positivos e 191 negativos.
 - Validacao Estatistica Inicial H6/H9 concluida e revisada pelo Quant Research.
-- Validacao H1/H2 preparada e corretamente bloqueada por risco confirmado de data leakage.
-- Feature set historico pre-jogo `historical_prematch_features_v1` criado e validado como APTO para H3/H4, com ressalvas controladas.
+- Validacao H1/H2 bloqueada por risco confirmado de data leakage.
+- Feature set historico pre-jogo `historical_prematch_features_v1` criado e validado para H3/H4.
+- Validacao Estatistica H3/H4 concluida.
+- `FEATURE_CANDIDATE_SET_V1.md` aprovado.
+- `BASELINE_EXPERIMENT_PLAN.md` aprovado.
+- `BASELINE_IMPLEMENTATION_SPEC.md` aprovado.
+- Baseline 1A Pre-Match H3/H4 implementado, executado e revisado.
+- Baseline 1A registrado como operacionalmente apto, mas quantitativamente NAO APROVADO.
+- `BASELINE_INGAME_IMPLEMENTATION_SPEC.md` produzido e aprovado para implementacao controlada.
 
 ---
 
-## Estado Atual da Coleta SofaScore
+## Estado Atual da Base
 
-Resultado auditado:
-
-- Total no inventory: 381 partidas.
-- Total de pastas locais: 381.
-- Partidas full: 192.
-- Partidas core: 188.
-- Total importavel: 380.
-- Partidas faltantes: 0.
-- Partidas incompletas relevantes: 1.
+- Inventory SofaScore EPL: 381 partidas.
+- Pastas locais: 381.
+- Partidas importaveis: 380.
 - Partida descartada da importacao atual: `12436452`.
-
-Observacoes:
-
-- A partida `12436449` foi corrigida/coletada e entrou como importavel.
-- `lineups.json` e `h2h.json` permanecem preservados como dados brutos complementares.
-- A estrategia core reduziu o volume de requests por partida de 5 para 3.
-
----
-
-## Estado Atual da Importacao PostgreSQL
-
-Tabelas populadas nesta etapa:
-
-- `matches_master`
-- `match_statistics`
-- `match_incidents`
-
-Contagens finais:
-
 - `matches_master`: 380 partidas.
 - `match_statistics`: 380 partidas.
 - `match_incidents`: 7647 registros.
-- Registros para `12436452`: 0.
 - Orfaos em `match_statistics`: 0.
 - Orfaos em `match_incidents`: 0.
-- Partidas importadas sem estatisticas: 0.
 
-Fora do escopo desta importacao:
+Ressalvas:
 
-- `match_graph`
-- lineups
-- h2h
-- features avancadas
-- modelagem
-
----
-
-## Validacao Leve de Qualidade
-
-Status:
-
-- APTO COM RESSALVAS.
-
-Resultados:
-
-- Nao existem orfaos.
-- Nao existem divergencias entre placar e incidentes.
-- 16 partidas sem gols sao compativeis com o placar.
 - `big_chances_home` possui 7 nulos.
 - `big_chances_away` possui 7 nulos.
-
-Interpretacao:
-
-- A base esta apta com ressalvas para Dataset Analitico V1.
-- As colunas `big_chances_home` e `big_chances_away` devem ser tratadas com ressalva e nao devem ser usadas como feature obrigatoria sem regra documentada de nulos.
-- `match_graph`, lineups e h2h permanecem fora do core v1.
+- `match_graph` ainda nao possui dados coletados/importados.
 
 ---
 
@@ -130,23 +82,14 @@ Script:
 
 - `LateGoalResearch/Analytics/DatasetBuilder/dataset_builder_v1.py`
 
-Commit:
-
-- `1a1404e09079f2a1a7958ae948fefdc667872a50` - Cria Dataset Builder V1.
-
-Documentacao:
-
-- `docs/04_RESEARCH/ANALYTICAL_DATASET_V1.md`
-- `docs/04_RESEARCH/DATASET_BUILDER_V1.md`
-
-Artefatos locais gerados:
+Artefatos locais:
 
 - `data/processed/datasets/late_goal_dataset_v1.csv`
 - `data/processed/datasets/late_goal_dataset_v1.parquet`
 - `data/processed/datasets/late_goal_dataset_v1_metadata.json`
 - `data/processed/datasets/late_goal_dataset_v1_validation_report.json`
 
-Resumo validado:
+Resumo:
 
 - Linhas: 380.
 - Grain: 1 linha por partida.
@@ -157,17 +100,7 @@ Resumo validado:
 - Duplicatas por `match_id`: 0.
 - Duplicatas por `sofascore_event_id`: 0.
 
-Ressalvas:
-
-- Estatisticas full-match de `match_statistics` possuem risco de leakage para uso in-game.
-- Colunas target-derived nao podem ser usadas como features.
-- `big_chances_home` e `big_chances_away` possuem 7 nulos cada.
-
----
-
-## Colunas Proibidas como Features nesta Etapa
-
-Target-derived:
+Colunas proibidas como features:
 
 - `has_late_goal`
 - `target_late_goal_75`
@@ -175,247 +108,131 @@ Target-derived:
 - `home_late_goal_count_75`
 - `away_late_goal_count_75`
 - `first_late_goal_minute_75`
-
-Placar final / resultado final, proibidos como preditores:
-
 - `home_goals`
 - `away_goals`
 - `total_goals`
 
-Estatisticas finais da propria partida sao proibidas como preditores in-game.
+Regra:
+
+- Estatisticas finais da propria partida sao proibidas como preditores in-game.
 
 ---
 
-## Validacao Estatistica Inicial H6/H9
+## Status das Hipoteses
 
-Status:
+- H1 — BLOQUEADA por data leakage.
+- H2 — BLOQUEADA por data leakage.
+- H3 — MANTER COMO CANDIDATA, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
+- H4 — MANTER COMO CANDIDATA FORTE, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
+- H5 — NAO VALIDADA.
+- H6 — VALIDADA INICIALMENTE e autorizada para Baseline In-Game V1.
+- H7 — NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
+- H8 — BLOQUEADA/PENDENTE de graph/momentum.
+- H9 — VALIDADA INICIALMENTE e autorizada para Baseline In-Game V1.
 
-- Concluida e aprovada pelo PM.
+---
+
+## Baseline 1A — Pre-Match H3/H4
 
 Documento:
 
-- `docs/04_RESEARCH/INITIAL_STATISTICAL_VALIDATION_H6_H9.md`
+- `docs/04_RESEARCH/BASELINE_PREMATCH_H3_H4_RESULTS.md`
 
-Dataset utilizado:
+Status:
 
-- `late_goal_dataset_v1b_ingame`
-- 1900 linhas
-- 380 partidas
-- cutoffs: 60, 65, 70, 75, 80
-- target: `target_goal_after_cutoff`
+- Operacional: APTO COM RESSALVAS.
+- Quantitativo: NAO APROVADO.
+- Decisao: nao avancar para backtesting, producao ou sistema decisorio.
 
-Resultado H6 — Estado da Partida:
+Resultado no teste:
 
-Manter:
+- ROC-AUC Test: 0.4910.
+- PR-AUC Test: 0.5364.
+- Prevalencia Test: 0.5263.
+- PR-AUC minimo exigido: 0.5563.
+- Brier modelo vs baseline nulo: piorou +0.0089.
+- Log Loss modelo vs baseline nulo: piorou +0.0180.
+
+Interpretacao:
+
+- O pipeline foi validado.
+- A implementacao respeitou split temporal, imputacao e auditoria anti-leakage.
+- As features pre-jogo H3/H4 isoladas nao sustentaram um baseline preditivo util no teste temporal.
+
+---
+
+## Baseline In-Game V1 — H6/H9
+
+Documento aprovado:
+
+- `docs/04_RESEARCH/BASELINE_INGAME_IMPLEMENTATION_SPEC.md`
+
+Commit:
+
+- `31db699a2e80c2ed11fed4672db8a785ce2b65b2`
+
+Status:
+
+- APROVADO para implementacao controlada.
+
+Configuracao:
+
+- Target: `target_late_goal_75`.
+- Cutoff: 75 minutos.
+- Tipo: in-game snapshot.
+
+Features permitidas:
 
 - `score_diff_home_until_cutoff`
 - `score_state_group`
-
-Observar:
-
-- `total_goals_until_cutoff`
-- `time_since_last_goal_until_cutoff`
-
-Descartar nesta amostra:
-
-- `is_draw_until_cutoff`
-- `home_leading_until_cutoff`
-- `away_leading_until_cutoff`
-
-Resultado H9 — Eventos:
-
-Manter:
-
 - `cards_until_cutoff`
 - `substitutions_until_cutoff`
 
-Observar:
+Proibido:
 
-- `goal_last_10m_until_cutoff`
+- H1/H2/H8.
+- xG/xGA/forecast.
+- eventos apos cutoff.
+- target-derived features.
+- estatisticas full-match.
+- producao, automacao operacional e backtesting financeiro.
 
-Descartar nesta amostra:
+Plano futuro:
 
-- `goal_last_5m_until_cutoff`
-
-Ressalva:
-
-- `red_cards_until_cutoff` e `yellow_cards_until_cutoff` nao foram usados porque estao nulos por design.
-
----
-
-## Validacao Estatistica H1/H2
-
-Status:
-
-- BLOQUEADA.
-
-Documento:
-
-- `docs/04_RESEARCH/STATISTICAL_VALIDATION_H1_H2.md`
-
-Conclusao Quant:
-
-- H1/H2 nao devem ser testadas estatisticamente ainda.
-
-Motivo:
-
-- Risco confirmado de data leakage.
-
-Variaveis bloqueadas:
-
-- `matches.home_xg`
-- `matches.away_xg`
-- `team_match_stats.xg`
-- `team_match_stats.xga`
-- `forecast_*`
-
-Detalhes:
-
-- `matches.home_xg` e `matches.away_xg` representam xG final da propria partida.
-- `team_match_stats.xg/xga` sao estatisticas finais por time por partida.
-- `forecast_*` vem junto do registro final Understat e nao foi comprovado como pre-kickoff.
-- `matches_master` possui 0 valores nao nulos em xG/forecast.
-- Nao ha probabilidades pre-jogo seguras nos artefatos atuais.
-
-Decisao do PM:
-
-- H1 bloqueada.
-- H2 bloqueada.
-- Nao usar xG da propria partida como feature pre-jogo.
-- Nao usar forecast sem comprovacao pre-kickoff.
-- Nao iniciar modelagem.
-
-Nova exigencia:
-
-- H1/H2 somente poderao ser retomadas apos construcao de dataset historico pre-jogo sem leakage.
-
----
-
-## Feature Set Historico Pre-Jogo H3/H4
-
-Status:
-
-- Gerado.
-- APTO.
-- Liberado para validacao estatistica H3/H4, com ressalvas controladas.
-
-Artefatos:
-
-- `LateGoalResearch/data/processed/features/historical_prematch_features_v1.csv`
-- `LateGoalResearch/data/processed/features/historical_prematch_features_v1.parquet`
-- `LateGoalResearch/data/processed/features/historical_prematch_features_v1_metadata.json`
-- `LateGoalResearch/data/processed/features/historical_prematch_features_v1_validation_report.json`
-
-Grain:
-
-- 1 linha por time por partida.
-- Cada partida gera uma linha para o mandante e uma linha para o visitante.
-
-Resumo validado:
-
-- Linhas: 760.
-- Partidas: 380.
-- Times: 20.
-- Duplicatas match+team: 0.
-- Partidas sem duas linhas de time: 0.
-- `history_rows_without_prior_match`: 20.
-- `history_window_3_complete_count`: 700.
-- `history_window_5_complete_count`: 660.
-- `history_window_10_complete_count`: 560.
-- `early_season_rows`: 100.
-
-Anti-leakage:
-
-- Regra documentada: `groupby(season, team_name).shift(1)` aplicado antes de rolling/expanding.
-- Validacao temporal: 24320 checks, 0 mismatches.
-- Colunas target-derived excluidas: `has_late_goal`, `target_late_goal_75`, `target_goal_after_cutoff`.
-
-Features H3 ofensivas disponiveis:
-
-- `goals_for_avg_last_3`
-- `goals_for_avg_last_5`
-- `goals_for_avg_last_10`
-- `shots_for_avg_last_5`
-- `shots_on_target_for_avg_last_5`
-- `big_chances_for_avg_last_5`
-
-Features H4 defensivas disponiveis:
-
-- `goals_against_avg_last_3`
-- `goals_against_avg_last_5`
-- `goals_against_avg_last_10`
-- `shots_against_avg_last_5`
-- `shots_on_target_against_avg_last_5`
-- `big_chances_against_avg_last_5`
-
-Ressalvas Quant:
-
-- O feature set atual ainda nao possui xG/xGA historico.
-- H3/H4 podem ser validadas agora como historico pre-jogo de gols, finalizacoes, chutes no alvo e big chances.
-- Nao declarar ainda H3/H4 como validadas via xG/xGA historico.
-- Primeira linha de cada time possui nulos esperados por ausencia de historico anterior.
-- Big chances podem carregar nulos por limitacao da fonte.
+- Baseline In-Game V2 com cutoffs 60, 65, 70 e 75 para medir trade-off entre antecedencia operacional e ganho informacional.
 
 ---
 
 ## Em Andamento
 
-### Validacao Estatistica H3/H4
+### Implementacao Controlada do Baseline In-Game V1
+
+Proximo agente:
+
+- Codex Developer.
 
 Objetivo:
 
-Validar estatisticamente se features historicas pre-jogo de forca ofensiva e fragilidade defensiva apresentam associacao com gols tardios marcados/sofridos.
-
-Documento esperado:
-
-- `docs/04_RESEARCH/STATISTICAL_VALIDATION_H3_H4.md`
-
-Regras:
-
-- Nao criar modelo.
-- Nao alterar datasets existentes.
-- Nao alterar PostgreSQL/schema/crawlers/importers.
-- Nao usar dados da propria partida.
-- Nao usar xG/xGA nesta etapa, pois ainda nao existem como historico pre-jogo nesse feature set.
-
----
-
-### API-Football
-
-Objetivo:
-
-Avaliar como fonte alternativa/complementar ao SofaScore.
-
-Status:
-
-- Spikes controlados executados.
-- API-Football permanece como complemento candidato, nao como substituta oficial do SofaScore.
+Executar o Baseline In-Game V1 conforme `BASELINE_INGAME_IMPLEMENTATION_SPEC.md`, gerar relatorio completo e retornar para revisao do Quant Research e PM.
 
 ---
 
 ## Proximas Etapas
 
-1. Executar Validacao Estatistica H3/H4 usando `historical_prematch_features_v1`.
-2. Manter H1/H2 bloqueadas ate existir dataset pre-jogo seguro com xG/xGA/forecast comprovadamente pre-kickoff.
-3. Manter H6/H9 como primeiras hipoteses com sinais estatisticos iniciais aceitos.
-4. Iniciar modelagem apenas depois de consolidar validacoes estatisticas e aprovar conjunto minimo de features.
-5. Backtesting apenas depois de baseline validado.
-6. Producao apenas em etapa futura.
+1. Codex implementar o Baseline In-Game V1.
+2. Gerar relatorio com metricas train/validation/test.
+3. Comparar contra baseline nulo.
+4. Auditar features utilizadas em X.
+5. Enviar resultado ao Quant Research para revisao.
+6. Manter backtesting e producao bloqueados.
 
 ---
 
 ## Descobertas Recentes
 
-- SofaScore fornece dados suficientes para base core EPL em 380 partidas.
-- Perfil core reduziu volume de requests e funcionou operacionalmente via 5G.
-- A partida `12436452` deve permanecer fora da importacao atual.
-- Importer SofaScore core e retomavel/idempotente.
-- Base PostgreSQL esta apta com ressalvas para Dataset Analitico V1.
-- Dataset Builder V1 gerou CSV, Parquet, metadata e validation report.
-- `target_late_goal_75` foi criado com 189 positivos e 191 negativos.
-- H6/H9 apresentaram primeiras features promissoras em dados reais.
-- H1/H2 foram corretamente bloqueadas por data leakage.
-- Feature set historico pre-jogo H3/H4 foi criado com validacao temporal sem mismatches.
-- Estatisticas full-match exigem ressalva de leakage antes de qualquer uso preditivo.
-- Nenhuma modelagem foi iniciada.
+- H3/H4 pre-jogo isoladas nao foram suficientes no Baseline 1A.
+- H6/H9 sao a frente in-game prioritaria por terem apresentado sinal estatistico inicial.
+- O projeto deve tratar o Baseline 1A como referencia exploratoria, nao como modelo candidato.
+- O proximo teste controlado sera o Baseline In-Game V1 no cutoff 75.
+- Nenhum backtesting ou producao foi iniciado.
 - `match_graph` segue pendente porque ainda nao ha `graph.json` coletado.
