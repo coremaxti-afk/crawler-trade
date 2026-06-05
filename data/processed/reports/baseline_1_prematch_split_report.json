@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-06-05T01:44:41",
+  "shuffle": false,
+  "ratios": {
+    "train": 0.6,
+    "validation": 0.2,
+    "test": 0.2
+  },
+  "total_rows": 380,
+  "split_counts": {
+    "train": 228,
+    "validation": 76,
+    "test": 76
+  },
+  "date_ranges": {
+    "train": {
+      "min": "2024-08-16T19:00:00",
+      "max": "2025-01-26T16:30:00"
+    },
+    "validation": {
+      "min": "2025-01-26T19:00:00",
+      "max": "2025-04-05T16:30:00"
+    },
+    "test": {
+      "min": "2025-04-06T13:00:00",
+      "max": "2025-05-25T15:00:00"
+    }
+  },
+  "target_distribution": {
+    "train": {
+      "positive": 112,
+      "negative": 116,
+      "prevalence": 0.491228
+    },
+    "validation": {
+      "positive": 37,
+      "negative": 39,
+      "prevalence": 0.486842
+    },
+    "test": {
+      "positive": 40,
+      "negative": 36,
+      "prevalence": 0.526316
+    }
+  },
+  "history_absent_rows": {
+    "train": 10,
+    "validation": 0,
+    "test": 0
+  },
+  "overlaps": {
+    "train_validation": 0,
+    "train_test": 0,
+    "validation_test": 0
+  },
+  "temporal_order_valid": true
+}
