@@ -50,6 +50,7 @@ class OperationalBlock(Exception):
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Controlled H8 shotmap collector for existing EPL matches.")
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT, help="Maximum matches to process in this run.")
+    parser.add_argument("--start-index", type=int, default=1, help="1-based index in the inventory candidate list to start from.")
     parser.add_argument("--dry-run", action="store_true", help="List pending matches without HTTP requests.")
     parser.add_argument("--request-delay", type=float, default=DEFAULT_REQUEST_DELAY_SECONDS, help="Base delay before each request in seconds.")
     parser.add_argument("--match-delay", type=float, default=DEFAULT_MATCH_DELAY_SECONDS, help="Base delay after each match in seconds.")
@@ -84,6 +85,16 @@ def row_event_id(row: dict[str, Any]) -> str:
     return str(value).split(".")[0].strip() if value is not None else ""
 
 
+def is_valid_json_file(path: Path) -> bool:
+    if not path.exists():
+        return False
+    try:
+        payload = read_json(path)
+    except (json.JSONDecodeError, OSError):
+        return False
+    return isinstance(payload, (dict, list))
+
+
 def shotmap_items(payload: Any) -> list[Any]:
     if isinstance(payload, dict):
         value = payload.get("shotmap")
@@ -102,8 +113,19 @@ def payload_metadata(payload: Any) -> dict[str, Any]:
         "field_presence": {},
     }
     fields = (
-        "minute", "time", "addedTime", "timeSeconds", "xg", "xgot", "player", "team",
-        "shotType", "goalMouthLocation", "playerCoordinates", "goalMouthCoordinates", "draw",
+        "minute",
+        "time",
+        "addedTime",
+        "timeSeconds",
+        "xg",
+        "xgot",
+        "player",
+        "team",
+        "shotType",
+        "goalMouthLocation",
+        "playerCoordinates",
+        "goalMouthCoordinates",
+        "draw",
     )
     if items:
         metadata["field_presence"] = {field: any(isinstance(item, dict) and field in item for item in items) for field in fields}
@@ -145,25 +167,27 @@ def make_candidate(row: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
-def selected_candidates(limit: int) -> list[dict[str, Any]]:
+def selected_candidates(limit: int, start_index: int) -> list[dict[str, Any]]:
     if limit < 1:
         raise SystemExit("--limit must be >= 1")
+    if start_index < 1:
+        raise SystemExit("--start-index must be >= 1")
     candidates: list[dict[str, Any]] = []
     for row in load_inventory():
         candidate = make_candidate(row)
-        if candidate is None or candidate["shotmap_valid"]:
+        if candidate is None:
             continue
         candidates.append(candidate)
-        if len(candidates) >= limit:
-            break
-    return candidates
+    return candidates[start_index - 1:start_index - 1 + limit]
 
 
 def print_candidates(candidates: list[dict[str, Any]]) -> None:
     print("H8 shotmap collection plan")
     print(f"Matches selected: {len(candidates)}")
     for index, item in enumerate(candidates, start=1):
-        status = "invalid_existing_will_backup" if item["shotmap_exists"] and not item["shotmap_valid"] else "pending"
+        status = "pending"
+        if item["shotmap_exists"] and not item["shotmap_valid"]:
+            status = "invalid_existing_will_backup"
         print(
             f"[{index}] {item['event_id']} | round={item.get('round')} | "
             f"{item.get('home_team') or 'unknown_home'} x {item.get('away_team') or 'unknown_away'} | "
@@ -328,7 +352,7 @@ def execute_collection(candidates: list[dict[str, Any]], args: argparse.Namespac
 
 def main() -> None:
     args = parse_args()
-    candidates = selected_candidates(args.limit)
+    candidates = selected_candidates(args.limit, args.start_index)
     print_candidates(candidates)
     if args.dry_run:
         print("\nSAFE MODE: no HTTP requests were made.")
