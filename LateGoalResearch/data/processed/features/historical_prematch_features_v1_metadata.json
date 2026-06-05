@@ -1,0 +1,92 @@
+{
+  "feature_set_name": "historical_prematch_features_v1",
+  "feature_set_version": "v1",
+  "generated_at": "2026-06-04T22:24:54",
+  "grain": "one row per team per match; each match creates one home row and one away row",
+  "source_tables": [
+    "matches_master",
+    "match_statistics",
+    "match_incidents"
+  ],
+  "read_only_postgresql": true,
+  "known_skipped_match_ids": [
+    "12436452"
+  ],
+  "ordering_rule": "season, team_name, match_date, match_id",
+  "anti_leakage_rule": "groupby(season, team_name).shift(1) is applied before rolling or expanding calculations",
+  "target_columns_excluded": [
+    "has_late_goal",
+    "target_late_goal_75",
+    "target_goal_after_cutoff"
+  ],
+  "row_count": 760,
+  "match_count": 380,
+  "team_count": 20,
+  "history_columns": [
+    "history_matches_available",
+    "history_window_3_complete",
+    "history_window_5_complete",
+    "history_window_10_complete",
+    "is_early_season"
+  ],
+  "h3_offensive_features": [
+    "goals_for_avg_last_3",
+    "goals_for_avg_last_5",
+    "goals_for_avg_last_10",
+    "shots_for_avg_last_5",
+    "shots_on_target_for_avg_last_5",
+    "big_chances_for_avg_last_5"
+  ],
+  "h4_defensive_features": [
+    "goals_against_avg_last_3",
+    "goals_against_avg_last_5",
+    "goals_against_avg_last_10",
+    "shots_against_avg_last_5",
+    "shots_on_target_against_avg_last_5",
+    "big_chances_against_avg_last_5"
+  ],
+  "season_to_date_features": [
+    "goals_for_avg_season_to_date",
+    "goals_against_avg_season_to_date",
+    "shots_for_avg_season_to_date",
+    "shots_against_avg_season_to_date",
+    "shots_on_target_for_avg_season_to_date",
+    "shots_on_target_against_avg_season_to_date",
+    "big_chances_for_avg_season_to_date",
+    "big_chances_against_avg_season_to_date"
+  ],
+  "all_feature_columns": [
+    "goals_for_avg_last_3",
+    "goals_for_avg_last_5",
+    "goals_for_avg_last_10",
+    "shots_for_avg_last_5",
+    "shots_on_target_for_avg_last_5",
+    "big_chances_for_avg_last_5",
+    "goals_against_avg_last_3",
+    "goals_against_avg_last_5",
+    "goals_against_avg_last_10",
+    "shots_against_avg_last_5",
+    "shots_on_target_against_avg_last_5",
+    "big_chances_against_avg_last_5",
+    "goals_for_avg_season_to_date",
+    "goals_against_avg_season_to_date",
+    "shots_for_avg_season_to_date",
+    "shots_against_avg_season_to_date",
+    "shots_on_target_for_avg_season_to_date",
+    "shots_on_target_against_avg_season_to_date",
+    "big_chances_for_avg_season_to_date",
+    "big_chances_against_avg_season_to_date"
+  ],
+  "output_files": {
+    "csv": "C:\\LateGoalResearch\\data\\processed\\features\\historical_prematch_features_v1.csv",
+    "parquet": "C:\\LateGoalResearch\\data\\processed\\features\\historical_prematch_features_v1.parquet",
+    "metadata": "C:\\LateGoalResearch\\data\\processed\\features\\historical_prematch_features_v1_metadata.json",
+    "validation_report": "C:\\LateGoalResearch\\data\\processed\\features\\historical_prematch_features_v1_validation_report.json"
+  },
+  "validation_status": "APTO",
+  "limitations": [
+    "Feature values depend on imported SofaScore full-time match statistics from prior matches only.",
+    "No target columns, full-match statistics from the current match, crawler data writes or model outputs are included.",
+    "big_chances rolling features can be null early in the season when prior source observations are null."
+  ]
+}
