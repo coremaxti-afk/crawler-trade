@@ -134,7 +134,7 @@ Resumo operacional:
 
 - Partidas planejadas: 5.
 - Partidas únicas efetivamente testadas: 1.
-- Tentativas registradas no log: 2, ambas para `event_id=12436870`.
+- Tentativas registradas no log: 3, todas para `event_id=12436870`.
 - JSONs válidos retornados: 0.
 - JSONs falhos/bloqueados: 1 partida única.
 - HTTP 403: sim.
@@ -144,7 +144,7 @@ Resumo operacional:
 
 Interpretação:
 
-O coletor respeitou a regra operacional de parada imediata em HTTP 403. Nenhuma ampliação de coleta deve ser feita enquanto o bloqueio persistir.
+O coletor respeitou a regra operacional de parada imediata em HTTP 403. Uma nova tentativa manual em 2026-06-05 também retornou HTTP 403 no primeiro evento. Nenhuma ampliação de coleta deve ser feita enquanto o bloqueio persistir.
 
 Recomendação:
 
