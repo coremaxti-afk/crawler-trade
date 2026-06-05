@@ -1,0 +1,133 @@
+{
+  "baseline_name": "baseline_1_prematch_h3_h4",
+  "baseline_version": "v1a",
+  "generated_at": "2026-06-05T01:44:41",
+  "input_files": {
+    "features": "C:\\LateGoalResearch\\data\\processed\\features\\historical_prematch_features_v1.csv",
+    "feature_metadata": "C:\\LateGoalResearch\\data\\processed\\features\\historical_prematch_features_v1_metadata.json",
+    "feature_validation": "C:\\LateGoalResearch\\data\\processed\\features\\historical_prematch_features_v1_validation_report.json",
+    "dataset": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1.csv",
+    "dataset_metadata": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1_metadata.json",
+    "dataset_validation": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1_validation_report.json"
+  },
+  "source_status": {
+    "feature_validation_status": "APTO",
+    "feature_temporal_leakage_mismatches": 0,
+    "dataset_validation_status": "APTO COM RESSALVAS"
+  },
+  "grain": "one row per match",
+  "source_team_level_rows": 760,
+  "output_match_level_rows": 380,
+  "target": "target_late_goal_75",
+  "official_whitelist_precedence": true,
+  "allowed_team_level_features": [
+    "goals_for_avg_last_3",
+    "goals_for_avg_last_10",
+    "shots_on_target_for_avg_last_5",
+    "shots_against_avg_last_5",
+    "shots_on_target_against_avg_last_5",
+    "big_chances_against_avg_last_5"
+  ],
+  "x_columns": [
+    "home_goals_for_avg_last_3",
+    "home_goals_for_avg_last_10",
+    "home_shots_on_target_for_avg_last_5",
+    "home_shots_against_avg_last_5",
+    "home_shots_on_target_against_avg_last_5",
+    "home_big_chances_against_avg_last_5",
+    "away_goals_for_avg_last_3",
+    "away_goals_for_avg_last_10",
+    "away_shots_on_target_for_avg_last_5",
+    "away_shots_against_avg_last_5",
+    "away_shots_on_target_against_avg_last_5",
+    "away_big_chances_against_avg_last_5"
+  ],
+  "forbidden_patterns_checked": [
+    "target",
+    "late_goal",
+    "has_late_goal",
+    "home_late_goal",
+    "away_late_goal",
+    "first_late_goal",
+    "last_goal",
+    "incident",
+    "score",
+    "cutoff",
+    "cards_until",
+    "substitutions_until",
+    "xg",
+    "xga",
+    "forecast",
+    "home_goals",
+    "away_goals",
+    "total_goals"
+  ],
+  "forbidden_scan_findings_on_x": [
+    {
+      "column": "home_goals_for_avg_last_3",
+      "matched_patterns": "home_goals",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    },
+    {
+      "column": "home_goals_for_avg_last_10",
+      "matched_patterns": "home_goals",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    },
+    {
+      "column": "home_shots_on_target_for_avg_last_5",
+      "matched_patterns": "target",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    },
+    {
+      "column": "home_shots_on_target_against_avg_last_5",
+      "matched_patterns": "target",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    },
+    {
+      "column": "away_goals_for_avg_last_3",
+      "matched_patterns": "away_goals",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    },
+    {
+      "column": "away_goals_for_avg_last_10",
+      "matched_patterns": "away_goals",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    },
+    {
+      "column": "away_shots_on_target_for_avg_last_5",
+      "matched_patterns": "target",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    },
+    {
+      "column": "away_shots_on_target_against_avg_last_5",
+      "matched_patterns": "target",
+      "resolution": "allowed because official whitelist prevails and feature is historical pre-match"
+    }
+  ],
+  "removed_columns": [
+    {
+      "column": "home_team_from_features",
+      "reason": "identifier or audit column, not predictive X"
+    },
+    {
+      "column": "home_opponent_from_features",
+      "reason": "identifier or audit column, not predictive X"
+    },
+    {
+      "column": "away_team_from_features",
+      "reason": "identifier or audit column, not predictive X"
+    },
+    {
+      "column": "away_opponent_from_features",
+      "reason": "identifier or audit column, not predictive X"
+    }
+  ],
+  "validations": {
+    "feature_rows_per_match_all_equal_2": true,
+    "one_home_row_per_match": true,
+    "one_away_row_per_match": true,
+    "match_id_unique_after_conversion": true,
+    "target_null_count": 0,
+    "all_x_columns_from_whitelist": true
+  }
+}
