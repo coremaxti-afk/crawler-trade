@@ -108,50 +108,55 @@ Payload vazio ou ausente deve ser registrado, não inferido.
 
 Data de registro: 2026-06-05
 
-Coletor utilizado:
+Coletores utilizados:
 
 ```text
 LateGoalResearch/Crawler/Sofascore/h8_graph_momentum_collector.py
+LateGoalResearch/Crawler/Sofascore/h8_graph_momentum_collector_playwright.py
 ```
 
-Log auditável local:
+Logs auditáveis locais:
 
 ```text
 C:\LateGoalResearch\Crawler\Sofascore\data\raw\sofascore\premier_league_61627\collection_log_graph.jsonl
+C:\LateGoalResearch\Crawler\Sofascore\data\raw\sofascore\premier_league_61627\collection_log_graph_playwright.jsonl
 ```
 
-Partidas planejadas para o spike controlado:
+Partidas testadas no spike controlado:
 
-| Ordem | event_id | Partida | target_late_goal_75 | Status |
-|---:|---:|---|---:|---|
-| 1 | 12436870 | Manchester United x Fulham | 1 | Testada; HTTP 403 |
-| 2 | 12436873 | Everton x Brighton & Hove Albion | 1 | Não testada; execução encerrada por HTTP 403 |
-| 3 | 12436875 | Nottingham Forest x Bournemouth | 1 | Não testada; execução encerrada por HTTP 403 |
-| 4 | 12436871 | Ipswich Town x Liverpool FC | 0 | Não testada; execução encerrada por HTTP 403 |
-| 5 | 12436872 | Arsenal x Wolverhampton | 0 | Não testada; execução encerrada por HTTP 403 |
+| Ordem | event_id | Partida | target_late_goal_75 | Status Playwright | graphPoints |
+|---:|---:|---|---:|---|---:|
+| 1 | 12436870 | Manchester United x Fulham | 1 | JSON válido | 92 |
+| 2 | 12436873 | Everton x Brighton & Hove Albion | 1 | JSON válido | 92 |
+| 3 | 12436875 | Nottingham Forest x Bournemouth | 1 | JSON válido | 92 |
+| 4 | 12436871 | Ipswich Town x Liverpool FC | 0 | JSON válido | 92 |
+| 5 | 12436872 | Arsenal x Wolverhampton | 0 | JSON válido | 92 |
 
 Resumo operacional:
 
 - Partidas planejadas: 5.
-- Partidas únicas efetivamente testadas: 1.
-- Tentativas registradas no log: 3, todas para `event_id=12436870`.
-- JSONs válidos retornados: 0.
-- JSONs falhos/bloqueados: 1 partida única.
-- HTTP 403: sim.
-- `graphPoints` observado no spike: não, pois não houve resposta 200 válida.
-- `graph_points_count`: 0.
-- Critério de 80% de validade: não atingido.
+- Partidas efetivamente coletadas via Playwright com sessão aquecida: 5.
+- JSONs válidos retornados: 5.
+- JSONs falhos/bloqueados na execução Playwright: 0.
+- `graphPoints` observado: sim, em 5/5 partidas.
+- `graph_points_count`: 92 em todas as 5 partidas.
+- HTTP 403 na execução Playwright: não.
+- Critério de 80% de validade: atingido, com 100% de validade no spike.
+
+Observação operacional:
+
+O coletor inicial baseado em `urllib` retornou HTTP 403 para `event_id=12436870` em tentativas anteriores. A variante Playwright com browser/sessão aquecida coletou as 5 partidas com sucesso. Portanto, o endpoint está acessível, mas depende de contexto de navegador/sessão para a coleta controlada.
 
 Interpretação:
 
-O coletor respeitou a regra operacional de parada imediata em HTTP 403. Uma nova tentativa manual em 2026-06-05 também retornou HTTP 403 no primeiro evento. Nenhuma ampliação de coleta deve ser feita enquanto o bloqueio persistir.
+O payload observado é consistente com o contrato esperado para H8 Graph/Momentum. A presença de 92 pontos em todas as partidas sugere cobertura minuto-a-minuto suficiente para avaliação posterior, mas ainda é uma amostra pequena.
 
 Recomendação:
 
-- Status H8 Graph/Momentum: BLOQUEADO para ampliação imediata.
-- Não ampliar para 20 partidas neste momento.
-- Revisar estratégia operacional de Data Acquisition antes de nova tentativa.
-- Não implementar importer, features, dataset ou baseline H8 até existir amostra raw válida suficiente.
+- Status H8 Graph/Momentum: APTO PARA AMPLIAÇÃO CONTROLADA.
+- Ampliar para 20 partidas com o coletor Playwright e warmup manual/sessão persistida.
+- Manter limite, checkpoint, delay, jitter, log auditável e parada imediata em HTTP 403.
+- Não implementar importer, features, dataset ou baseline H8 até a amostra de 20 partidas ser validada.
 
 ---
 
@@ -170,10 +175,11 @@ Recomendação:
 
 ## Próximo Passo Recomendado
 
-Acionar Data Acquisition Engineer para revisar o bloqueio HTTP 403 observado no spike inicial antes de qualquer nova ampliação.
+Acionar Data Acquisition Engineer para ampliar o spike controlado para 20 partidas usando a variante Playwright com sessão aquecida.
 
 Objetivo da próxima etapa:
 
-- reduzir risco de bloqueio;
-- confirmar se o endpoint permanece acessível em ambiente autorizado;
-- obter amostra raw válida mínima antes de qualquer decisão sobre importer e feature engineering H8.
+- medir cobertura em amostra maior;
+- confirmar estabilidade sem HTTP 403;
+- medir variação de `graphPoints` por partida;
+- confirmar consistência do payload antes de qualquer decisão sobre importer e feature engineering H8.
