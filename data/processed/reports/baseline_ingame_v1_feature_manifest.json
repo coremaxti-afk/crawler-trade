@@ -1,0 +1,107 @@
+{
+  "baseline_name": "baseline_ingame_v1_h6_h9",
+  "baseline_version": "v1",
+  "generated_at": "2026-06-05T02:29:18",
+  "input_files": {
+    "ingame_dataset": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1b_ingame.csv",
+    "ingame_metadata": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1b_ingame_metadata.json",
+    "ingame_validation": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1b_ingame_validation_report.json",
+    "dataset_v1_for_target_equivalence": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_v1.csv"
+  },
+  "source_rows": 1900,
+  "snapshot_rows": 380,
+  "cutoff_minute": 75,
+  "target": "target_late_goal_75",
+  "operational_target": "target_goal_after_cutoff",
+  "score_state_group_derivation": "derived from score_diff_home_until_cutoff inside cutoff-75 snapshot",
+  "x_columns_base": [
+    "score_diff_home_until_cutoff",
+    "cards_until_cutoff",
+    "substitutions_until_cutoff",
+    "score_state_group"
+  ],
+  "numeric_features": [
+    "score_diff_home_until_cutoff",
+    "cards_until_cutoff",
+    "substitutions_until_cutoff"
+  ],
+  "categorical_features": [
+    "score_state_group"
+  ],
+  "encoded_x_columns": [
+    "score_diff_home_until_cutoff",
+    "cards_until_cutoff",
+    "substitutions_until_cutoff",
+    "score_state_group_away_leading",
+    "score_state_group_draw",
+    "score_state_group_home_leading"
+  ],
+  "forbidden_patterns_checked": [
+    "xg",
+    "xga",
+    "forecast",
+    "late_goal",
+    "target",
+    "after_cutoff",
+    "final",
+    "full_match",
+    "home_goals",
+    "away_goals",
+    "total_goals",
+    "goal_last",
+    "last_goal",
+    "time_since_last_goal",
+    "prematch"
+  ],
+  "forbidden_scan_findings_on_x": [],
+  "removed_columns": [
+    {
+      "column": "target_goal_after_cutoff",
+      "reason": "operational target, not predictive X"
+    },
+    {
+      "column": "target_late_goal_75",
+      "reason": "official target, not predictive X"
+    },
+    {
+      "column": "home_goals_until_cutoff",
+      "reason": "not in official whitelist"
+    },
+    {
+      "column": "away_goals_until_cutoff",
+      "reason": "not in official whitelist"
+    },
+    {
+      "column": "total_goals_until_cutoff",
+      "reason": "not in official whitelist"
+    },
+    {
+      "column": "last_goal_minute_until_cutoff",
+      "reason": "not in official whitelist"
+    },
+    {
+      "column": "time_since_last_goal_until_cutoff",
+      "reason": "not in official whitelist"
+    },
+    {
+      "column": "goal_last_5m_until_cutoff",
+      "reason": "not in official whitelist"
+    },
+    {
+      "column": "goal_last_10m_until_cutoff",
+      "reason": "not in official whitelist"
+    }
+  ],
+  "validations": {
+    "all_rows_cutoff_75": true,
+    "match_id_unique_after_filter": true,
+    "duplicate_match_ids": 0,
+    "target_null_count": 0,
+    "all_x_columns_from_whitelist": true,
+    "target_equivalence_checked": true,
+    "target_equivalence_mismatches": 0,
+    "no_full_match_statistics_source_used": true,
+    "no_prematch_features_used": true,
+    "no_xg_xga_forecast_used": true
+  }
+}
