@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Encerrar a iteração de baselines sem graph/momentum e abrir a frente de coleta/análise de graph para testar H8 — Momentum e Pressão Temporal.
+Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, preparando a próxima fase de importação/feature engineering sem iniciar backtesting ou produção.
 
 ---
 
@@ -34,6 +34,10 @@ Encerrar a iteração de baselines sem graph/momentum e abrir a frente de coleta
 - [x] Implementar e executar Baseline In-Game V1.
 - [x] Revisar resultado quantitativo do Baseline In-Game V1.
 - [x] Encerrar a iteração de baselines sem graph/momentum como exploratória e não aprovada para backtesting/produção.
+- [x] Executar discovery controlado de endpoints SofaScore.
+- [x] Confirmar endpoint `/graph` como útil para H8.
+- [x] Confirmar endpoint `/shotmap` como útil para H8.
+- [x] Coletar `graph` com sucesso.
 
 ---
 
@@ -51,13 +55,6 @@ Status:
 - Quantitativo: NÃO APROVADO.
 - Decisão: não avançar para backtesting, produção ou sistema decisório.
 
-Métricas no teste:
-
-- ROC-AUC Test: 0.4910.
-- PR-AUC Test: 0.5364.
-- Prevalência Test: 0.5263.
-- PR-AUC mínimo exigido: 0.5563.
-
 ### Baseline In-Game V1 — H6/H9
 
 Documento:
@@ -70,33 +67,84 @@ Status:
 - Quantitativo: NÃO APROVADO.
 - Decisão: não avançar para backtesting, produção ou sistema decisório.
 
-Métricas no teste:
-
-- ROC-AUC Test: 0.5250.
-- PR-AUC Test: 0.5541.
-- Prevalência Test: 0.5263.
-- PR-AUC requerido: 0.5563.
-- Brier modelo: 0.2525 vs nulo 0.2505.
-- Log Loss modelo: 0.6983 vs nulo 0.6942.
-
 Interpretação:
 
 - O In-Game V1 melhorou em relação ao Pre-Match, mas ainda não atingiu os critérios mínimos.
-- O PR-AUC ficou próximo do mínimo, mas falhou por pequena margem.
-- A qualidade probabilística piorou contra o baseline nulo.
 - Os baselines atuais servem como benchmarks exploratórios, não como modelos candidatos.
+- A próxima hipótese prioritária é que dados vivos de momentum/pressão e finalizações possam aumentar o sinal preditivo.
 
 ---
 
-## Decisão PM
+## Discovery SofaScore H8
 
-A iteração de baselines sem graph/momentum está encerrada.
+Documentos:
 
-Motivo:
+- `docs/03_SOURCES/SOFASCORE/ENDPOINT_DISCOVERY_20260605.md`
+- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_ENDPOINT.md`
 
-- Os baselines sem graph não foram aprovados quantitativamente.
-- A hipótese do PM é que dados ao vivo/momentum podem ser mais relevantes para gols tardios.
-- A próxima frente oficial passa a ser buscar/coletar graph/momentum para testar H8.
+Endpoints úteis confirmados:
+
+- `/graph`
+- `/shotmap`
+- `/statistics`
+- `/incidents`
+- `/lineups`
+- `/average-positions`
+- `/managers`
+
+Base candidata para H8:
+
+- `graph`
+- `shotmap`
+- `incidents`
+- `statistics`
+
+Complementos possíveis:
+
+- `lineups`
+- `average-positions`
+- `managers`
+
+Endpoints não recomendados para insistência por tentativa de nomes:
+
+- `/attacks`
+- `/dangerous-attacks`
+- `/possession`
+- `/field-tilt`
+- `/pressure`
+- `/momentum`
+- `/attack-momentum`
+
+Decisão:
+
+- Não insistir em endpoints não confirmados por tentativa de nomes.
+- Priorizar H8 com `graph` + `shotmap` + `incidents` + `statistics`.
+
+---
+
+## Estado Atual da Coleta H8
+
+### Graph
+
+Status:
+
+- Coletado com sucesso.
+
+Interpretação:
+
+- `graph` passa a ser o principal artefato temporal de momentum/pressão para H8.
+- A próxima etapa será validar cobertura, estrutura e qualidade antes de importar/modelar.
+
+### Shotmap
+
+Status:
+
+- Em coleta.
+
+Interpretação:
+
+- `shotmap` pode fornecer finalizações com minuto, acréscimo, `timeSeconds`, xG, xGOT e coordenadas.
+- Pode permitir features como xG acumulado até cutoff, xG recente, volume de chutes e qualidade das chances antes do cutoff.
 
 ---
 
@@ -109,27 +157,18 @@ Motivo:
 - H5 — NÃO VALIDADA.
 - H6 — VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph não aprovou quantitativamente.
 - H7 — NÃO VALIDADA COMO HIPÓTESE INDEPENDENTE.
-- H8 — PRÓXIMA FRENTE: graph/momentum.
+- H8 — FRENTE ATIVA: graph/momentum + shotmap.
 - H9 — VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph não aprovou quantitativamente.
 
 ---
 
 ## Próxima Frente Oficial
 
-Graph / Momentum — H8.
+Consolidação da coleta H8.
 
 Objetivo:
 
-Investigar se dados temporais de pressão/momentum ao vivo melhoram a previsão de gols tardios.
-
-Escopo inicial esperado:
-
-- identificar endpoint/artefato `graph` ou equivalente;
-- validar disponibilidade para partidas já coletadas;
-- estimar custo em requests;
-- definir estratégia segura de coleta;
-- documentar estrutura dos dados;
-- avaliar como transformar graph/momentum em features sem leakage.
+Validar a cobertura e a qualidade dos dados `graph` e `shotmap` antes de planejar importer, feature builder ou novo baseline.
 
 ---
 
@@ -143,16 +182,17 @@ Escopo inicial esperado:
 - Não usar xG/xGA/forecast sem comprovação temporal segura.
 - Não usar eventos após cutoff como features in-game.
 - Manter backtesting e produção bloqueados.
-- Qualquer coleta graph/momentum deve respeitar checkpoint, baixo volume, delays e validação operacional.
+- Qualquer coleta adicional deve respeitar checkpoint, baixo volume, delays e validação operacional.
 
 ---
 
 ## Próximos Passos
 
-- [ ] Acionar Data Acquisition Engineer para avaliar graph/momentum.
-- [ ] Identificar endpoint e formato do graph.
-- [ ] Executar teste controlado em amostra mínima.
-- [ ] Documentar viabilidade operacional.
+- [ ] Finalizar coleta de `shotmap`.
+- [ ] Auditar cobertura de `graph` por partida.
+- [ ] Auditar cobertura de `shotmap` por partida.
+- [ ] Validar estrutura e qualidade dos JSONs coletados.
+- [ ] Acionar Data Engineer / Database para avaliar importer futuro de `graph` e `shotmap`.
 - [ ] Acionar CTO se houver necessidade de nova arquitetura de armazenamento/importação.
 - [ ] Só depois definir plano Quant para H8.
 
@@ -160,4 +200,4 @@ Escopo inicial esperado:
 
 ## Status
 
-EM EXECUÇÃO — BASELINES SEM GRAPH ENCERRADOS COMO EXPLORATÓRIOS; PRÓXIMA FRENTE: GRAPH/MOMENTUM H8.
+EM EXECUÇÃO — GRAPH COLETADO COM SUCESSO; SHOTMAP EM COLETA; H8 É A FRENTE ATIVA.
