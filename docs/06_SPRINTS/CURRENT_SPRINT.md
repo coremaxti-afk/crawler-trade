@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando da coleta/importacao para validacao estatistica inicial sem iniciar producao, automacao operacional ou backtesting financeiro.
+Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando da coleta/importacao para feature engineering auditavel sem iniciar producao, automacao operacional ou backtesting financeiro.
 
 ---
 
@@ -25,6 +25,9 @@ Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando
 - [x] Registrar `12437015` como known_missing para Graph HTTP 404.
 - [x] Completar catalogo metodologico H8 V1.
 - [x] Executar Validacao Estatistica Inicial H8-A/H8-B.
+- [x] Especificar Feature Builder H8 V1.
+- [x] Implementar Feature Builder H8 V1.
+- [x] Executar Feature Builder H8 V1 localmente.
 
 ---
 
@@ -37,16 +40,17 @@ Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando
 - `docs/08_DATABASE/H8_STORAGE_IMPORT_SPEC.md`
 - `docs/04_RESEARCH/H8_FEATURE_CATALOG_V1.md`
 - `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`
+- `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`
 
 ---
 
-## Estado Atual da Coleta e Importacao H8
+## Estado Atual da Coleta, Importacao e Features H8
 
 ### Graph
 
 Status:
 
-- Coletado, auditado, armazenado e importado com ressalva tecnica conhecida.
+- Coletado, auditado, armazenado, importado e usado no Feature Builder H8 V1 com ressalva tecnica conhecida.
 
 Auditoria atualizada:
 
@@ -63,17 +67,11 @@ Auditoria atualizada:
 - Registros importados em `match_graph`: 34.861.
 - Excecao conhecida: `12437015`, Crystal Palace x Liverpool FC, HTTP 404 no endpoint `/graph`.
 
-Interpretacao:
-
-- `graph` continua sendo o principal artefato temporal de momentum/pressao para H8.
-- A cobertura esta efetivamente fechada, exceto por uma excecao tecnica conhecida.
-- Outputs que exigem Graph devem excluir `12437015` ou tratar explicitamente como known_missing.
-
 ### Shotmap
 
 Status:
 
-- Coletado, auditado, armazenado e importado com sucesso.
+- Coletado, auditado, armazenado, importado e usado no Feature Builder H8 V1 com sucesso.
 
 Auditoria:
 
@@ -89,10 +87,32 @@ Auditoria:
 - HTTP 403 na coleta final: nao.
 - Registros importados em `match_shotmap`: 9.883.
 
-### Source Status
+### Feature Builder H8 V1
 
-- Registros em `match_source_status`: 760.
-- `12437015` registrado como `known_missing` para `graph.json`, HTTP 404.
+Status:
+
+- Implementado.
+- Executado localmente.
+- Sem modelo.
+- Sem baseline.
+- Sem backtesting.
+- Sem escrita no PostgreSQL.
+
+Resultados:
+
+- Script: `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
+- Spec: `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`.
+- Output local: `data/processed/features/h8_features_v1.csv`.
+- Output local: `data/processed/features/h8_features_v1.parquet`.
+- Output local: `data/processed/features/h8_features_v1_metadata.json`.
+- Output local: `data/processed/features/h8_features_v1_validation_report.json`.
+- Linhas: 1520.
+- Partidas unicas: 380.
+- Cutoffs: 60, 65, 70 e 75.
+- Graph disponivel: 379 partidas.
+- Shotmap disponivel: 380 partidas.
+- Validation status: APTO COM RESSALVAS.
+- Erros: 0.
 
 ---
 
@@ -120,37 +140,6 @@ Melhores sinais:
 - `momentum_trend_last_10m`, cutoff 60: MANTER, p-value 0,0194, efeito maximo 13,0 p.p.
 - `shots_last_10m`, cutoff 60: MANTER, p-value 0,0492, efeito maximo 11,7 p.p.
 
-Interpretacao:
-
-- Graph e Shotmap devem seguir como familias complementares.
-- A validacao e exploratoria/univariada e nao autoriza producao nem backtesting.
-- Proxima etapa depende de aprovacao para Feature Builder H8 e eventual Dataset/Baseline H8.
-
----
-
-## Base Candidata para H8
-
-- `graph`
-- `shotmap`
-- `incidents`
-- `statistics`, apenas quando houver controle temporal seguro e aprovacao explicita
-
-Complementos possiveis:
-
-- `lineups`
-- `average-positions`
-- `managers`
-
-Endpoints nao recomendados para insistencia por tentativa de nomes:
-
-- `/attacks`
-- `/dangerous-attacks`
-- `/possession`
-- `/field-tilt`
-- `/pressure`
-- `/momentum`
-- `/attack-momentum`
-
 ---
 
 ## Status das Hipoteses
@@ -162,7 +151,7 @@ Endpoints nao recomendados para insistencia por tentativa de nomes:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - VALIDADA INICIALMENTE: Graph/Shotmap possuem sinais candidatos; pendente decisao para Feature Builder/Dataset/Baseline H8.
+- H8 - FEATURE BUILDER V1 IMPLEMENTADO; pendente decisao para Dataset/Baseline H8.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 
 ---
@@ -177,19 +166,17 @@ Endpoints nao recomendados para insistencia por tentativa de nomes:
 - Nao usar xG/xGA/forecast sem comprovacao temporal segura.
 - Nao usar eventos apos cutoff como features in-game.
 - Manter backtesting e producao bloqueados.
-- Nao implementar Feature Builder H8 sem aprovacao explicita.
-- Nao criar Dataset H8 permanente sem aprovacao explicita.
+- Nao criar Dataset H8 para baseline sem aprovacao explicita.
 - Nao executar Baseline H8 sem aprovacao explicita.
 
 ---
 
 ## Proximos Passos
 
-- [ ] Revisar `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`.
-- [ ] Definir com Quant Research quais features H8 MANTER/OBSERVAR seguem.
-- [ ] Solicitar aprovacao PM/CTO antes de Feature Builder H8.
-- [ ] Se aprovado, implementar Feature Builder H8 com whitelist e auditoria anti-leakage.
-- [ ] Se aprovado, gerar Dataset H8 por cutoff.
+- [ ] Revisar `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`.
+- [ ] Revisar `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
+- [ ] Decidir se o Feature Builder H8 V1 sera promovido para Dataset H8.
+- [ ] Se aprovado, criar Dataset H8 com join explicito ao target.
 - [ ] Se aprovado, executar Baseline H8 controlado.
 - [ ] Manter backtesting e producao bloqueados.
 
@@ -197,4 +184,4 @@ Endpoints nao recomendados para insistencia por tentativa de nomes:
 
 ## Status
 
-EM EXECUCAO - H8 COLETADO, AUDITADO, IMPORTADO E VALIDADO ESTATISTICAMENTE EM RODADA INICIAL. GRAPH: 379/380 PARTIDAS IMPORTAVEIS COBERTAS COM 1 EXCECAO 404 CONHECIDA (`12437015`). SHOTMAP: 380/380 PARTIDAS IMPORTAVEIS COBERTAS. VALIDACAO H8-A/H8-B: 2 FEATURES MANTER, 27 OBSERVAR, 7 DESCARTAR. PROXIMA DECISAO: FEATURE BUILDER/DATASET/BASELINE H8, AINDA SEM PRODUCAO OU BACKTESTING.
+EM EXECUCAO - H8 COLETADO, AUDITADO, IMPORTADO, VALIDADO ESTATISTICAMENTE E COM FEATURE BUILDER V1 IMPLEMENTADO. FEATURE SET LOCAL GERADO COM 1520 LINHAS, 380 PARTIDAS, GRAPH 379/380 E SHOTMAP 380/380. PROXIMA DECISAO: DATASET/BASELINE H8, AINDA SEM PRODUCAO OU BACKTESTING.
