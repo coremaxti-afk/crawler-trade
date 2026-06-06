@@ -37,7 +37,8 @@ Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, preparan
 - [x] Executar discovery controlado de endpoints SofaScore.
 - [x] Confirmar endpoint `/graph` como util para H8.
 - [x] Confirmar endpoint `/shotmap` como util para H8.
-- [x] Coletar `graph` com sucesso.
+- [x] Coletar `graph` com sucesso parcial.
+- [x] Auditar cobertura `graph` da base EPL importavel.
 - [x] Coletar `shotmap` com sucesso.
 - [x] Auditar cobertura `shotmap` da base EPL importavel.
 
@@ -83,6 +84,7 @@ Documentos:
 
 - `docs/03_SOURCES/SOFASCORE/ENDPOINT_DISCOVERY_20260605.md`
 - `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_ENDPOINT.md`
+- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_AUDIT_20260606.md`
 - `docs/03_SOURCES/SOFASCORE/SHOTMAP_ENDPOINT.md`
 
 Endpoints uteis confirmados:
@@ -131,12 +133,43 @@ Decisao:
 
 Status:
 
-- Coletado com sucesso.
+- Coletado e auditado com ressalvas.
+
+Auditoria:
+
+- Inventory total: 381 partidas.
+- Pastas locais: 381.
+- Partidas importaveis: 380.
+- `graph.json` validos: 371.
+- `graph.json` faltantes na base importavel: 9.
+- `graph.json` invalidos: 0.
+- Validos com 0 pontos: 0.
+- `graphPoints` minimo: 91.
+- `graphPoints` maximo: 92.
+- Media de `graphPoints`: 91,98.
+- Partida conhecida como skip: `12436452`.
+
+Faltantes:
+
+- `12436884` - Bournemouth x Newcastle United.
+- `12436904` - Wolverhampton x Chelsea.
+- `12436908` - Brentford x Southampton.
+- `12436912` - Everton x Bournemouth.
+- `12436927` - West Ham United x Manchester City.
+- `12436923` - Newcastle United x Tottenham Hotspur.
+- `12436949` - Southampton x Manchester United.
+- `12436938` - Crystal Palace x Leicester City.
+- `12437015` - Crystal Palace x Liverpool FC.
+
+Documento:
+
+- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_AUDIT_20260606.md`
 
 Interpretacao:
 
-- `graph` passa a ser o principal artefato temporal de momentum/pressao para H8.
-- A proxima etapa sera validar cobertura, estrutura e qualidade antes de importar/modelar.
+- `graph` continua sendo o principal artefato temporal de momentum/pressao para H8.
+- A cobertura atual e alta, mas nao esta fechada para as 380 partidas importaveis.
+- Antes de importer/feature builder/baseline H8, e preciso decidir a regra para as 9 partidas faltantes.
 
 ### Shotmap
 
@@ -178,7 +211,7 @@ Interpretacao:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - FRENTE ATIVA: graph/momentum + shotmap coletados; pendente importer/feature spec.
+- H8 - FRENTE ATIVA: graph/momentum + shotmap coletados; graph com 9 faltantes; pendente decisao de cobertura/importer/feature spec.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 
 ---
@@ -211,8 +244,9 @@ Validar a cobertura e a qualidade dos dados `graph` e `shotmap` antes de planeja
 
 ## Proximos Passos
 
-- [ ] Auditar cobertura de `graph` por partida.
-- [ ] Validar estrutura e qualidade dos JSONs `graph` e `shotmap` coletados.
+- [ ] Decidir se sera feita nova coleta controlada para os 9 `graph.json` faltantes.
+- [ ] Definir politica de tratamento para partidas sem `graph.json`.
+- [ ] Validar estrutura conjunta de `graph` e `shotmap` para desenho futuro de importer.
 - [ ] Acionar Data Engineer / Database para avaliar importer futuro de `graph` e `shotmap`.
 - [ ] Acionar CTO se houver necessidade de nova arquitetura de armazenamento/importacao.
 - [ ] So depois definir plano Quant para H8.
@@ -221,4 +255,4 @@ Validar a cobertura e a qualidade dos dados `graph` e `shotmap` antes de planeja
 
 ## Status
 
-EM EXECUCAO - GRAPH E SHOTMAP COLETADOS; SHOTMAP AUDITADO COM 380/380 PARTIDAS IMPORTAVEIS COBERTAS; H8 SEGUE COMO FRENTE ATIVA, SEM IMPORTER/FEATURES/BASELINE AUTORIZADOS AINDA.
+EM EXECUCAO - SHOTMAP AUDITADO COM 380/380 PARTIDAS IMPORTAVEIS COBERTAS; GRAPH AUDITADO COM 371/380 PARTIDAS IMPORTAVEIS COBERTAS E 9 FALTANTES; H8 SEGUE COMO FRENTE ATIVA, SEM IMPORTER/FEATURES/BASELINE AUTORIZADOS AINDA.
