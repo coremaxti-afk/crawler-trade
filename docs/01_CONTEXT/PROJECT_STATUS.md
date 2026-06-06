@@ -48,6 +48,14 @@
 - Baseline 1A Pre-Match H3/H4 implementado, executado e revisado.
 - Baseline 1A registrado como operacionalmente apto, mas quantitativamente NAO APROVADO.
 - `BASELINE_INGAME_IMPLEMENTATION_SPEC.md` produzido e aprovado para implementacao controlada.
+- Baseline In-Game V1 implementado, executado e revisado.
+- Baseline In-Game V1 registrado como operacionalmente apto, mas quantitativamente NAO APROVADO.
+- Discovery controlado SofaScore H8 executado.
+- Endpoint `/graph` confirmado como fonte temporal de momentum.
+- Endpoint `/shotmap` confirmado como fonte de finalizacoes temporais e espaciais.
+- Coleta raw `graph.json` executada com sucesso.
+- Coleta raw `shotmap.json` executada com sucesso.
+- Auditoria `shotmap` concluida com 380/380 partidas importaveis cobertas.
 
 ---
 
@@ -67,7 +75,8 @@ Ressalvas:
 
 - `big_chances_home` possui 7 nulos.
 - `big_chances_away` possui 7 nulos.
-- `match_graph` ainda nao possui dados coletados/importados.
+- `match_graph` ainda nao possui dados importados.
+- Dados raw H8 (`graph.json` e `shotmap.json`) foram coletados, mas ainda nao possuem importer aprovado.
 
 ---
 
@@ -118,21 +127,58 @@ Regra:
 
 ---
 
-## Status das Hipoteses
+## H8 - Graph / Momentum / Shotmap
 
-- H1 — BLOQUEADA por data leakage.
-- H2 — BLOQUEADA por data leakage.
-- H3 — MANTER COMO CANDIDATA, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
-- H4 — MANTER COMO CANDIDATA FORTE, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
-- H5 — NAO VALIDADA.
-- H6 — VALIDADA INICIALMENTE e autorizada para Baseline In-Game V1.
-- H7 — NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 — BLOQUEADA/PENDENTE de graph/momentum.
-- H9 — VALIDADA INICIALMENTE e autorizada para Baseline In-Game V1.
+Documentos:
+
+- `docs/03_SOURCES/SOFASCORE/ENDPOINT_DISCOVERY_20260605.md`
+- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_ENDPOINT.md`
+- `docs/03_SOURCES/SOFASCORE/SHOTMAP_ENDPOINT.md`
+
+Status:
+
+- H8 e a frente ativa.
+- `graph.json` foi coletado como artefato raw temporal de momentum/pressao.
+- `shotmap.json` foi coletado e auditado como artefato raw de finalizacoes temporais/espaciais.
+- Importer H8 ainda nao autorizado.
+- Feature builder H8 ainda nao autorizado.
+- Dataset/Baseline H8 ainda nao autorizados.
+
+Auditoria `shotmap`:
+
+- Inventory total: 381 partidas.
+- Pastas locais: 381.
+- Partidas importaveis: 380.
+- `shotmap.json` validos: 380.
+- `shotmap.json` faltantes na base importavel: 0.
+- `shotmap.json` invalidos: 0.
+- Total de finalizacoes: 9.883.
+- Media de finalizacoes por partida: 26,01.
+- Partida conhecida como skip: `12436452`.
+
+Interpretação:
+
+- `graph` e `shotmap` formam a base raw candidata para features H8.
+- `shotmap` pode permitir, futuramente, xG acumulado ate cutoff, xG recente, volume de chutes, xGOT recente e qualidade das chances antes do cutoff.
+- Nenhuma dessas features foi implementada ainda.
 
 ---
 
-## Baseline 1A — Pre-Match H3/H4
+## Status das Hipoteses
+
+- H1 - BLOQUEADA por data leakage.
+- H2 - BLOQUEADA por data leakage.
+- H3 - MANTER COMO CANDIDATA, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
+- H4 - MANTER COMO CANDIDATA FORTE, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
+- H5 - NAO VALIDADA.
+- H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
+- H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
+- H8 - FRENTE ATIVA: raw `graph` e `shotmap` coletados; pendente importer/feature spec.
+- H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
+
+---
+
+## Baseline 1A - Pre-Match H3/H4
 
 Documento:
 
@@ -161,69 +207,48 @@ Interpretacao:
 
 ---
 
-## Baseline In-Game V1 — H6/H9
+## Baseline In-Game V1 - H6/H9
 
-Documento aprovado:
+Documento:
 
-- `docs/04_RESEARCH/BASELINE_INGAME_IMPLEMENTATION_SPEC.md`
-
-Commit:
-
-- `31db699a2e80c2ed11fed4672db8a785ce2b65b2`
+- `docs/04_RESEARCH/BASELINE_INGAME_V1_RESULTS.md`
 
 Status:
 
-- APROVADO para implementacao controlada.
+- Operacional: APTO COM RESSALVAS.
+- Quantitativo: NAO APROVADO.
+- Decisao: nao avancar para backtesting, producao ou sistema decisorio.
 
-Configuracao:
+Interpretacao:
 
-- Target: `target_late_goal_75`.
-- Cutoff: 75 minutos.
-- Tipo: in-game snapshot.
-
-Features permitidas:
-
-- `score_diff_home_until_cutoff`
-- `score_state_group`
-- `cards_until_cutoff`
-- `substitutions_until_cutoff`
-
-Proibido:
-
-- H1/H2/H8.
-- xG/xGA/forecast.
-- eventos apos cutoff.
-- target-derived features.
-- estatisticas full-match.
-- producao, automacao operacional e backtesting financeiro.
-
-Plano futuro:
-
-- Baseline In-Game V2 com cutoffs 60, 65, 70 e 75 para medir trade-off entre antecedencia operacional e ganho informacional.
+- O In-Game V1 melhorou em relacao ao Baseline 1A, mas ainda nao atingiu criterio quantitativo suficiente.
+- A frente H8 foi priorizada para testar se dados vivos de momentum/pressao e finalizacoes elevam o sinal preditivo.
 
 ---
 
 ## Em Andamento
 
-### Implementacao Controlada do Baseline In-Game V1
+### Consolidacao H8
 
-Proximo agente:
+Proximos agentes provaveis:
 
-- Codex Developer.
+- Data Engineer / Database.
+- CTO.
+- Quant Research / Data Science.
 
 Objetivo:
 
-Executar o Baseline In-Game V1 conforme `BASELINE_INGAME_IMPLEMENTATION_SPEC.md`, gerar relatorio completo e retornar para revisao do Quant Research e PM.
+Avaliar como importar e validar `graph.json` e `shotmap.json` antes de qualquer feature builder ou baseline H8.
 
 ---
 
 ## Proximas Etapas
 
-1. Codex implementar o Baseline In-Game V1.
-2. Gerar relatorio com metricas train/validation/test.
-3. Comparar contra baseline nulo.
-4. Auditar features utilizadas em X.
-5. Enviar resultado ao Quant Research para revisao.
+1. Auditar cobertura e qualidade de `graph.json` por partida.
+2. Validar estrutura de `shotmap.json` para desenho futuro de importer.
+3. Acionar Data Engineer / Database para avaliar armazenamento/importacao H8.
+4. Acionar CTO se houver mudanca de schema ou nova estrutura de armazenamento.
+5. Acionar Quant Research para especificar features H8 somente apos decisao de armazenamento/importacao.
 6. Manter backtesting e producao bloqueados.
 
 ---
@@ -231,8 +256,9 @@ Executar o Baseline In-Game V1 conforme `BASELINE_INGAME_IMPLEMENTATION_SPEC.md`
 ## Descobertas Recentes
 
 - H3/H4 pre-jogo isoladas nao foram suficientes no Baseline 1A.
-- H6/H9 sao a frente in-game prioritaria por terem apresentado sinal estatistico inicial.
-- O projeto deve tratar o Baseline 1A como referencia exploratoria, nao como modelo candidato.
-- O proximo teste controlado sera o Baseline In-Game V1 no cutoff 75.
+- H6/H9 melhoraram o baseline, mas nao aprovaram quantitativamente sem graph/momentum.
+- `graph` foi confirmado como fonte temporal de momentum/pressao.
+- `shotmap` foi confirmado como fonte de finalizacoes temporais/espaciais.
+- A cobertura `shotmap` esta fechada para as 380 partidas importaveis.
+- A proxima decisao tecnica e sobre importer/armazenamento H8, nao modelagem.
 - Nenhum backtesting ou producao foi iniciado.
-- `match_graph` segue pendente porque ainda nao ha `graph.json` coletado.
