@@ -1,8 +1,14 @@
 # SofaScore Graph / Momentum Endpoint
 
-Status: ENDPOINT CONFIRMADO
+Status: ENDPOINT CONFIRMADO; COLETA AUDITADA COM RESSALVAS
 
-Frente relacionada: H8 — Graph / Momentum
+Frente relacionada: H8 - Graph / Momentum / Shotmap
+
+Documento de auditoria completa:
+
+```text
+docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_AUDIT_20260606.md
+```
 
 ---
 
@@ -10,9 +16,9 @@ Frente relacionada: H8 — Graph / Momentum
 
 Registrar oficialmente o endpoint SofaScore de graph/momentum para uso futuro na frente H8.
 
-Este documento registra apenas a descoberta e a orientação arquitetural inicial.
+Este documento registra descoberta, orientacao operacional e resultado resumido da auditoria de cobertura.
 
-Não autoriza implementação de importer, features, baseline ou modelagem.
+Nao autoriza implementacao de importer, features, baseline, modelagem, backtesting ou producao.
 
 ---
 
@@ -48,25 +54,32 @@ https://www.sofascore.com/api/v1/event/12436874/graph
 
 ---
 
-## Interpretação Inicial
+## Interpretacao Inicial
 
-Cada item em `graphPoints` contém:
+Cada item em `graphPoints` contem:
 
 - `minute`: minuto da partida;
 - `value`: valor de momentum observado para aquele minuto.
 
-Valores positivos e negativos parecem representar variação relativa de domínio/momentum entre as equipes.
+Valores positivos e negativos parecem representar variacao relativa de dominio/momentum entre as equipes.
 
-A semântica exata do sinal deve ser validada antes de qualquer feature engineering oficial.
+A semantica exata do sinal deve ser validada antes de qualquer feature engineering oficial.
 
 ---
 
-## Estrutura Raw Recomendada
+## Estrutura Raw
 
-Caso a coleta seja aprovada, salvar o JSON bruto em:
+JSON bruto salvo em:
 
 ```text
 data/raw/sofascore/premier_league_61627/matches/{event_id}/graph.json
+```
+
+Logs auditaveis locais:
+
+```text
+data/raw/sofascore/premier_league_61627/collection_log_graph.jsonl
+data/raw/sofascore/premier_league_61627/collection_log_graph_playwright.jsonl
 ```
 
 ---
@@ -76,31 +89,30 @@ data/raw/sofascore/premier_league_61627/matches/{event_id}/graph.json
 A coleta deve seguir as mesmas regras operacionais dos coletores SofaScore seguros:
 
 - checkpoint por arquivo;
-- não sobrescrever JSON válido existente;
-- `--limit` obrigatório;
+- nao sobrescrever JSON valido existente;
 - delay entre partidas;
 - jitter;
-- retry/backoff para falhas temporárias;
+- retry/backoff para falhas temporarias;
 - HTTP 403 deve encerrar o lote;
-- log auditável separado;
+- log auditavel separado;
 - sem paralelismo;
 - sem bypass agressivo;
-- sem rotação de IP.
+- sem rotacao de IP.
 
 ---
 
-## Validação Mínima do Payload
+## Validacao Minima do Payload
 
-Um `graph.json` deve ser considerado válido se:
+Um `graph.json` deve ser considerado valido se:
 
-- for JSON parseável;
+- for JSON parseavel;
 - contiver a chave `graphPoints`;
 - `graphPoints` for uma lista;
 - cada item tiver `minute` e `value`;
-- `minute` for numérico ou conversível para número;
-- `value` for numérico ou conversível para número.
+- `minute` for numerico ou conversivel para numero;
+- `value` for numerico ou conversivel para numero.
 
-Payload vazio ou ausente deve ser registrado, não inferido.
+Payload vazio ou ausente deve ser registrado, nao inferido.
 
 ---
 
@@ -115,71 +127,111 @@ LateGoalResearch/Crawler/Sofascore/h8_graph_momentum_collector.py
 LateGoalResearch/Crawler/Sofascore/h8_graph_momentum_collector_playwright.py
 ```
 
-Logs auditáveis locais:
-
-```text
-C:\LateGoalResearch\Crawler\Sofascore\data\raw\sofascore\premier_league_61627\collection_log_graph.jsonl
-C:\LateGoalResearch\Crawler\Sofascore\data\raw\sofascore\premier_league_61627\collection_log_graph_playwright.jsonl
-```
-
 Partidas testadas no spike controlado:
 
 | Ordem | event_id | Partida | target_late_goal_75 | Status Playwright | graphPoints |
 |---:|---:|---|---:|---|---:|
-| 1 | 12436870 | Manchester United x Fulham | 1 | JSON válido | 92 |
-| 2 | 12436873 | Everton x Brighton & Hove Albion | 1 | JSON válido | 92 |
-| 3 | 12436875 | Nottingham Forest x Bournemouth | 1 | JSON válido | 92 |
-| 4 | 12436871 | Ipswich Town x Liverpool FC | 0 | JSON válido | 92 |
-| 5 | 12436872 | Arsenal x Wolverhampton | 0 | JSON válido | 92 |
+| 1 | 12436870 | Manchester United x Fulham | 1 | JSON valido | 92 |
+| 2 | 12436873 | Everton x Brighton & Hove Albion | 1 | JSON valido | 92 |
+| 3 | 12436875 | Nottingham Forest x Bournemouth | 1 | JSON valido | 92 |
+| 4 | 12436871 | Ipswich Town x Liverpool FC | 0 | JSON valido | 92 |
+| 5 | 12436872 | Arsenal x Wolverhampton | 0 | JSON valido | 92 |
 
-Resumo operacional:
+Resumo operacional do spike:
 
 - Partidas planejadas: 5.
-- Partidas efetivamente coletadas via Playwright com sessão aquecida: 5.
-- JSONs válidos retornados: 5.
-- JSONs falhos/bloqueados na execução Playwright: 0.
+- Partidas coletadas via Playwright com sessao aquecida: 5.
+- JSONs validos retornados: 5.
 - `graphPoints` observado: sim, em 5/5 partidas.
 - `graph_points_count`: 92 em todas as 5 partidas.
-- HTTP 403 na execução Playwright: não.
-- Critério de 80% de validade: atingido, com 100% de validade no spike.
+- HTTP 403 na execucao Playwright: nao.
+- Criterio de 80% de validade: atingido, com 100% de validade no spike.
 
-Observação operacional:
+Observacao operacional:
 
-O coletor inicial baseado em `urllib` retornou HTTP 403 para `event_id=12436870` em tentativas anteriores. A variante Playwright com browser/sessão aquecida coletou as 5 partidas com sucesso. Portanto, o endpoint está acessível, mas depende de contexto de navegador/sessão para a coleta controlada.
-
-Interpretação:
-
-O payload observado é consistente com o contrato esperado para H8 Graph/Momentum. A presença de 92 pontos em todas as partidas sugere cobertura minuto-a-minuto suficiente para avaliação posterior, mas ainda é uma amostra pequena.
-
-Recomendação:
-
-- Status H8 Graph/Momentum: APTO PARA AMPLIAÇÃO CONTROLADA.
-- Ampliar para 20 partidas com o coletor Playwright e warmup manual/sessão persistida.
-- Manter limite, checkpoint, delay, jitter, log auditável e parada imediata em HTTP 403.
-- Não implementar importer, features, dataset ou baseline H8 até a amostra de 20 partidas ser validada.
+O coletor inicial baseado em `urllib` retornou HTTP 403 para `event_id=12436870` em tentativas anteriores. A variante Playwright com browser/sessao aquecida coletou as 5 partidas com sucesso. Portanto, o endpoint esta acessivel, mas depende de contexto de navegador/sessao para a coleta controlada.
 
 ---
 
-## Restrições
+## Auditoria de Cobertura - 2026-06-06
 
-- Não alterar schema.
-- Não implementar importer.
-- Não criar features H8 ainda.
-- Não criar dataset novo.
-- Não executar baseline.
-- Não fazer modelagem.
-- Não misturar coleta graph com features.
-- Não alterar estrutura dos JSONs existentes.
+Documento detalhado:
+
+```text
+docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_AUDIT_20260606.md
+```
+
+Resumo:
+
+| Metrica | Valor |
+|---|---:|
+| Inventory total | 381 |
+| Pastas locais | 381 |
+| Partidas importaveis | 380 |
+| `graph.json` validos | 371 |
+| `graph.json` faltantes na base importavel | 9 |
+| `graph.json` invalidos | 0 |
+| Validos com 0 pontos | 0 |
+| Minimo de `graphPoints` | 91 |
+| Maximo de `graphPoints` | 92 |
+| Media de `graphPoints` | 91,98 |
+
+Partidas faltantes:
+
+| event_id | Rodada | Partida |
+|---:|---:|---|
+| 12436884 | 2 | Bournemouth x Newcastle United |
+| 12436904 | 2 | Wolverhampton x Chelsea |
+| 12436908 | 3 | Brentford x Southampton |
+| 12436912 | 3 | Everton x Bournemouth |
+| 12436927 | 3 | West Ham United x Manchester City |
+| 12436923 | 3 | Newcastle United x Tottenham Hotspur |
+| 12436949 | 4 | Southampton x Manchester United |
+| 12436938 | 4 | Crystal Palace x Leicester City |
+| 12437015 | 7 | Crystal Palace x Liverpool FC |
+
+Observacao:
+
+- `12437015` retornou HTTP 404 em duas tentativas Playwright registradas.
+- Nao ha `graph.json` invalido localmente.
+- A cobertura atual e 371/380 partidas importaveis.
 
 ---
 
-## Próximo Passo Recomendado
+## Status Final da Fonte Graph
 
-Acionar Data Acquisition Engineer para ampliar o spike controlado para 20 partidas usando a variante Playwright com sessão aquecida.
+Status: APTO COM RESSALVAS.
 
-Objetivo da próxima etapa:
+Conclusao:
 
-- medir cobertura em amostra maior;
-- confirmar estabilidade sem HTTP 403;
-- medir variação de `graphPoints` por partida;
-- confirmar consistência do payload antes de qualquer decisão sobre importer e feature engineering H8.
+- O endpoint `/graph` e fonte candidata forte para H8.
+- Os arquivos validos apresentam estrutura consistente.
+- A cobertura ainda nao esta completa para a base importavel.
+- Antes de importer, feature builder ou baseline H8, o projeto deve decidir como tratar as 9 partidas faltantes.
+
+---
+
+## Restricoes
+
+- Nao alterar schema.
+- Nao implementar importer.
+- Nao criar features H8 ainda.
+- Nao criar dataset novo.
+- Nao executar baseline.
+- Nao fazer modelagem.
+- Nao misturar coleta graph com features.
+- Nao alterar estrutura dos JSONs existentes.
+- Nao iniciar backtesting.
+- Nao iniciar producao.
+
+---
+
+## Proximo Passo Recomendado
+
+Decidir, com PM/Data Acquisition/CTO/Data Engineer, uma das estrategias abaixo:
+
+1. Executar nova coleta controlada apenas para as 9 partidas faltantes.
+2. Aceitar cobertura parcial e definir regra metodologica para partidas sem `graph.json`.
+3. Tratar `12437015` separadamente por historico de HTTP 404.
+
+Somente depois disso deve ser planejado qualquer importer ou feature engineering H8.
