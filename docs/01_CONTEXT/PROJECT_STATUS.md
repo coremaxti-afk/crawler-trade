@@ -51,6 +51,7 @@ Ressalvas:
 - Catalogo metodologico H8 V1 concluido.
 - Validacao Estatistica Inicial H8-A/H8-B executada.
 - Feature Builder H8 V1 especificado, implementado e executado localmente.
+- Dataset H8 V1 criado com join explicito do target e validation report APTO COM RESSALVAS.
 
 ---
 
@@ -66,6 +67,7 @@ Documentos:
 - `docs/04_RESEARCH/H8_FEATURE_CATALOG_V1.md`
 - `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`
 - `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`
+- `docs/04_RESEARCH/H8_DATASET_BASELINE_RECOMMENDATION.md`
 
 Status:
 
@@ -76,46 +78,10 @@ Status:
 - Validacao estatistica inicial H8 foi executada contra `target_late_goal_75` nos cutoffs 60, 65, 70 e 75.
 - Feature Builder H8 V1 foi implementado em `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
 - Feature Builder H8 V1 gerou `h8_features_v1` localmente com 1520 linhas e status APTO COM RESSALVAS.
-- Dataset H8 para baseline ainda nao foi autorizado como etapa de modelagem.
+- Dataset H8 V1 foi implementado em `Analytics/DatasetBuilder/h8_dataset_builder_v1.py`.
+- Dataset H8 V1 foi gerado localmente com 1520 linhas, 380 partidas, 4 cutoffs e `target_late_goal_75` anexado.
 - Baseline H8 ainda nao foi executado.
 - Producao e backtesting financeiro continuam bloqueados.
-
-Auditoria `graph`:
-
-- Inventory total: 381 partidas.
-- Pastas locais: 381.
-- Partidas importaveis: 380.
-- `graph.json` validos: 379.
-- `graph.json` faltantes totais na base importavel: 1.
-- `graph.json` faltantes excluindo 404 conhecido: 0.
-- `graph.json` invalidos: 0.
-- `graphPoints` minimo: 91.
-- `graphPoints` maximo: 92.
-- Media de `graphPoints`: 91,98.
-- Excecao tecnica conhecida: `12437015`, Crystal Palace x Liverpool FC, HTTP 404 no endpoint `/graph`.
-
-Auditoria `shotmap`:
-
-- Inventory total: 381 partidas.
-- Pastas locais: 381.
-- Partidas importaveis: 380.
-- `shotmap.json` validos: 380.
-- `shotmap.json` faltantes na base importavel: 0.
-- `shotmap.json` invalidos: 0.
-- Total de finalizacoes: 9.883.
-- Media de finalizacoes por partida: 26,01.
-- Partida conhecida como skip: `12436452`.
-
-Validacao Estatistica Inicial H8:
-
-- Testes executados: 36 combinacoes cutoff-feature.
-- MANTER: 2.
-- OBSERVAR: 27.
-- DESCARTAR: 7.
-- NAO TESTAVEL: 0.
-- Melhor sinal: `momentum_trend_last_10m` no cutoff 60, p-value 0,0194, efeito maximo 13,0 p.p.
-- Segundo sinal aprovado: `shots_last_10m` no cutoff 60, p-value 0,0492, efeito maximo 11,7 p.p.
-- Graph e Shotmap seguem como familias complementares candidatas.
 
 Feature Builder H8 V1:
 
@@ -129,7 +95,35 @@ Feature Builder H8 V1:
 - Shotmap disponivel: 380 partidas.
 - Status validation report: APTO COM RESSALVAS.
 - Erros: 0.
-- Warnings: 2.
+
+Dataset H8 V1:
+
+- Script: `Analytics/DatasetBuilder/h8_dataset_builder_v1.py`.
+- Output local: `data/processed/datasets/late_goal_dataset_h8_v1.csv`.
+- Output local: `data/processed/datasets/late_goal_dataset_h8_v1.parquet`.
+- Metadata: `data/processed/datasets/late_goal_dataset_h8_v1_metadata.json`.
+- Validation report: `data/processed/datasets/late_goal_dataset_h8_v1_validation_report.json`.
+- Linhas: 1520.
+- Partidas unicas: 380.
+- Cutoffs: 60, 65, 70 e 75.
+- Target: `target_late_goal_75`.
+- `match_id + cutoff_minute` duplicados: 0.
+- Target mismatches: 0.
+- Graph known_missing rows: 4.
+- Shotmap available rows: 1520.
+- Validation status: APTO COM RESSALVAS.
+- Erros: 0.
+
+Validacao Estatistica Inicial H8:
+
+- Testes executados: 36 combinacoes cutoff-feature.
+- MANTER: 2.
+- OBSERVAR: 27.
+- DESCARTAR: 7.
+- NAO TESTAVEL: 0.
+- Melhor sinal: `momentum_trend_last_10m` no cutoff 60, p-value 0,0194, efeito maximo 13,0 p.p.
+- Segundo sinal aprovado: `shots_last_10m` no cutoff 60, p-value 0,0492, efeito maximo 11,7 p.p.
+- Graph e Shotmap seguem como familias complementares candidatas.
 
 ---
 
@@ -177,7 +171,7 @@ Regra:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - FEATURE BUILDER V1 IMPLEMENTADO: Graph e Shotmap possuem feature set auditavel; pendente decisao de Dataset/Baseline H8.
+- H8 - DATASET V1 IMPLEMENTADO: pendente decisao de Baseline H8.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 
 ---
@@ -194,17 +188,17 @@ Proximos agentes provaveis:
 
 Objetivo:
 
-Revisar o Feature Builder H8 V1 e decidir se sera autorizado Dataset H8 para baseline e/ou Baseline H8 controlado.
+Revisar o Dataset H8 V1 e decidir se sera autorizado Baseline H8 controlado.
 
 ---
 
 ## Proximas Etapas
 
-1. Revisar `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`.
-2. Revisar `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
-3. Definir se o feature set H8 V1 sera usado em Dataset/Baseline H8.
-4. Se autorizado, criar Dataset H8 com join explicito ao target.
-5. Se autorizado, executar Baseline H8 controlado.
+1. Revisar `Analytics/DatasetBuilder/h8_dataset_builder_v1.py`.
+2. Revisar `data/processed/datasets/late_goal_dataset_h8_v1_metadata.json`.
+3. Revisar `data/processed/datasets/late_goal_dataset_h8_v1_validation_report.json`.
+4. Decidir se Baseline H8 controlado sera autorizado.
+5. Se autorizado, implementar Baseline H8 sem backtesting financeiro e sem producao.
 6. Manter backtesting financeiro e producao bloqueados.
 
 ---
@@ -218,5 +212,6 @@ Revisar o Feature Builder H8 V1 e decidir se sera autorizado Dataset H8 para bas
 - `shotmap` foi confirmado como fonte de finalizacoes temporais/espaciais.
 - A cobertura `shotmap` esta fechada para as 380 partidas importaveis.
 - H8-A/H8-B apresentaram 2 sinais MANTER e 27 OBSERVAR na validacao univariada inicial.
-- Feature Builder H8 V1 produziu 1520 linhas com validação anti-leakage sem erros.
+- Feature Builder H8 V1 produziu 1520 linhas com validacao anti-leakage sem erros.
+- Dataset H8 V1 anexou `target_late_goal_75` explicitamente e preservou whitelist/known_missing.
 - Nenhum backtesting ou producao foi iniciado.
