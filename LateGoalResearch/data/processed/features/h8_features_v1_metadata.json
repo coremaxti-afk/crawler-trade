@@ -1,0 +1,83 @@
+{
+  "feature_set_name": "h8_features_v1",
+  "feature_set_version": "v1",
+  "generated_at_utc": "2026-06-06T18:39:31.394483+00:00",
+  "grain": "one row per match_id + cutoff_minute",
+  "sources": [
+    "matches_master",
+    "match_graph",
+    "match_shotmap",
+    "match_source_status"
+  ],
+  "row_count": 1520,
+  "cutoffs": [
+    60,
+    65,
+    70,
+    75
+  ],
+  "known_skipped_match_ids": [
+    "12436452"
+  ],
+  "known_missing_graph_event_ids": [
+    12437015
+  ],
+  "graph_features": [
+    "momentum_last_5m_avg",
+    "momentum_last_10m_avg",
+    "momentum_trend_last_10m",
+    "momentum_sum_until_cutoff"
+  ],
+  "shotmap_features": [
+    "xg_last_5m",
+    "xg_last_10m",
+    "shots_last_5m",
+    "shots_last_10m",
+    "xg_sum_until_cutoff"
+  ],
+  "whitelist_features": [
+    "momentum_last_5m_avg",
+    "momentum_last_10m_avg",
+    "momentum_trend_last_10m",
+    "momentum_sum_until_cutoff",
+    "xg_last_5m",
+    "xg_last_10m",
+    "shots_last_5m",
+    "shots_last_10m",
+    "xg_sum_until_cutoff"
+  ],
+  "output_columns": [
+    "match_id",
+    "sofascore_event_id",
+    "league",
+    "season",
+    "match_date",
+    "home_team",
+    "away_team",
+    "cutoff_minute",
+    "graph_available",
+    "graph_known_missing",
+    "shotmap_available",
+    "graph_points_until_cutoff",
+    "graph_points_last_5m",
+    "graph_points_last_10m",
+    "shots_until_cutoff",
+    "momentum_last_5m_avg",
+    "momentum_last_10m_avg",
+    "momentum_trend_last_10m",
+    "momentum_sum_until_cutoff",
+    "xg_last_5m",
+    "xg_last_10m",
+    "shots_last_5m",
+    "shots_last_10m",
+    "xg_sum_until_cutoff"
+  ],
+  "anti_leakage_rules": [
+    "Only rows with minute <= cutoff_minute are used for every H8 feature.",
+    "Graph and Shotmap features are computed separately.",
+    "No target, late-goal, final-score or full-match-statistics columns are included.",
+    "momentum_value is preserved as imported; no sign inversion or normalization is applied.",
+    "12437015 is known_missing for graph.json and Graph features remain null for that event."
+  ],
+  "validation_status": "APTO COM RESSALVAS"
+}
