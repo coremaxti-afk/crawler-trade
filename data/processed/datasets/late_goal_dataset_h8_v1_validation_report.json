@@ -1,0 +1,63 @@
+{
+  "dataset_name": "late_goal_dataset_h8_v1",
+  "dataset_version": "h8_v1",
+  "generated_at_utc": "2026-06-06T19:02:34.012316+00:00",
+  "status": "APTO COM RESSALVAS",
+  "row_count": 1520,
+  "expected_rows": 1520,
+  "unique_matches": 380,
+  "cutoffs": [60, 65, 70, 75],
+  "cutoff_counts": {
+    "60": 380,
+    "65": 380,
+    "70": 380,
+    "75": 380
+  },
+  "key_duplicates": 0,
+  "target_column": "target_late_goal_75",
+  "target_counts": {
+    "0": 764,
+    "1": 756
+  },
+  "target_mismatches": 0,
+  "graph_known_missing_event_ids": [12437015],
+  "graph_known_missing_rows": 4,
+  "shotmap_available_rows": 1520,
+  "shotmap_zero_inconsistencies": 0,
+  "feature_columns_for_x": [
+    "momentum_last_5m_avg",
+    "momentum_last_10m_avg",
+    "momentum_trend_last_10m",
+    "momentum_sum_until_cutoff",
+    "xg_last_5m",
+    "xg_last_10m",
+    "shots_last_5m",
+    "shots_last_10m",
+    "xg_sum_until_cutoff"
+  ],
+  "coverage_columns_not_for_x": [
+    "graph_available",
+    "graph_known_missing",
+    "shotmap_available",
+    "graph_points_until_cutoff",
+    "graph_points_last_5m",
+    "graph_points_last_10m",
+    "shots_until_cutoff"
+  ],
+  "blocked_columns_present": [],
+  "unexpected_columns": [],
+  "anti_leakage_checks": {
+    "target_join_explicit": true,
+    "uses_only_precomputed_h8_features": true,
+    "feature_whitelist_enforced": true,
+    "no_target_derived_columns_in_x": true,
+    "no_final_score_columns": true,
+    "graph_known_missing_preserved": true,
+    "shotmap_zeros_preserved": true
+  },
+  "errors": [],
+  "warnings": [
+    "Dataset H8 V1 includes the target column for supervised analysis; X must use only FEATURE_COLUMNS.",
+    "Graph features are null for known_missing event_id 12437015 and require explicit downstream handling."
+  ]
+}
