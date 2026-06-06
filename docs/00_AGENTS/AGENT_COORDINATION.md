@@ -358,12 +358,13 @@ PM
 - Não enviar tarefas vagas ao Codex.
 - Não misturar responsabilidades.
 - Não alterar arquitetura sem o CTO.
-- Não alterar status/sprint sem o PM.
 - Não criar agentes novos sem necessidade.
 - Não recriar estruturas existentes.
 - Não apagar dados brutos.
 - Não usar técnicas agressivas contra fontes externas.
 - Documentar decisões relevantes.
+- Manter `PROJECT_STATUS.md` atualizado quando o estado global mudar.
+- Manter `CURRENT_SPRINT.md` atualizado quando a frente ativa mudar.
 
 ---
 
@@ -379,12 +380,63 @@ A coordenação estará funcionando bem quando:
 - especialistas não invadirem escopo uns dos outros;
 - a documentação refletir o progresso real do projeto.
 
+---
+
 ## Governança Documental
+
+A governança documental vigente é definida por `docs/00_AGENTS/GOVERNANCE_V2.md`.
 
 Antes de iniciar qualquer análise:
 
 1. Ler documentos obrigatórios do seu papel.
-2. Verificar CURRENT_SPRINT.md.
-3. Verificar PROJECT_STATUS.md.
-4. Atualizar apenas os documentos sob sua responsabilidade.
-5. Não alterar documentação pertencente a outro agente sem autorização.
+2. Verificar `CURRENT_SPRINT.md`.
+3. Verificar `PROJECT_STATUS.md`.
+
+Ao concluir uma entrega, todo agente possui autonomia para atualizar a documentação necessária ao registro correto do estado do projeto.
+
+Não é mais necessário solicitar autorização prévia para atualizar documentos quando a mudança apenas registra, corrige ou sincroniza o estado real de uma entrega.
+
+É obrigatório atualizar documentação quando o estado do projeto mudar.
+
+É obrigatório manter atualizado:
+
+- `docs/01_CONTEXT/PROJECT_STATUS.md`
+- `docs/06_SPRINTS/CURRENT_SPRINT.md`
+
+É obrigatório registrar commits relevantes em documentos de status, relatórios ou especificações quando eles representarem entregas importantes.
+
+### Documentos Podem Ser Atualizados Por Qualquer Agente Quando Necessário
+
+Agentes podem atualizar documentos fora da sua área original quando isso for necessário para:
+
+- registrar uma entrega concluída;
+- corrigir status defasado;
+- apontar para relatório ou artefato novo;
+- registrar commit relevante;
+- documentar limitação, risco ou bloqueio descoberto;
+- manter `PROJECT_STATUS.md` e `CURRENT_SPRINT.md` consistentes.
+
+A atualização deve ser limitada ao necessário e não pode alterar decisões fora do escopo do agente.
+
+### Exceções que Continuam Exigindo Aprovação PM/CTO
+
+Continuam exigindo aprovação explícita:
+
+- mudanças de estratégia;
+- mudanças de target;
+- mudanças de arquitetura;
+- mudanças de governança;
+- mudanças de roadmap;
+- mudanças de schema não previamente aprovadas;
+- avanço para baseline, modelagem, backtesting ou produção fora do escopo autorizado.
+
+Registrar uma decisão aprovada é permitido.
+
+Tomar a decisão sem aprovação não é permitido.
+
+### Regra Prática
+
+```text
+Se a documentação apenas registra o que foi entregue ou validado, atualize.
+Se a documentação muda direção, arquitetura, target, roadmap ou governança, peça aprovação.
+```
