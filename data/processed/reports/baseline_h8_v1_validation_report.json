@@ -1,0 +1,48 @@
+{
+  "generated_at_utc": "2026-06-06T23:23:54.731941+00:00",
+  "status": "APTO COM RESSALVAS",
+  "validation_gate": {
+    "status": "APTO COM RESSALVAS",
+    "checks": {
+      "target_late_goal_75_unido_corretamente": true,
+      "ausencia_target_derived_features": true,
+      "ausencia_full_match": true,
+      "ausencia_placar_final": true,
+      "graph_known_missing_preservado": true,
+      "duplicatas_match_cutoff_zero": true
+    },
+    "all_passed": true,
+    "source_report": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_h8_v1_validation_report.json"
+  },
+  "errors": [],
+  "warnings": [
+    "Baseline H8 V1 did not meet minimum quantitative criteria on the test split.",
+    "Baseline H8 V1 is a controlled research run and is not approved for production or backtesting."
+  ],
+  "anti_leakage": {
+    "features_used": [
+      "momentum_last_5m_avg",
+      "momentum_last_10m_avg",
+      "momentum_trend_last_10m",
+      "momentum_sum_until_cutoff",
+      "xg_last_5m",
+      "xg_last_10m",
+      "shots_last_5m",
+      "shots_last_10m",
+      "xg_sum_until_cutoff"
+    ],
+    "target": "target_late_goal_75",
+    "cutoffs": [60, 65, 70, 75],
+    "no_h3_h4_h6_h9_features": true,
+    "no_backtesting": true,
+    "no_production": true
+  },
+  "quantitative_decision": {
+    "status": "NAO APROVADO",
+    "best_cutoff": 60,
+    "roc_auc_test": 0.5076388888888889,
+    "pr_auc_test": 0.5232015279276772,
+    "brier_delta_test": 0.01550917972884569,
+    "log_loss_delta_test": 0.03445654741721327
+  }
+}
