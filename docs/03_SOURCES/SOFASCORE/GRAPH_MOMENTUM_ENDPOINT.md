@@ -1,6 +1,6 @@
 # SofaScore Graph / Momentum Endpoint
 
-Status: ENDPOINT CONFIRMADO; COLETA AUDITADA COM RESSALVAS
+Status: ENDPOINT CONFIRMADO; COLETA AUDITADA COM RESSALVA TECNICA CONHECIDA
 
 Frente relacionada: H8 - Graph / Momentum / Shotmap
 
@@ -75,30 +75,6 @@ JSON bruto salvo em:
 data/raw/sofascore/premier_league_61627/matches/{event_id}/graph.json
 ```
 
-Logs auditaveis locais:
-
-```text
-data/raw/sofascore/premier_league_61627/collection_log_graph.jsonl
-data/raw/sofascore/premier_league_61627/collection_log_graph_playwright.jsonl
-```
-
----
-
-## Regras de Coleta Recomendadas
-
-A coleta deve seguir as mesmas regras operacionais dos coletores SofaScore seguros:
-
-- checkpoint por arquivo;
-- nao sobrescrever JSON valido existente;
-- delay entre partidas;
-- jitter;
-- retry/backoff para falhas temporarias;
-- HTTP 403 deve encerrar o lote;
-- log auditavel separado;
-- sem paralelismo;
-- sem bypass agressivo;
-- sem rotacao de IP.
-
 ---
 
 ## Validacao Minima do Payload
@@ -149,11 +125,11 @@ Resumo operacional do spike:
 
 Observacao operacional:
 
-O coletor inicial baseado em `urllib` retornou HTTP 403 para `event_id=12436870` em tentativas anteriores. A variante Playwright com browser/sessao aquecida coletou as 5 partidas com sucesso. Portanto, o endpoint esta acessivel, mas depende de contexto de navegador/sessao para a coleta controlada.
+O coletor inicial baseado em `urllib` retornou HTTP 403 para `event_id=12436870` em tentativas anteriores. A variante Playwright com browser/sessao aquecida coletou as partidas com sucesso. Portanto, o endpoint esta acessivel, mas depende de contexto de navegador/sessao para a coleta controlada.
 
 ---
 
-## Auditoria de Cobertura - 2026-06-06
+## Auditoria de Cobertura Atualizada - 2026-06-06
 
 Documento detalhado:
 
@@ -168,46 +144,32 @@ Resumo:
 | Inventory total | 381 |
 | Pastas locais | 381 |
 | Partidas importaveis | 380 |
-| `graph.json` validos | 371 |
-| `graph.json` faltantes na base importavel | 9 |
+| `graph.json` validos | 379 |
+| `graph.json` faltantes totais na base importavel | 1 |
+| `graph.json` faltantes excluindo 404 conhecido | 0 |
 | `graph.json` invalidos | 0 |
-| Validos com 0 pontos | 0 |
 | Minimo de `graphPoints` | 91 |
 | Maximo de `graphPoints` | 92 |
 | Media de `graphPoints` | 91,98 |
 
-Partidas faltantes:
+Excecao conhecida:
 
-| event_id | Rodada | Partida |
-|---:|---:|---|
-| 12436884 | 2 | Bournemouth x Newcastle United |
-| 12436904 | 2 | Wolverhampton x Chelsea |
-| 12436908 | 3 | Brentford x Southampton |
-| 12436912 | 3 | Everton x Bournemouth |
-| 12436927 | 3 | West Ham United x Manchester City |
-| 12436923 | 3 | Newcastle United x Tottenham Hotspur |
-| 12436949 | 4 | Southampton x Manchester United |
-| 12436938 | 4 | Crystal Palace x Leicester City |
-| 12437015 | 7 | Crystal Palace x Liverpool FC |
-
-Observacao:
-
-- `12437015` retornou HTTP 404 em duas tentativas Playwright registradas.
-- Nao ha `graph.json` invalido localmente.
-- A cobertura atual e 371/380 partidas importaveis.
+| event_id | Rodada | Partida | Status |
+|---:|---:|---|---|
+| 12437015 | 7 | Crystal Palace x Liverpool FC | HTTP 404 confirmado no endpoint `/graph` |
 
 ---
 
 ## Status Final da Fonte Graph
 
-Status: APTO COM RESSALVAS.
+Status: APTO COM RESSALVA TECNICA CONHECIDA.
 
 Conclusao:
 
 - O endpoint `/graph` e fonte candidata forte para H8.
 - Os arquivos validos apresentam estrutura consistente.
-- A cobertura ainda nao esta completa para a base importavel.
-- Antes de importer, feature builder ou baseline H8, o projeto deve decidir como tratar as 9 partidas faltantes.
+- A cobertura esta fechada para todas as partidas importaveis exceto `12437015`, que retorna HTTP 404.
+- Antes de importer, feature builder ou baseline H8, o projeto deve definir regra explicita para a excecao `12437015`.
 
 ---
 
@@ -228,10 +190,10 @@ Conclusao:
 
 ## Proximo Passo Recomendado
 
-Decidir, com PM/Data Acquisition/CTO/Data Engineer, uma das estrategias abaixo:
+Decidir, com PM/Data Acquisition/CTO/Data Engineer, a politica para `12437015`:
 
-1. Executar nova coleta controlada apenas para as 9 partidas faltantes.
-2. Aceitar cobertura parcial e definir regra metodologica para partidas sem `graph.json`.
-3. Tratar `12437015` separadamente por historico de HTTP 404.
+1. excluir apenas das features H8 baseadas em graph;
+2. manter a partida para features baseadas em shotmap/incidents/statistics;
+3. ou excluir a partida de datasets H8 que exijam graph completo.
 
 Somente depois disso deve ser planejado qualquer importer ou feature engineering H8.
