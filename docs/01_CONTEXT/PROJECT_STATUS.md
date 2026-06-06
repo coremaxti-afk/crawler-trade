@@ -9,6 +9,9 @@
 - `matches_master`: 380 partidas.
 - `match_statistics`: 380 partidas.
 - `match_incidents`: 7647 registros.
+- `match_graph`: 34861 pontos em 379 partidas.
+- `match_shotmap`: 9883 finalizacoes em 380 partidas.
+- `match_source_status`: 760 registros.
 - Orfaos em `match_statistics`: 0.
 - Orfaos em `match_incidents`: 0.
 
@@ -16,8 +19,8 @@ Ressalvas:
 
 - `big_chances_home` possui 7 nulos.
 - `big_chances_away` possui 7 nulos.
-- `match_graph` ainda nao possui dados importados.
-- Dados raw H8 (`graph.json` e `shotmap.json`) foram coletados, mas ainda nao possuem importer aprovado.
+- `12436452` segue como partida conhecida descartada da importacao SofaScore atual.
+- `12437015` segue como `known_missing` para `graph.json`, HTTP 404 confirmado, mantendo a partida e excluindo apenas outputs que exigem Graph.
 
 ---
 
@@ -30,7 +33,7 @@ Ressalvas:
 - Match Mapping criado.
 - PostgreSQL configurado.
 - SQLAlchemy configurado.
-- Tabelas `match_mapping`, `matches_master`, `match_statistics`, `match_incidents` e `match_graph` criadas.
+- Tabelas `match_mapping`, `matches_master`, `match_statistics`, `match_incidents`, `match_graph`, `match_shotmap` e `match_source_status` criadas.
 - Coleta SofaScore core/full auditada com 380 partidas importaveis.
 - PostgreSQL populado com 380 partidas SofaScore importaveis.
 - Dataset Analitico V1 gerado com 380 linhas e status APTO COM RESSALVAS.
@@ -44,6 +47,9 @@ Ressalvas:
 - Endpoint `/shotmap` confirmado como fonte de finalizacoes temporais e espaciais.
 - Coleta raw `graph.json` executada e auditada.
 - Coleta raw `shotmap.json` executada e auditada.
+- Schema/storage H8 implementado e importado para `match_graph`, `match_shotmap` e `match_source_status`.
+- Catalogo metodologico H8 V1 concluido.
+- Validacao Estatistica Inicial H8-A/H8-B executada.
 
 ---
 
@@ -55,17 +61,23 @@ Documentos:
 - `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_ENDPOINT.md`
 - `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_AUDIT_20260606.md`
 - `docs/03_SOURCES/SOFASCORE/SHOTMAP_ENDPOINT.md`
+- `docs/08_DATABASE/H8_STORAGE_IMPORT_SPEC.md`
+- `docs/04_RESEARCH/H8_FEATURE_CATALOG_V1.md`
+- `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`
 
 Status:
 
 - H8 e a frente ativa.
-- `graph.json` foi coletado como artefato raw temporal de momentum/pressao.
-- `shotmap.json` foi coletado como artefato raw de finalizacoes temporais/espaciais.
-- Importer H8 ainda nao autorizado.
-- Feature builder H8 ainda nao autorizado.
-- Dataset/Baseline H8 ainda nao autorizados.
+- `graph.json` foi coletado, auditado, armazenado e importado como artefato temporal de momentum/pressao.
+- `shotmap.json` foi coletado, auditado, armazenado e importado como artefato de finalizacoes temporais/espaciais.
+- `12437015` permanece como excecao tecnica conhecida para Graph.
+- Validacao estatistica inicial H8 foi executada contra `target_late_goal_75` nos cutoffs 60, 65, 70 e 75.
+- Feature Builder H8 ainda nao foi implementado.
+- Dataset H8 permanente ainda nao foi criado.
+- Baseline H8 ainda nao foi executado.
+- Producao e backtesting financeiro continuam bloqueados.
 
-Auditoria `graph` atualizada:
+Auditoria `graph`:
 
 - Inventory total: 381 partidas.
 - Pastas locais: 381.
@@ -91,13 +103,16 @@ Auditoria `shotmap`:
 - Media de finalizacoes por partida: 26,01.
 - Partida conhecida como skip: `12436452`.
 
-Interpretacao:
+Validacao Estatistica Inicial H8:
 
-- `graph` e `shotmap` formam a base raw candidata para features H8.
-- `shotmap` pode permitir, futuramente, xG acumulado ate cutoff, xG recente, volume de chutes, xGOT recente e qualidade das chances antes do cutoff.
-- `graph` pode permitir, futuramente, momentum acumulado, momentum recente, pressao por janela e variacoes de dominio antes do cutoff.
-- Nenhuma dessas features foi implementada ainda.
-- Antes de importer/feature builder H8, e necessario definir regra explicita para `12437015` sem `graph.json`.
+- Testes executados: 36 combinacoes cutoff-feature.
+- MANTER: 2.
+- OBSERVAR: 27.
+- DESCARTAR: 7.
+- NAO TESTAVEL: 0.
+- Melhor sinal: `momentum_trend_last_10m` no cutoff 60, p-value 0,0194, efeito maximo 13,0 p.p.
+- Segundo sinal aprovado: `shots_last_10m` no cutoff 60, p-value 0,0492, efeito maximo 11,7 p.p.
+- Graph e Shotmap seguem como familias complementares candidatas.
 
 ---
 
@@ -145,7 +160,7 @@ Regra:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - FRENTE ATIVA: raw `graph` e `shotmap` coletados e auditados; pendente decisao de importer/feature spec.
+- H8 - VALIDADA INICIALMENTE: Graph e Shotmap possuem sinais candidatos; pendente Feature Builder H8 e decisao de proxima etapa.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 
 ---
@@ -156,24 +171,24 @@ Regra:
 
 Proximos agentes provaveis:
 
+- Quant Research / Data Science.
 - Data Engineer / Database.
 - CTO.
-- Quant Research / Data Science.
 
 Objetivo:
 
-Avaliar como importar e validar `graph.json` e `shotmap.json` antes de qualquer feature builder ou baseline H8.
+Revisar a validacao estatistica inicial H8 e decidir se sera autorizado Feature Builder H8, Dataset H8 e/ou Baseline H8 controlado.
 
 ---
 
 ## Proximas Etapas
 
-1. Definir politica para `12437015` sem `graph.json`.
-2. Validar estrutura de `graph.json` e `shotmap.json` para desenho futuro de importer.
-3. Acionar Data Engineer / Database para avaliar armazenamento/importacao H8.
-4. Acionar CTO se houver mudanca de schema ou nova estrutura de armazenamento.
-5. Acionar Quant Research para especificar features H8 somente apos decisao de armazenamento/importacao.
-6. Manter backtesting e producao bloqueados.
+1. Revisar `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`.
+2. Decidir quais features H8 classificadas como MANTER/OBSERVAR seguem para Feature Builder.
+3. Se autorizado, implementar Feature Builder H8 com whitelist e auditoria anti-leakage.
+4. Se autorizado, gerar Dataset H8 por cutoff.
+5. Se autorizado, executar Baseline H8 controlado.
+6. Manter backtesting financeiro e producao bloqueados.
 
 ---
 
@@ -185,5 +200,5 @@ Avaliar como importar e validar `graph.json` e `shotmap.json` antes de qualquer 
 - `graph` possui 379/380 partidas importaveis cobertas e 1 excecao 404 conhecida.
 - `shotmap` foi confirmado como fonte de finalizacoes temporais/espaciais.
 - A cobertura `shotmap` esta fechada para as 380 partidas importaveis.
-- A proxima decisao tecnica e sobre tratamento da excecao/importer/armazenamento H8, nao modelagem.
+- H8-A/H8-B apresentaram 2 sinais MANTER e 27 OBSERVAR na validacao univariada inicial.
 - Nenhum backtesting ou producao foi iniciado.
