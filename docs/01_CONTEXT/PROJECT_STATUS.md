@@ -1,65 +1,5 @@
 # PROJECT STATUS
 
-## Etapas do Projeto
-
-1. Organizacao
-2. Inventario das Fontes
-3. Coleta Bruta
-4. Banco de Dados
-5. Integracao Multi-Fonte
-6. Catalogo de Features
-7. Engenharia de Features
-8. Definicao do Alvo
-9. Dataset Analitico
-10. Pesquisa Quantitativa
-11. Modelagem
-12. Producao
-
----
-
-## Concluido
-
-- Estrutura documental do projeto consolidada.
-- Governanca de agentes criada em `docs/00_AGENTS/AGENT_COORDINATION.md`.
-- Perfil do PM criado em `docs/00_AGENTS/PM_PROFILE.md`.
-- Documento base de hipoteses criado em `docs/04_RESEARCH/ACTIVE/LATE_GOAL_HYPOTHESES.md`.
-- Understat integrado.
-- FotMob integrado parcialmente.
-- EPL 2024/2025 descoberta via SofaScore com 381 partidas no inventory.
-- Match Mapping criado.
-- PostgreSQL configurado.
-- SQLAlchemy configurado.
-- Tabelas `match_mapping`, `matches_master`, `match_statistics`, `match_incidents` e `match_graph` criadas.
-- Coleta SofaScore core/full auditada com 380 partidas importaveis.
-- `sofascore_importer.py` implementado no commit `84e641f`.
-- PostgreSQL populado com 380 partidas SofaScore importaveis.
-- Idempotencia do importer validada.
-- Validacao leve de qualidade concluida com status: APTO COM RESSALVAS.
-- Dataset Builder V1 implementado no commit `1a1404e09079f2a1a7958ae948fefdc667872a50`.
-- Dataset Analitico V1 gerado com 380 linhas e status APTO COM RESSALVAS.
-- Target Audit concluido: `target_late_goal_75` com 189 positivos e 191 negativos.
-- Validacao Estatistica Inicial H6/H9 concluida e revisada pelo Quant Research.
-- Validacao H1/H2 bloqueada por risco confirmado de data leakage.
-- Feature set historico pre-jogo `historical_prematch_features_v1` criado e validado para H3/H4.
-- Validacao Estatistica H3/H4 concluida.
-- `FEATURE_CANDIDATE_SET_V1.md` aprovado.
-- `BASELINE_EXPERIMENT_PLAN.md` aprovado.
-- `BASELINE_IMPLEMENTATION_SPEC.md` aprovado.
-- Baseline 1A Pre-Match H3/H4 implementado, executado e revisado.
-- Baseline 1A registrado como operacionalmente apto, mas quantitativamente NAO APROVADO.
-- `BASELINE_INGAME_IMPLEMENTATION_SPEC.md` produzido e aprovado para implementacao controlada.
-- Baseline In-Game V1 implementado, executado e revisado.
-- Baseline In-Game V1 registrado como operacionalmente apto, mas quantitativamente NAO APROVADO.
-- Discovery controlado SofaScore H8 executado.
-- Endpoint `/graph` confirmado como fonte temporal de momentum.
-- Endpoint `/shotmap` confirmado como fonte de finalizacoes temporais e espaciais.
-- Coleta raw `graph.json` executada com sucesso parcial.
-- Auditoria `graph` concluida com 371/380 partidas importaveis cobertas.
-- Coleta raw `shotmap.json` executada com sucesso.
-- Auditoria `shotmap` concluida com 380/380 partidas importaveis cobertas.
-
----
-
 ## Estado Atual da Base
 
 - Inventory SofaScore EPL: 381 partidas.
@@ -78,7 +18,86 @@ Ressalvas:
 - `big_chances_away` possui 7 nulos.
 - `match_graph` ainda nao possui dados importados.
 - Dados raw H8 (`graph.json` e `shotmap.json`) foram coletados, mas ainda nao possuem importer aprovado.
-- A cobertura raw `graph` ainda possui 9 partidas importaveis faltantes.
+
+---
+
+## Concluido
+
+- Estrutura documental do projeto consolidada.
+- Understat integrado.
+- FotMob integrado parcialmente.
+- EPL 2024/2025 descoberta via SofaScore com 381 partidas no inventory.
+- Match Mapping criado.
+- PostgreSQL configurado.
+- SQLAlchemy configurado.
+- Tabelas `match_mapping`, `matches_master`, `match_statistics`, `match_incidents` e `match_graph` criadas.
+- Coleta SofaScore core/full auditada com 380 partidas importaveis.
+- PostgreSQL populado com 380 partidas SofaScore importaveis.
+- Dataset Analitico V1 gerado com 380 linhas e status APTO COM RESSALVAS.
+- Target Audit concluido: `target_late_goal_75` com 189 positivos e 191 negativos.
+- Validacao H1/H2 bloqueada por risco confirmado de data leakage.
+- Validacao H3/H4 concluida.
+- Baseline 1A Pre-Match H3/H4 implementado, executado e revisado como NAO APROVADO quantitativamente.
+- Baseline In-Game V1 H6/H9 implementado, executado e revisado como NAO APROVADO quantitativamente.
+- Discovery controlado SofaScore H8 executado.
+- Endpoint `/graph` confirmado como fonte temporal de momentum.
+- Endpoint `/shotmap` confirmado como fonte de finalizacoes temporais e espaciais.
+- Coleta raw `graph.json` executada e auditada.
+- Coleta raw `shotmap.json` executada e auditada.
+
+---
+
+## H8 - Graph / Momentum / Shotmap
+
+Documentos:
+
+- `docs/03_SOURCES/SOFASCORE/ENDPOINT_DISCOVERY_20260605.md`
+- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_ENDPOINT.md`
+- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_AUDIT_20260606.md`
+- `docs/03_SOURCES/SOFASCORE/SHOTMAP_ENDPOINT.md`
+
+Status:
+
+- H8 e a frente ativa.
+- `graph.json` foi coletado como artefato raw temporal de momentum/pressao.
+- `shotmap.json` foi coletado como artefato raw de finalizacoes temporais/espaciais.
+- Importer H8 ainda nao autorizado.
+- Feature builder H8 ainda nao autorizado.
+- Dataset/Baseline H8 ainda nao autorizados.
+
+Auditoria `graph` atualizada:
+
+- Inventory total: 381 partidas.
+- Pastas locais: 381.
+- Partidas importaveis: 380.
+- `graph.json` validos: 379.
+- `graph.json` faltantes totais na base importavel: 1.
+- `graph.json` faltantes excluindo 404 conhecido: 0.
+- `graph.json` invalidos: 0.
+- `graphPoints` minimo: 91.
+- `graphPoints` maximo: 92.
+- Media de `graphPoints`: 91,98.
+- Excecao tecnica conhecida: `12437015`, Crystal Palace x Liverpool FC, HTTP 404 no endpoint `/graph`.
+
+Auditoria `shotmap`:
+
+- Inventory total: 381 partidas.
+- Pastas locais: 381.
+- Partidas importaveis: 380.
+- `shotmap.json` validos: 380.
+- `shotmap.json` faltantes na base importavel: 0.
+- `shotmap.json` invalidos: 0.
+- Total de finalizacoes: 9.883.
+- Media de finalizacoes por partida: 26,01.
+- Partida conhecida como skip: `12436452`.
+
+Interpretacao:
+
+- `graph` e `shotmap` formam a base raw candidata para features H8.
+- `shotmap` pode permitir, futuramente, xG acumulado ate cutoff, xG recente, volume de chutes, xGOT recente e qualidade das chances antes do cutoff.
+- `graph` pode permitir, futuramente, momentum acumulado, momentum recente, pressao por janela e variacoes de dominio antes do cutoff.
+- Nenhuma dessas features foi implementada ainda.
+- Antes de importer/feature builder H8, e necessario definir regra explicita para `12437015` sem `graph.json`.
 
 ---
 
@@ -89,23 +108,11 @@ Status:
 - Gerado.
 - APTO COM RESSALVAS.
 
-Script:
-
-- `LateGoalResearch/Analytics/DatasetBuilder/dataset_builder_v1.py`
-
-Artefatos locais:
-
-- `data/processed/datasets/late_goal_dataset_v1.csv`
-- `data/processed/datasets/late_goal_dataset_v1.parquet`
-- `data/processed/datasets/late_goal_dataset_v1_metadata.json`
-- `data/processed/datasets/late_goal_dataset_v1_validation_report.json`
-
 Resumo:
 
 - Linhas: 380.
 - Grain: 1 linha por partida.
 - Target principal: `target_late_goal_75`.
-- Alias operacional: `has_late_goal`.
 - Target positivo: 189.
 - Target negativo: 191.
 - Duplicatas por `match_id`: 0.
@@ -129,72 +136,6 @@ Regra:
 
 ---
 
-## H8 - Graph / Momentum / Shotmap
-
-Documentos:
-
-- `docs/03_SOURCES/SOFASCORE/ENDPOINT_DISCOVERY_20260605.md`
-- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_ENDPOINT.md`
-- `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_AUDIT_20260606.md`
-- `docs/03_SOURCES/SOFASCORE/SHOTMAP_ENDPOINT.md`
-
-Status:
-
-- H8 e a frente ativa.
-- `graph.json` foi coletado como artefato raw temporal de momentum/pressao, com cobertura parcial auditada.
-- `shotmap.json` foi coletado e auditado como artefato raw de finalizacoes temporais/espaciais, com cobertura completa para a base importavel.
-- Importer H8 ainda nao autorizado.
-- Feature builder H8 ainda nao autorizado.
-- Dataset/Baseline H8 ainda nao autorizados.
-
-Auditoria `graph`:
-
-- Inventory total: 381 partidas.
-- Pastas locais: 381.
-- Partidas importaveis: 380.
-- `graph.json` validos: 371.
-- `graph.json` faltantes na base importavel: 9.
-- `graph.json` invalidos: 0.
-- Validos com 0 pontos: 0.
-- `graphPoints` minimo: 91.
-- `graphPoints` maximo: 92.
-- Media de `graphPoints`: 91,98.
-- Partida conhecida como skip: `12436452`.
-
-Partidas `graph` faltantes:
-
-- `12436884` - Bournemouth x Newcastle United.
-- `12436904` - Wolverhampton x Chelsea.
-- `12436908` - Brentford x Southampton.
-- `12436912` - Everton x Bournemouth.
-- `12436927` - West Ham United x Manchester City.
-- `12436923` - Newcastle United x Tottenham Hotspur.
-- `12436949` - Southampton x Manchester United.
-- `12436938` - Crystal Palace x Leicester City.
-- `12437015` - Crystal Palace x Liverpool FC.
-
-Auditoria `shotmap`:
-
-- Inventory total: 381 partidas.
-- Pastas locais: 381.
-- Partidas importaveis: 380.
-- `shotmap.json` validos: 380.
-- `shotmap.json` faltantes na base importavel: 0.
-- `shotmap.json` invalidos: 0.
-- Total de finalizacoes: 9.883.
-- Media de finalizacoes por partida: 26,01.
-- Partida conhecida como skip: `12436452`.
-
-Interpretacao:
-
-- `graph` e `shotmap` formam a base raw candidata para features H8.
-- `shotmap` pode permitir, futuramente, xG acumulado ate cutoff, xG recente, volume de chutes, xGOT recente e qualidade das chances antes do cutoff.
-- `graph` pode permitir, futuramente, momentum acumulado, momentum recente, pressao por janela e variacoes de dominio antes do cutoff.
-- Nenhuma dessas features foi implementada ainda.
-- Antes de importer/feature builder H8, e necessario decidir como tratar as 9 partidas sem `graph.json`.
-
----
-
 ## Status das Hipoteses
 
 - H1 - BLOQUEADA por data leakage.
@@ -204,56 +145,8 @@ Interpretacao:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - FRENTE ATIVA: raw `graph` e `shotmap` coletados; graph com 9 faltantes; pendente decisao de cobertura/importer/feature spec.
+- H8 - FRENTE ATIVA: raw `graph` e `shotmap` coletados e auditados; pendente decisao de importer/feature spec.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
-
----
-
-## Baseline 1A - Pre-Match H3/H4
-
-Documento:
-
-- `docs/04_RESEARCH/BASELINE_PREMATCH_H3_H4_RESULTS.md`
-
-Status:
-
-- Operacional: APTO COM RESSALVAS.
-- Quantitativo: NAO APROVADO.
-- Decisao: nao avancar para backtesting, producao ou sistema decisorio.
-
-Resultado no teste:
-
-- ROC-AUC Test: 0.4910.
-- PR-AUC Test: 0.5364.
-- Prevalencia Test: 0.5263.
-- PR-AUC minimo exigido: 0.5563.
-- Brier modelo vs baseline nulo: piorou +0.0089.
-- Log Loss modelo vs baseline nulo: piorou +0.0180.
-
-Interpretacao:
-
-- O pipeline foi validado.
-- A implementacao respeitou split temporal, imputacao e auditoria anti-leakage.
-- As features pre-jogo H3/H4 isoladas nao sustentaram um baseline preditivo util no teste temporal.
-
----
-
-## Baseline In-Game V1 - H6/H9
-
-Documento:
-
-- `docs/04_RESEARCH/BASELINE_INGAME_V1_RESULTS.md`
-
-Status:
-
-- Operacional: APTO COM RESSALVAS.
-- Quantitativo: NAO APROVADO.
-- Decisao: nao avancar para backtesting, producao ou sistema decisorio.
-
-Interpretacao:
-
-- O In-Game V1 melhorou em relacao ao Baseline 1A, mas ainda nao atingiu criterio quantitativo suficiente.
-- A frente H8 foi priorizada para testar se dados vivos de momentum/pressao e finalizacoes elevam o sinal preditivo.
 
 ---
 
@@ -275,13 +168,12 @@ Avaliar como importar e validar `graph.json` e `shotmap.json` antes de qualquer 
 
 ## Proximas Etapas
 
-1. Decidir se sera feita nova coleta controlada para os 9 `graph.json` faltantes.
-2. Definir politica para partidas sem `graph.json`.
-3. Validar estrutura de `graph.json` e `shotmap.json` para desenho futuro de importer.
-4. Acionar Data Engineer / Database para avaliar armazenamento/importacao H8.
-5. Acionar CTO se houver mudanca de schema ou nova estrutura de armazenamento.
-6. Acionar Quant Research para especificar features H8 somente apos decisao de armazenamento/importacao.
-7. Manter backtesting e producao bloqueados.
+1. Definir politica para `12437015` sem `graph.json`.
+2. Validar estrutura de `graph.json` e `shotmap.json` para desenho futuro de importer.
+3. Acionar Data Engineer / Database para avaliar armazenamento/importacao H8.
+4. Acionar CTO se houver mudanca de schema ou nova estrutura de armazenamento.
+5. Acionar Quant Research para especificar features H8 somente apos decisao de armazenamento/importacao.
+6. Manter backtesting e producao bloqueados.
 
 ---
 
@@ -290,8 +182,8 @@ Avaliar como importar e validar `graph.json` e `shotmap.json` antes de qualquer 
 - H3/H4 pre-jogo isoladas nao foram suficientes no Baseline 1A.
 - H6/H9 melhoraram o baseline, mas nao aprovaram quantitativamente sem graph/momentum.
 - `graph` foi confirmado como fonte temporal de momentum/pressao.
-- `graph` possui 371/380 partidas importaveis cobertas e 9 faltantes.
+- `graph` possui 379/380 partidas importaveis cobertas e 1 excecao 404 conhecida.
 - `shotmap` foi confirmado como fonte de finalizacoes temporais/espaciais.
 - A cobertura `shotmap` esta fechada para as 380 partidas importaveis.
-- A proxima decisao tecnica e sobre tratamento de faltantes/importer/armazenamento H8, nao modelagem.
+- A proxima decisao tecnica e sobre tratamento da excecao/importer/armazenamento H8, nao modelagem.
 - Nenhum backtesting ou producao foi iniciado.
