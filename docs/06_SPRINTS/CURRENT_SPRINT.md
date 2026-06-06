@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando da coleta/importacao para feature engineering auditavel sem iniciar producao, automacao operacional ou backtesting financeiro.
+Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando da coleta/importacao para feature engineering e Dataset H8 auditavel sem iniciar producao, automacao operacional ou backtesting financeiro.
 
 ---
 
@@ -28,6 +28,7 @@ Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando
 - [x] Especificar Feature Builder H8 V1.
 - [x] Implementar Feature Builder H8 V1.
 - [x] Executar Feature Builder H8 V1 localmente.
+- [x] Criar Dataset H8 V1 com join explicito do target.
 
 ---
 
@@ -41,67 +42,28 @@ Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, passando
 - `docs/04_RESEARCH/H8_FEATURE_CATALOG_V1.md`
 - `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`
 - `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`
+- `docs/04_RESEARCH/H8_DATASET_BASELINE_RECOMMENDATION.md`
 
 ---
 
-## Estado Atual da Coleta, Importacao e Features H8
+## Estado Atual H8
 
 ### Graph
 
-Status:
-
-- Coletado, auditado, armazenado, importado e usado no Feature Builder H8 V1 com ressalva tecnica conhecida.
-
-Auditoria atualizada:
-
-- Inventory total: 381 partidas.
-- Pastas locais: 381.
-- Partidas importaveis: 380.
-- `graph.json` validos: 379.
-- `graph.json` faltantes totais na base importavel: 1.
-- `graph.json` faltantes excluindo 404 conhecido: 0.
-- `graph.json` invalidos: 0.
-- `graphPoints` minimo: 91.
-- `graphPoints` maximo: 92.
-- Media de `graphPoints`: 91,98.
+- Coletado, auditado, armazenado, importado e usado no Feature Builder H8 V1.
 - Registros importados em `match_graph`: 34.861.
+- Cobertura: 379/380 partidas importaveis.
 - Excecao conhecida: `12437015`, Crystal Palace x Liverpool FC, HTTP 404 no endpoint `/graph`.
 
 ### Shotmap
 
-Status:
-
-- Coletado, auditado, armazenado, importado e usado no Feature Builder H8 V1 com sucesso.
-
-Auditoria:
-
-- Inventory total: 381 partidas.
-- Pastas locais: 381.
-- Partidas importaveis: 380.
-- `shotmap.json` validos: 380.
-- Faltantes na base importavel: 0.
-- Invalidos: 0.
-- Partida conhecida como skip: `12436452`.
-- Total de finalizacoes: 9.883.
-- Media de finalizacoes por partida: 26,01.
-- HTTP 403 na coleta final: nao.
+- Coletado, auditado, armazenado, importado e usado no Feature Builder H8 V1.
 - Registros importados em `match_shotmap`: 9.883.
+- Cobertura: 380/380 partidas importaveis.
 
 ### Feature Builder H8 V1
 
-Status:
-
-- Implementado.
-- Executado localmente.
-- Sem modelo.
-- Sem baseline.
-- Sem backtesting.
-- Sem escrita no PostgreSQL.
-
-Resultados:
-
 - Script: `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
-- Spec: `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`.
 - Output local: `data/processed/features/h8_features_v1.csv`.
 - Output local: `data/processed/features/h8_features_v1.parquet`.
 - Output local: `data/processed/features/h8_features_v1_metadata.json`.
@@ -109,23 +71,30 @@ Resultados:
 - Linhas: 1520.
 - Partidas unicas: 380.
 - Cutoffs: 60, 65, 70 e 75.
-- Graph disponivel: 379 partidas.
-- Shotmap disponivel: 380 partidas.
+- Validation status: APTO COM RESSALVAS.
+- Erros: 0.
+
+### Dataset H8 V1
+
+- Script: `Analytics/DatasetBuilder/h8_dataset_builder_v1.py`.
+- Output local: `data/processed/datasets/late_goal_dataset_h8_v1.csv`.
+- Output local: `data/processed/datasets/late_goal_dataset_h8_v1.parquet`.
+- Metadata: `data/processed/datasets/late_goal_dataset_h8_v1_metadata.json`.
+- Validation report: `data/processed/datasets/late_goal_dataset_h8_v1_validation_report.json`.
+- Linhas: 1520.
+- Partidas unicas: 380.
+- Cutoffs: 60, 65, 70 e 75.
+- Target anexado: `target_late_goal_75`.
+- `match_id + cutoff_minute` duplicados: 0.
+- Target mismatches: 0.
+- Graph known_missing rows: 4.
+- Shotmap available rows: 1520.
 - Validation status: APTO COM RESSALVAS.
 - Erros: 0.
 
 ---
 
 ## Validacao Estatistica Inicial H8
-
-Status:
-
-- Executada.
-- Sem criacao de modelo.
-- Sem baseline.
-- Sem alteracao de schema/importer/crawler/dados brutos.
-
-Resumo:
 
 - Target: `target_late_goal_75`.
 - Cutoffs: 60, 65, 70 e 75.
@@ -151,7 +120,7 @@ Melhores sinais:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - FEATURE BUILDER V1 IMPLEMENTADO; pendente decisao para Dataset/Baseline H8.
+- H8 - DATASET V1 IMPLEMENTADO; pendente decisao para Baseline H8.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 
 ---
@@ -166,22 +135,20 @@ Melhores sinais:
 - Nao usar xG/xGA/forecast sem comprovacao temporal segura.
 - Nao usar eventos apos cutoff como features in-game.
 - Manter backtesting e producao bloqueados.
-- Nao criar Dataset H8 para baseline sem aprovacao explicita.
 - Nao executar Baseline H8 sem aprovacao explicita.
 
 ---
 
 ## Proximos Passos
 
-- [ ] Revisar `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`.
-- [ ] Revisar `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
-- [ ] Decidir se o Feature Builder H8 V1 sera promovido para Dataset H8.
-- [ ] Se aprovado, criar Dataset H8 com join explicito ao target.
-- [ ] Se aprovado, executar Baseline H8 controlado.
+- [ ] Revisar `Analytics/DatasetBuilder/h8_dataset_builder_v1.py`.
+- [ ] Revisar metadata e validation report do Dataset H8 V1.
+- [ ] Decidir se Baseline H8 controlado sera autorizado.
+- [ ] Se aprovado, implementar Baseline H8 sem backtesting financeiro e sem producao.
 - [ ] Manter backtesting e producao bloqueados.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 COLETADO, AUDITADO, IMPORTADO, VALIDADO ESTATISTICAMENTE E COM FEATURE BUILDER V1 IMPLEMENTADO. FEATURE SET LOCAL GERADO COM 1520 LINHAS, 380 PARTIDAS, GRAPH 379/380 E SHOTMAP 380/380. PROXIMA DECISAO: DATASET/BASELINE H8, AINDA SEM PRODUCAO OU BACKTESTING.
+EM EXECUCAO - H8 COLETADO, AUDITADO, IMPORTADO, VALIDADO ESTATISTICAMENTE, COM FEATURE BUILDER V1 E DATASET H8 V1 IMPLEMENTADOS. DATASET H8 V1 LOCAL GERADO COM 1520 LINHAS, 380 PARTIDAS, 4 CUTOFFS E TARGET ANEXADO. PROXIMA DECISAO: BASELINE H8, AINDA SEM PRODUCAO OU BACKTESTING.
