@@ -50,6 +50,7 @@ Ressalvas:
 - Schema/storage H8 implementado e importado para `match_graph`, `match_shotmap` e `match_source_status`.
 - Catalogo metodologico H8 V1 concluido.
 - Validacao Estatistica Inicial H8-A/H8-B executada.
+- Feature Builder H8 V1 especificado, implementado e executado localmente.
 
 ---
 
@@ -64,6 +65,7 @@ Documentos:
 - `docs/08_DATABASE/H8_STORAGE_IMPORT_SPEC.md`
 - `docs/04_RESEARCH/H8_FEATURE_CATALOG_V1.md`
 - `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`
+- `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`
 
 Status:
 
@@ -72,8 +74,9 @@ Status:
 - `shotmap.json` foi coletado, auditado, armazenado e importado como artefato de finalizacoes temporais/espaciais.
 - `12437015` permanece como excecao tecnica conhecida para Graph.
 - Validacao estatistica inicial H8 foi executada contra `target_late_goal_75` nos cutoffs 60, 65, 70 e 75.
-- Feature Builder H8 ainda nao foi implementado.
-- Dataset H8 permanente ainda nao foi criado.
+- Feature Builder H8 V1 foi implementado em `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
+- Feature Builder H8 V1 gerou `h8_features_v1` localmente com 1520 linhas e status APTO COM RESSALVAS.
+- Dataset H8 para baseline ainda nao foi autorizado como etapa de modelagem.
 - Baseline H8 ainda nao foi executado.
 - Producao e backtesting financeiro continuam bloqueados.
 
@@ -113,6 +116,20 @@ Validacao Estatistica Inicial H8:
 - Melhor sinal: `momentum_trend_last_10m` no cutoff 60, p-value 0,0194, efeito maximo 13,0 p.p.
 - Segundo sinal aprovado: `shots_last_10m` no cutoff 60, p-value 0,0492, efeito maximo 11,7 p.p.
 - Graph e Shotmap seguem como familias complementares candidatas.
+
+Feature Builder H8 V1:
+
+- Script: `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
+- Spec: `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`.
+- Grain: 1 linha por `match_id + cutoff_minute`.
+- Cutoffs: 60, 65, 70 e 75.
+- Linhas geradas localmente: 1520.
+- Partidas unicas: 380.
+- Graph disponivel: 379 partidas.
+- Shotmap disponivel: 380 partidas.
+- Status validation report: APTO COM RESSALVAS.
+- Erros: 0.
+- Warnings: 2.
 
 ---
 
@@ -160,7 +177,7 @@ Regra:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - VALIDADA INICIALMENTE: Graph e Shotmap possuem sinais candidatos; pendente Feature Builder H8 e decisao de proxima etapa.
+- H8 - FEATURE BUILDER V1 IMPLEMENTADO: Graph e Shotmap possuem feature set auditavel; pendente decisao de Dataset/Baseline H8.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 
 ---
@@ -172,21 +189,21 @@ Regra:
 Proximos agentes provaveis:
 
 - Quant Research / Data Science.
-- Data Engineer / Database.
-- CTO.
+- PM.
+- CTO, se houver nova mudanca metodologica ou arquitetura.
 
 Objetivo:
 
-Revisar a validacao estatistica inicial H8 e decidir se sera autorizado Feature Builder H8, Dataset H8 e/ou Baseline H8 controlado.
+Revisar o Feature Builder H8 V1 e decidir se sera autorizado Dataset H8 para baseline e/ou Baseline H8 controlado.
 
 ---
 
 ## Proximas Etapas
 
-1. Revisar `docs/04_RESEARCH/H8_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`.
-2. Decidir quais features H8 classificadas como MANTER/OBSERVAR seguem para Feature Builder.
-3. Se autorizado, implementar Feature Builder H8 com whitelist e auditoria anti-leakage.
-4. Se autorizado, gerar Dataset H8 por cutoff.
+1. Revisar `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`.
+2. Revisar `Analytics/FeatureBuilder/h8_feature_builder_v1.py`.
+3. Definir se o feature set H8 V1 sera usado em Dataset/Baseline H8.
+4. Se autorizado, criar Dataset H8 com join explicito ao target.
 5. Se autorizado, executar Baseline H8 controlado.
 6. Manter backtesting financeiro e producao bloqueados.
 
@@ -201,4 +218,5 @@ Revisar a validacao estatistica inicial H8 e decidir se sera autorizado Feature 
 - `shotmap` foi confirmado como fonte de finalizacoes temporais/espaciais.
 - A cobertura `shotmap` esta fechada para as 380 partidas importaveis.
 - H8-A/H8-B apresentaram 2 sinais MANTER e 27 OBSERVAR na validacao univariada inicial.
+- Feature Builder H8 V1 produziu 1520 linhas com validação anti-leakage sem erros.
 - Nenhum backtesting ou producao foi iniciado.
