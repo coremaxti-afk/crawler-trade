@@ -4,28 +4,28 @@
 
 Objetivo:
 
-Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, preparando a próxima fase de importação/feature engineering sem iniciar backtesting ou produção.
+Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, preparando a proxima fase de importacao/feature engineering sem iniciar backtesting ou producao.
 
 ---
 
-## Concluído
+## Concluido
 
 - [x] Criar collectors SofaScore.
 - [x] Resolver robustez operacional do HTTP 403 com coleta core.
-- [x] Coletar/auditar EPL SofaScore com 381 partidas no inventário.
-- [x] Consolidar 380 partidas importáveis.
+- [x] Coletar/auditar EPL SofaScore com 381 partidas no inventario.
+- [x] Consolidar 380 partidas importaveis.
 - [x] Implementar `sofascore_importer.py`.
 - [x] Popular PostgreSQL com dados core SofaScore.
-- [x] Validar idempotência do importer.
-- [x] Validar integridade básica entre `matches_master`, `match_statistics` e `match_incidents`.
-- [x] Executar validação leve de qualidade pós-importação.
-- [x] Definir metodologia do Dataset Analítico V1.
+- [x] Validar idempotencia do importer.
+- [x] Validar integridade basica entre `matches_master`, `match_statistics` e `match_incidents`.
+- [x] Executar validacao leve de qualidade pos-importacao.
+- [x] Definir metodologia do Dataset Analitico V1.
 - [x] Implementar Dataset Builder V1.
-- [x] Gerar Dataset Analítico V1.
+- [x] Gerar Dataset Analitico V1.
 - [x] Executar Target Audit.
 - [x] Validar estatisticamente H6/H9.
 - [x] Bloquear H1/H2 por risco confirmado de data leakage.
-- [x] Construir feature set histórico pré-jogo H3/H4.
+- [x] Construir feature set historico pre-jogo H3/H4.
 - [x] Validar estatisticamente H3/H4.
 - [x] Produzir e aprovar `FEATURE_CANDIDATE_SET_V1.md`.
 - [x] Implementar e executar Baseline 1A Pre-Match H3/H4.
@@ -33,17 +33,19 @@ Consolidar a frente H8 com dados temporais de graph/momentum e shotmap, preparan
 - [x] Produzir `BASELINE_INGAME_IMPLEMENTATION_SPEC.md`.
 - [x] Implementar e executar Baseline In-Game V1.
 - [x] Revisar resultado quantitativo do Baseline In-Game V1.
-- [x] Encerrar a iteração de baselines sem graph/momentum como exploratória e não aprovada para backtesting/produção.
+- [x] Encerrar a iteracao de baselines sem graph/momentum como exploratoria e nao aprovada para backtesting/producao.
 - [x] Executar discovery controlado de endpoints SofaScore.
-- [x] Confirmar endpoint `/graph` como útil para H8.
-- [x] Confirmar endpoint `/shotmap` como útil para H8.
+- [x] Confirmar endpoint `/graph` como util para H8.
+- [x] Confirmar endpoint `/shotmap` como util para H8.
 - [x] Coletar `graph` com sucesso.
+- [x] Coletar `shotmap` com sucesso.
+- [x] Auditar cobertura `shotmap` da base EPL importavel.
 
 ---
 
 ## Resultado dos Baselines Sem Graph
 
-### Baseline 1A — Pre-Match H3/H4
+### Baseline 1A - Pre-Match H3/H4
 
 Documento:
 
@@ -52,10 +54,10 @@ Documento:
 Status:
 
 - Operacional: APTO COM RESSALVAS.
-- Quantitativo: NÃO APROVADO.
-- Decisão: não avançar para backtesting, produção ou sistema decisório.
+- Quantitativo: NAO APROVADO.
+- Decisao: nao avancar para backtesting, producao ou sistema decisorio.
 
-### Baseline In-Game V1 — H6/H9
+### Baseline In-Game V1 - H6/H9
 
 Documento:
 
@@ -64,14 +66,14 @@ Documento:
 Status:
 
 - Operacional: APTO COM RESSALVAS.
-- Quantitativo: NÃO APROVADO.
-- Decisão: não avançar para backtesting, produção ou sistema decisório.
+- Quantitativo: NAO APROVADO.
+- Decisao: nao avancar para backtesting, producao ou sistema decisorio.
 
-Interpretação:
+Interpretacao:
 
-- O In-Game V1 melhorou em relação ao Pre-Match, mas ainda não atingiu os critérios mínimos.
-- Os baselines atuais servem como benchmarks exploratórios, não como modelos candidatos.
-- A próxima hipótese prioritária é que dados vivos de momentum/pressão e finalizações possam aumentar o sinal preditivo.
+- O In-Game V1 melhorou em relacao ao Pre-Match, mas ainda nao atingiu os criterios minimos.
+- Os baselines atuais servem como benchmarks exploratorios, nao como modelos candidatos.
+- A proxima hipotese prioritaria e que dados vivos de momentum/pressao e finalizacoes possam aumentar o sinal preditivo.
 
 ---
 
@@ -81,8 +83,9 @@ Documentos:
 
 - `docs/03_SOURCES/SOFASCORE/ENDPOINT_DISCOVERY_20260605.md`
 - `docs/03_SOURCES/SOFASCORE/GRAPH_MOMENTUM_ENDPOINT.md`
+- `docs/03_SOURCES/SOFASCORE/SHOTMAP_ENDPOINT.md`
 
-Endpoints úteis confirmados:
+Endpoints uteis confirmados:
 
 - `/graph`
 - `/shotmap`
@@ -99,13 +102,13 @@ Base candidata para H8:
 - `incidents`
 - `statistics`
 
-Complementos possíveis:
+Complementos possiveis:
 
 - `lineups`
 - `average-positions`
 - `managers`
 
-Endpoints não recomendados para insistência por tentativa de nomes:
+Endpoints nao recomendados para insistencia por tentativa de nomes:
 
 - `/attacks`
 - `/dangerous-attacks`
@@ -115,9 +118,9 @@ Endpoints não recomendados para insistência por tentativa de nomes:
 - `/momentum`
 - `/attack-momentum`
 
-Decisão:
+Decisao:
 
-- Não insistir em endpoints não confirmados por tentativa de nomes.
+- Nao insistir em endpoints nao confirmados por tentativa de nomes.
 - Priorizar H8 com `graph` + `shotmap` + `incidents` + `statistics`.
 
 ---
@@ -130,41 +133,59 @@ Status:
 
 - Coletado com sucesso.
 
-Interpretação:
+Interpretacao:
 
-- `graph` passa a ser o principal artefato temporal de momentum/pressão para H8.
-- A próxima etapa será validar cobertura, estrutura e qualidade antes de importar/modelar.
+- `graph` passa a ser o principal artefato temporal de momentum/pressao para H8.
+- A proxima etapa sera validar cobertura, estrutura e qualidade antes de importar/modelar.
 
 ### Shotmap
 
 Status:
 
-- Em coleta.
+- Coletado e auditado com sucesso.
 
-Interpretação:
+Auditoria:
 
-- `shotmap` pode fornecer finalizações com minuto, acréscimo, `timeSeconds`, xG, xGOT e coordenadas.
-- Pode permitir features como xG acumulado até cutoff, xG recente, volume de chutes e qualidade das chances antes do cutoff.
+- Inventory total: 381 partidas.
+- Pastas locais: 381.
+- `shotmap.json` validos: 380.
+- Faltantes na base importavel: 0.
+- Invalidos: 0.
+- Partida conhecida como skip: `12436452`.
+- Total de finalizacoes: 9.883.
+- Media de finalizacoes por partida: 26,01.
+- HTTP 403 na coleta final: nao.
+
+Documento:
+
+- `docs/03_SOURCES/SOFASCORE/SHOTMAP_ENDPOINT.md`
+
+Interpretacao:
+
+- `shotmap` fornece finalizacoes com minuto, acrescimo, `timeSeconds`, xG, xGOT e coordenadas.
+- A cobertura esta fechada para as 380 partidas importaveis.
+- Pode permitir features futuras como xG acumulado ate cutoff, xG recente, volume de chutes e qualidade das chances antes do cutoff.
+- Importer, feature builder e baseline H8 continuam bloqueados ate nova aprovacao.
 
 ---
 
-## Status das Hipóteses
+## Status das Hipoteses
 
-- H1 — BLOQUEADA por data leakage.
-- H2 — BLOQUEADA por data leakage.
-- H3 — MANTER COMO CANDIDATA, mas Baseline 1A Pre-Match não aprovou no teste temporal.
-- H4 — MANTER COMO CANDIDATA FORTE, mas Baseline 1A Pre-Match não aprovou no teste temporal.
-- H5 — NÃO VALIDADA.
-- H6 — VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph não aprovou quantitativamente.
-- H7 — NÃO VALIDADA COMO HIPÓTESE INDEPENDENTE.
-- H8 — FRENTE ATIVA: graph/momentum + shotmap.
-- H9 — VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph não aprovou quantitativamente.
+- H1 - BLOQUEADA por data leakage.
+- H2 - BLOQUEADA por data leakage.
+- H3 - MANTER COMO CANDIDATA, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
+- H4 - MANTER COMO CANDIDATA FORTE, mas Baseline 1A Pre-Match nao aprovou no teste temporal.
+- H5 - NAO VALIDADA.
+- H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
+- H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
+- H8 - FRENTE ATIVA: graph/momentum + shotmap coletados; pendente importer/feature spec.
+- H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 
 ---
 
-## Próxima Frente Oficial
+## Proxima Frente Oficial
 
-Consolidação da coleta H8.
+Consolidacao tecnica da H8.
 
 Objetivo:
 
@@ -172,32 +193,32 @@ Validar a cobertura e a qualidade dos dados `graph` e `shotmap` antes de planeja
 
 ---
 
-## Restrições Ativas
+## Restricoes Ativas
 
-- Não avançar nenhum baseline atual para backtesting.
-- Não usar nenhum baseline atual em produção.
-- Não transformar nenhum baseline atual em sistema decisório.
-- Não usar features bloqueadas.
-- Não usar estatísticas finais da própria partida como preditores.
-- Não usar xG/xGA/forecast sem comprovação temporal segura.
-- Não usar eventos após cutoff como features in-game.
-- Manter backtesting e produção bloqueados.
-- Qualquer coleta adicional deve respeitar checkpoint, baixo volume, delays e validação operacional.
+- Nao avancar nenhum baseline atual para backtesting.
+- Nao usar nenhum baseline atual em producao.
+- Nao transformar nenhum baseline atual em sistema decisorio.
+- Nao usar features bloqueadas.
+- Nao usar estatisticas finais da propria partida como preditores.
+- Nao usar xG/xGA/forecast sem comprovacao temporal segura.
+- Nao usar eventos apos cutoff como features in-game.
+- Manter backtesting e producao bloqueados.
+- Qualquer coleta adicional deve respeitar checkpoint, baixo volume, delays e validacao operacional.
+- Nao implementar importer H8 sem aprovacao explicita.
+- Nao alterar schema para H8 sem aprovacao explicita do CTO/Data Engineer.
 
 ---
 
-## Próximos Passos
+## Proximos Passos
 
-- [ ] Finalizar coleta de `shotmap`.
 - [ ] Auditar cobertura de `graph` por partida.
-- [ ] Auditar cobertura de `shotmap` por partida.
-- [ ] Validar estrutura e qualidade dos JSONs coletados.
+- [ ] Validar estrutura e qualidade dos JSONs `graph` e `shotmap` coletados.
 - [ ] Acionar Data Engineer / Database para avaliar importer futuro de `graph` e `shotmap`.
-- [ ] Acionar CTO se houver necessidade de nova arquitetura de armazenamento/importação.
-- [ ] Só depois definir plano Quant para H8.
+- [ ] Acionar CTO se houver necessidade de nova arquitetura de armazenamento/importacao.
+- [ ] So depois definir plano Quant para H8.
 
 ---
 
 ## Status
 
-EM EXECUÇÃO — GRAPH COLETADO COM SUCESSO; SHOTMAP EM COLETA; H8 É A FRENTE ATIVA.
+EM EXECUCAO - GRAPH E SHOTMAP COLETADOS; SHOTMAP AUDITADO COM 380/380 PARTIDAS IMPORTAVEIS COBERTAS; H8 SEGUE COMO FRENTE ATIVA, SEM IMPORTER/FEATURES/BASELINE AUTORIZADOS AINDA.
