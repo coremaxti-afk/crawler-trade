@@ -1,241 +1,506 @@
 # Team Profile Segmentation Results
 
-Data: 2026-06-07 04:33:59 UTC
+## Status
 
-## Resumo Executivo
+Validacao estatistica formal dos segmentos do `Team Profile Segment Dataset V1`.
 
-A analise exploratoria de segmentacao dinamica por perfil de equipes foi executada com perfis expansivos calculados apenas com jogos anteriores do proprio time. A amostra operacional contem **380 partidas**, **642 linhas-time elegiveis** e **321 confrontos elegiveis** apos exigir `min_games >= 5` para os dois times.
+Nao contem modelo.
 
-Resultado principal: foram encontrados segmentos com efeito positivo relevante em gols tardios, principalmente em combinacoes de **ofensivo forte** e **defesa fragil**, mas a maioria dos achados deve ser tratada como exploratoria. A evidencia e suficiente para orientar nova validacao controlada, nao para modelagem, baseline operacional ou decisao de producao.
+Nao contem baseline.
 
-Documento base solicitado: `docs/04_RESEARCH/TEAM_PROFILE_SEGMENTATION_EXPLORATION.md` nao foi encontrado localmente nem no GitHub no momento da execucao. A analise seguiu integralmente a metodologia especificada na tarefa.
+Nao contem backtesting.
 
-## Fontes Usadas
+Nao contem producao.
 
-- PostgreSQL somente leitura.
-- `matches_master` para identificacao da partida, data, times e placar final usado apenas como historico para jogos futuros.
-- `match_statistics` para estatisticas finais usadas apenas no perfil historico de jogos posteriores.
-- `match_incidents` para gols e targets tardios.
+---
 
-Nenhuma escrita no PostgreSQL foi executada. Nenhum crawler, importer, schema, dataset existente ou dado bruto foi alterado.
+## 1. Resumo Executivo
 
-## Metodologia Anti-Leakage
+A validacao estatistica formal dos segmentos foi executada sobre o dataset versionado:
 
-- Grain de perfil: 1 linha por time por partida.
-- Para cada time, os perfis foram ordenados por `season`, `team_name`, `match_date`, `match_id`.
-- Cada metrica de perfil usa `groupby(season, team_name).shift(1)` antes de qualquer media expansiva.
-- A partida analisada nunca entra no proprio perfil.
-- Partidas futuras nunca entram no perfil.
-- A primeira partida elegivel de um time exige `history_matches_available >= 5`.
-- As categorias dinamicas de perfil foram recalculadas por data com informacao disponivel ate aquela data, baseada em perfis ja formados por historico anterior.
-- O target usa gols com `minute > cutoff`, onde cutoff pertence a [60, 65, 70, 75].
+- `data/processed/datasets/team_profile_segment_dataset_v1.csv`
 
-## Definicao dos Perfis
+Target:
 
-### Perfil Ofensivo
+- `target_late_goal_75`
 
-Indice ofensivo historico expansivo composto por:
+Resultado Quant:
 
-- gols a favor;
-- finalizacoes a favor;
-- finalizacoes no alvo a favor;
-- grandes chances a favor.
+```text
+APROVADO COMO ANALISE EXPLORATORIA FORMAL
+NAO APROVADO PARA MODELO
+NAO APROVADO PARA BASELINE
+NAO APROVADO PARA BACKTESTING
+NAO APROVADO PARA PRODUCAO
+```
 
-Classificacao dinamica:
+Conclusao principal:
 
-- `strong`: tercil superior do indice ofensivo historico disponivel;
-- `middle`: tercil intermediario;
-- `weak`: tercil inferior.
+- Nenhum segmento atingiu criterio estatistico forte suficiente para ser classificado como `PROMISSOR` na validacao formal do dataset versionado.
+- O segmento com maior efeito positivo foi `ofensivo_forte_vs_defesa_fragil`.
+- O segmento `ambos_defesa_forte` nao apresentou evidencia robusta; o resultado anterior parece mais provavel ser artefato de amostra/cutoff do que sinal estavel.
+- A segmentacao segue util como frente exploratoria, mas nao deve avancar diretamente para baseline.
 
-### Perfil Defensivo
+---
 
-Indice de fragilidade defensiva historico expansivo composto por:
+## 2. Dataset Validado
 
-- gols sofridos;
-- finalizacoes contra;
-- finalizacoes no alvo contra;
-- grandes chances contra.
+Fonte:
 
-Classificacao dinamica:
+- `Team Profile Segment Dataset V1`
 
-- `fragile`: tercil superior de fragilidade;
-- `middle`: tercil intermediario;
-- `strong`: tercil inferior de fragilidade, isto e, defesa mais forte.
+Validacoes ja confirmadas:
 
-## Cobertura
+- 380 partidas.
+- 380 partidas unicas.
+- 0 duplicatas.
+- `target_late_goal_75` unido corretamente.
+- 0 nulos no target.
+- 0 divergencias no target.
+- target preservado: 189 positivos / 191 negativos.
+- 330 partidas elegiveis por perfil.
+- 320 partidas segmentaveis.
+- 0 violacoes temporais.
+- 0 target-derived features em X.
+- 0 colunas proibidas em X.
+- 0 full-match columns.
 
-- Partidas totais analisadas: **380**.
-- Linhas-time totais: **760**.
-- Linhas-time elegiveis: **642**.
-- Confrontos totais: **380**.
-- Confrontos elegiveis: **321**.
-- `min_games`: **5**.
-- Cutoffs avaliados: **60, 65, 70, 75**.
+Taxa geral do target:
 
-Distribuicao dos perfis ofensivos elegiveis: `{"middle": 243, "strong": 206, "weak": 193}`.
+```text
+189 / 380 = 49.7%
+```
 
-Distribuicao dos perfis defensivos elegiveis: `{"middle": 258, "strong": 193, "fragile": 191}`.
+---
 
-## Criterios Estatisticos
+## 3. Metodologia
 
-Para cada segmento e target foram calculados:
+Para cada segmento binario materializado no dataset, foi comparado:
 
-- N do segmento;
-- positivos e negativos;
-- taxa do segmento;
-- taxa geral da amostra elegivel;
-- diferenca em pontos percentuais;
-- odds ratio;
-- intervalo de confianca aproximado de 95% para odds ratio;
-- p-value por teste exato de Fisher contra o restante da amostra elegivel.
+```text
+partidas dentro do segmento
+vs
+partidas fora do segmento
+```
 
-Classificacao aplicada:
+Para cada segmento foram calculados:
 
-- `PROMISSOR`: N >= 30, diferenca positiva >= 5 p.p. e p-value < 0.10.
-- `OBSERVAR`: efeito positivo relevante, mas com amostra limitada ou significancia fraca.
-- `DESCARTAR`: sem efeito positivo observavel nesta amostra.
+- N partidas.
+- Positivos.
+- Negativos.
+- Taxa de ocorrencia do target.
+- Diferenca em pontos percentuais contra a taxa geral.
+- Odds ratio contra o restante da amostra.
+- Intervalo de confianca aproximado de 95% para odds ratio.
+- p-value por teste exato de Fisher.
 
-## Segmentos Promissores
+Tabela 2x2 usada:
 
-- confrontos_segmentados / ambos_defesa_forte @ 60: N=30, taxa=83.3%, geral=69.5%, diff=+13.9 p.p., OR=2.18, p=0.0973
-- confrontos_segmentados / sem_ofensivo_forte_sem_defesa_fragil @ 60: N=43, taxa=81.4%, geral=69.5%, diff=+11.9 p.p., OR=2.01, p=0.0763
-- perfil_defensivo_isolado / defensivo_fragile @ 70: N=191, taxa=44.5%, geral=34.4%, diff=+10.1 p.p., OR=1.86, p=0.0006
-- perfil_defensivo_isolado / defensivo_fragile @ 65: N=191, taxa=48.7%, geral=39.1%, diff=+9.6 p.p., OR=1.76, p=0.0014
-- perfil_defensivo_isolado / defensivo_fragile @ 75: N=191, taxa=37.7%, geral=28.8%, diff=+8.9 p.p., OR=1.81, p=0.0016
-- perfil_defensivo_isolado / defensivo_fragile @ 60: N=191, taxa=51.8%, geral=43.1%, diff=+8.7 p.p., OR=1.65, p=0.0041
-- perfil_ofensivo_isolado / ofensivo_strong @ 60: N=206, taxa=50.0%, geral=43.1%, diff=+6.9 p.p., OR=1.50, p=0.0170
-- perfil_ofensivo_isolado / ofensivo_strong @ 65: N=206, taxa=45.6%, geral=39.1%, diff=+6.5 p.p., OR=1.49, p=0.0242
-- perfil_ofensivo_isolado / ofensivo_strong @ 70: N=206, taxa=40.8%, geral=34.4%, diff=+6.4 p.p., OR=1.50, p=0.0210
+```text
+                 target=1   target=0
+segmento=1          a          b
+segmento=0          c          d
+```
 
-## Segmentos Para Observar
+Odds ratio:
 
-- confrontos_segmentados / ambos_defesa_forte @ 65: N=30, taxa=76.7%, geral=64.8%, diff=+11.9 p.p., OR=1.80, p=0.1665
-- confrontos_segmentados / ofensivo_forte_vs_defesa_fragil @ 65: N=58, taxa=74.1%, geral=64.8%, diff=+9.3 p.p., OR=1.67, p=0.1284
-- confrontos_segmentados / ofensivo_forte_vs_defesa_fragil @ 70: N=58, taxa=67.2%, geral=58.3%, diff=+9.0 p.p., OR=1.58, p=0.1424
-- confrontos_segmentados / ofensivo_forte_vs_defesa_fragil @ 75: N=58, taxa=56.9%, geral=49.8%, diff=+7.1 p.p., OR=1.41, p=0.2490
-- confrontos_segmentados / ofensivo_forte_vs_defesa_fragil @ 60: N=58, taxa=75.9%, geral=69.5%, diff=+6.4 p.p., OR=1.44, p=0.2731
-- confrontos_segmentados / ofensivo_forte_vs_ofensivo_forte @ 65: N=27, taxa=70.4%, geral=64.8%, diff=+5.6 p.p., OR=1.28, p=0.6745
-- confrontos_segmentados / ambos_defesa_forte @ 70: N=30, taxa=63.3%, geral=58.3%, diff=+5.1 p.p., OR=1.24, p=0.6980
-- perfil_ofensivo_isolado / ofensivo_strong @ 75: N=206, taxa=33.0%, geral=28.8%, diff=+4.2 p.p., OR=1.34, p=0.1131
+```text
+OR = (a * d) / (b * c)
+```
 
-## Segmentos Descartados
+---
 
-- Segmentos sem efeito positivo consistente foram classificados como DESCARTAR nesta amostra. A lista completa por cutoff esta nas tabelas abaixo.
+## 4. Criterios de Classificacao
 
-## Perfil Ofensivo Isolado vs Gols Tardios do Time
+### PROMISSOR
 
-| Cutoff | Segmento | N | Pos | Neg | Taxa seg. | Taxa geral | Dif. p.p. | OR | p-value | Classe |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| 60 | ofensivo_strong | 206 | 103 | 103 | 50.0% | 43.1% | +6.9 | 1.50 | 0.0170 | PROMISSOR |
-| 60 | ofensivo_middle | 243 | 110 | 133 | 45.3% | 43.1% | +2.1 | 1.15 | 0.4121 | DESCARTAR |
-| 60 | ofensivo_weak | 193 | 64 | 129 | 33.2% | 43.1% | -10.0 | 0.55 | 0.0009 | DESCARTAR |
-| 65 | ofensivo_strong | 206 | 94 | 112 | 45.6% | 39.1% | +6.5 | 1.49 | 0.0242 | PROMISSOR |
-| 65 | ofensivo_middle | 243 | 98 | 145 | 40.3% | 39.1% | +1.2 | 1.09 | 0.6181 | DESCARTAR |
-| 65 | ofensivo_weak | 193 | 59 | 134 | 30.6% | 39.1% | -8.5 | 0.59 | 0.0037 | DESCARTAR |
-| 70 | ofensivo_strong | 206 | 84 | 122 | 40.8% | 34.4% | +6.4 | 1.50 | 0.0210 | PROMISSOR |
-| 70 | ofensivo_middle | 243 | 85 | 158 | 35.0% | 34.4% | +0.6 | 1.04 | 0.8641 | DESCARTAR |
-| 70 | ofensivo_weak | 193 | 52 | 141 | 26.9% | 34.4% | -7.5 | 0.61 | 0.0088 | DESCARTAR |
-| 75 | ofensivo_strong | 206 | 68 | 138 | 33.0% | 28.8% | +4.2 | 1.34 | 0.1131 | OBSERVAR |
-| 75 | ofensivo_middle | 243 | 74 | 169 | 30.5% | 28.8% | +1.6 | 1.14 | 0.4740 | DESCARTAR |
-| 75 | ofensivo_weak | 193 | 43 | 150 | 22.3% | 28.8% | -6.5 | 0.62 | 0.0175 | DESCARTAR |
+Segmento com:
 
-## Perfil Defensivo Isolado vs Gols Tardios Sofridos
+- N >= 30;
+- diferenca positiva >= 5 p.p.;
+- p-value < 0.10;
+- odds ratio > 1.0.
 
-| Cutoff | Segmento | N | Pos | Neg | Taxa seg. | Taxa geral | Dif. p.p. | OR | p-value | Classe |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| 60 | defensivo_fragile | 191 | 99 | 92 | 51.8% | 43.1% | +8.7 | 1.65 | 0.0041 | PROMISSOR |
-| 60 | defensivo_strong | 193 | 78 | 115 | 40.4% | 43.1% | -2.7 | 0.85 | 0.3854 | DESCARTAR |
-| 60 | defensivo_middle | 258 | 100 | 158 | 38.8% | 43.1% | -4.4 | 0.74 | 0.0738 | DESCARTAR |
-| 65 | defensivo_fragile | 191 | 93 | 98 | 48.7% | 39.1% | +9.6 | 1.76 | 0.0014 | PROMISSOR |
-| 65 | defensivo_strong | 193 | 69 | 124 | 35.8% | 39.1% | -3.3 | 0.82 | 0.2899 | DESCARTAR |
-| 65 | defensivo_middle | 258 | 89 | 169 | 34.5% | 39.1% | -4.6 | 0.72 | 0.0577 | DESCARTAR |
-| 70 | defensivo_fragile | 191 | 85 | 106 | 44.5% | 34.4% | +10.1 | 1.86 | 0.0006 | PROMISSOR |
-| 70 | defensivo_strong | 193 | 59 | 134 | 30.6% | 34.4% | -3.9 | 0.78 | 0.2047 | DESCARTAR |
-| 70 | defensivo_middle | 258 | 77 | 181 | 29.8% | 34.4% | -4.6 | 0.71 | 0.0513 | DESCARTAR |
-| 75 | defensivo_fragile | 191 | 72 | 119 | 37.7% | 28.8% | +8.9 | 1.81 | 0.0016 | PROMISSOR |
-| 75 | defensivo_middle | 258 | 65 | 193 | 25.2% | 28.8% | -3.6 | 0.74 | 0.1097 | DESCARTAR |
-| 75 | defensivo_strong | 193 | 48 | 145 | 24.9% | 28.8% | -3.9 | 0.76 | 0.1551 | DESCARTAR |
+### OBSERVAR
 
-## Confrontos Segmentados vs Gol Tardio na Partida
+Segmento com:
 
-| Cutoff | Segmento | N | Pos | Neg | Taxa seg. | Taxa geral | Dif. p.p. | OR | p-value | Classe |
-|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| 60 | ambos_defesa_forte | 30 | 25 | 5 | 83.3% | 69.5% | +13.9 | 2.18 | 0.0973 | PROMISSOR |
-| 60 | sem_ofensivo_forte_sem_defesa_fragil | 43 | 35 | 8 | 81.4% | 69.5% | +11.9 | 2.01 | 0.0763 | PROMISSOR |
-| 60 | ofensivo_forte_vs_defesa_fragil | 58 | 44 | 14 | 75.9% | 69.5% | +6.4 | 1.44 | 0.2731 | OBSERVAR |
-| 60 | ofensivo_forte_vs_ofensivo_forte | 27 | 19 | 8 | 70.4% | 69.5% | +0.9 | 1.02 | 1.0000 | DESCARTAR |
-| 60 | ao_menos_um_ofensivo_forte | 179 | 124 | 55 | 69.3% | 69.5% | -0.2 | 0.98 | 1.0000 | DESCARTAR |
-| 60 | ao_menos_uma_defesa_fragil | 164 | 111 | 53 | 67.7% | 69.5% | -1.8 | 0.84 | 0.5446 | DESCARTAR |
-| 60 | ofensivo_fraco_vs_defesa_forte | 54 | 36 | 18 | 66.7% | 69.5% | -2.8 | 0.85 | 0.6295 | DESCARTAR |
-| 60 | defesa_fragil_vs_defesa_fragil | 27 | 15 | 12 | 55.6% | 69.5% | -13.9 | 0.51 | 0.1257 | DESCARTAR |
-| 65 | ambos_defesa_forte | 30 | 23 | 7 | 76.7% | 64.8% | +11.9 | 1.80 | 0.1665 | OBSERVAR |
-| 65 | ofensivo_forte_vs_defesa_fragil | 58 | 43 | 15 | 74.1% | 64.8% | +9.3 | 1.67 | 0.1284 | OBSERVAR |
-| 65 | ofensivo_forte_vs_ofensivo_forte | 27 | 19 | 8 | 70.4% | 64.8% | +5.6 | 1.28 | 0.6745 | OBSERVAR |
-| 65 | ao_menos_uma_defesa_fragil | 164 | 108 | 56 | 65.9% | 64.8% | +1.1 | 1.10 | 0.7264 | DESCARTAR |
-| 65 | ao_menos_um_ofensivo_forte | 179 | 117 | 62 | 65.4% | 64.8% | +0.6 | 1.06 | 0.8152 | DESCARTAR |
-| 65 | sem_ofensivo_forte_sem_defesa_fragil | 43 | 28 | 15 | 65.1% | 64.8% | +0.3 | 1.00 | 1.0000 | DESCARTAR |
-| 65 | ofensivo_fraco_vs_defesa_forte | 54 | 33 | 21 | 61.1% | 64.8% | -3.7 | 0.82 | 0.5358 | DESCARTAR |
-| 65 | defesa_fragil_vs_defesa_fragil | 27 | 15 | 12 | 55.6% | 64.8% | -9.2 | 0.65 | 0.2996 | DESCARTAR |
-| 70 | ofensivo_forte_vs_defesa_fragil | 58 | 39 | 19 | 67.2% | 58.3% | +9.0 | 1.58 | 0.1424 | OBSERVAR |
-| 70 | ambos_defesa_forte | 30 | 19 | 11 | 63.3% | 58.3% | +5.1 | 1.24 | 0.6980 | OBSERVAR |
-| 70 | ao_menos_uma_defesa_fragil | 164 | 98 | 66 | 59.8% | 58.3% | +1.5 | 1.13 | 0.6508 | DESCARTAR |
-| 70 | ofensivo_forte_vs_ofensivo_forte | 27 | 16 | 11 | 59.3% | 58.3% | +1.0 | 1.03 | 1.0000 | DESCARTAR |
-| 70 | ao_menos_um_ofensivo_forte | 179 | 105 | 74 | 58.7% | 58.3% | +0.4 | 1.04 | 0.9095 | DESCARTAR |
-| 70 | sem_ofensivo_forte_sem_defesa_fragil | 43 | 25 | 18 | 58.1% | 58.3% | -0.1 | 0.99 | 1.0000 | DESCARTAR |
-| 70 | ofensivo_fraco_vs_defesa_forte | 54 | 30 | 24 | 55.6% | 58.3% | -2.7 | 0.87 | 0.6538 | DESCARTAR |
-| 70 | defesa_fragil_vs_defesa_fragil | 27 | 14 | 13 | 51.9% | 58.3% | -6.4 | 0.75 | 0.5428 | DESCARTAR |
-| 75 | ofensivo_forte_vs_defesa_fragil | 58 | 33 | 25 | 56.9% | 49.8% | +7.1 | 1.41 | 0.2490 | OBSERVAR |
-| 75 | sem_ofensivo_forte_sem_defesa_fragil | 43 | 23 | 20 | 53.5% | 49.8% | +3.6 | 1.18 | 0.6268 | DESCARTAR |
-| 75 | ambos_defesa_forte | 30 | 16 | 14 | 53.3% | 49.8% | +3.5 | 1.16 | 0.7061 | DESCARTAR |
-| 75 | ao_menos_uma_defesa_fragil | 164 | 83 | 81 | 50.6% | 49.8% | +0.8 | 1.06 | 0.8236 | DESCARTAR |
-| 75 | ao_menos_um_ofensivo_forte | 179 | 89 | 90 | 49.7% | 49.8% | -0.1 | 0.99 | 1.0000 | DESCARTAR |
-| 75 | ofensivo_fraco_vs_defesa_forte | 54 | 25 | 29 | 46.3% | 49.8% | -3.5 | 0.85 | 0.6548 | DESCARTAR |
-| 75 | ofensivo_forte_vs_ofensivo_forte | 27 | 12 | 15 | 44.4% | 49.8% | -5.4 | 0.80 | 0.6883 | DESCARTAR |
-| 75 | defesa_fragil_vs_defesa_fragil | 27 | 12 | 15 | 44.4% | 49.8% | -5.4 | 0.80 | 0.6883 | DESCARTAR |
+- efeito positivo >= 3 p.p., mas significancia fraca; ou
+- efeito positivo >= 5 p.p. com N pequeno ou p-value fraco; ou
+- segmento metodologicamente relevante para monitoramento.
 
-## Ranking dos Maiores Efeitos Positivos
+### DESCARTAR
 
-| Rank | Escopo | Segmento | Cutoff | N | Taxa seg. | Taxa geral | Dif. p.p. | OR | IC 95% OR | p-value | Classe |
-|---:|---|---|---:|---:|---:|---:|---:|---:|---|---:|---|
-| 1 | confrontos_segmentados | ambos_defesa_forte | 60 | 30 | 83.3% | 69.5% | +13.9 | 2.18 | [0.84, 5.67] | 0.0973 | PROMISSOR |
-| 2 | confrontos_segmentados | sem_ofensivo_forte_sem_defesa_fragil | 60 | 43 | 81.4% | 69.5% | +11.9 | 2.01 | [0.91, 4.42] | 0.0763 | PROMISSOR |
-| 3 | confrontos_segmentados | ambos_defesa_forte | 65 | 30 | 76.7% | 64.8% | +11.9 | 1.80 | [0.76, 4.23] | 0.1665 | OBSERVAR |
-| 4 | perfil_defensivo_isolado | defensivo_fragile | 70 | 191 | 44.5% | 34.4% | +10.1 | 1.86 | [1.31, 2.63] | 0.0006 | PROMISSOR |
-| 5 | perfil_defensivo_isolado | defensivo_fragile | 65 | 191 | 48.7% | 39.1% | +9.6 | 1.76 | [1.25, 2.48] | 0.0014 | PROMISSOR |
-| 6 | confrontos_segmentados | ofensivo_forte_vs_defesa_fragil | 65 | 58 | 74.1% | 64.8% | +9.3 | 1.67 | [0.89, 3.14] | 0.1284 | OBSERVAR |
-| 7 | confrontos_segmentados | ofensivo_forte_vs_defesa_fragil | 70 | 58 | 67.2% | 58.3% | +9.0 | 1.58 | [0.87, 2.85] | 0.1424 | OBSERVAR |
-| 8 | perfil_defensivo_isolado | defensivo_fragile | 75 | 191 | 37.7% | 28.8% | +8.9 | 1.81 | [1.26, 2.60] | 0.0016 | PROMISSOR |
-| 9 | perfil_defensivo_isolado | defensivo_fragile | 60 | 191 | 51.8% | 43.1% | +8.7 | 1.65 | [1.17, 2.32] | 0.0041 | PROMISSOR |
-| 10 | confrontos_segmentados | ofensivo_forte_vs_defesa_fragil | 75 | 58 | 56.9% | 49.8% | +7.1 | 1.41 | [0.80, 2.48] | 0.2490 | OBSERVAR |
+Segmento com:
 
-## Leitura dos Resultados
+- efeito fraco;
+- efeito negativo;
+- amostra pequena sem sinal;
+- p-value sem suporte estatistico.
 
-A segmentacao sugere que jogos envolvendo combinacoes de ataque historicamente forte e defesa historicamente fragil podem concentrar maior frequencia de gols tardios em alguns cutoffs. Ainda assim, a analise permanece exploratoria por tres motivos:
+---
 
-1. a amostra elegivel e menor que a base completa por causa da regra `min_games >= 5`;
-2. os tercis dinamicos criam segmentos relativamente pequenos em alguns confrontos;
-3. a significancia estatistica deve ser tratada como indicativa, pois multiplos segmentos e cutoffs foram testados.
+## 5. Ranking Completo dos Segmentos
 
-Os resultados negativos ou fracos nao invalidam H3/H4 como familias, mas indicam que segmentacao simples por tercis historicos talvez precise de refinamento antes de virar feature operacional.
+| Rank | Segmento | N | Pos | Neg | Taxa seg. | Taxa geral | Dif. p.p. | OR | IC 95% OR | p-value | Classe |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---|---:|---|
+| 1 | ofensivo_forte_vs_defesa_fragil | 56 | 32 | 24 | 57.1% | 49.7% | +7.4 | 1.42 | 0.80 - 2.51 | 0.2492 | OBSERVAR |
+| 2 | sem_ofensivo_forte_sem_defesa_fragil | 43 | 23 | 20 | 53.5% | 49.7% | +3.7 | 1.18 | 0.63 - 2.24 | 0.6302 | OBSERVAR |
+| 3 | ambos_defesa_forte | 30 | 16 | 14 | 53.3% | 49.7% | +3.6 | 1.17 | 0.55 - 2.47 | 0.7077 | OBSERVAR |
+| 4 | ao_menos_uma_defesa_fragil | 163 | 83 | 80 | 50.9% | 49.7% | +1.2 | 1.09 | 0.72 - 1.63 | 0.7559 | DESCARTAR |
+| 5 | ao_menos_um_ofensivo_forte | 177 | 88 | 89 | 49.7% | 49.7% | -0.0 | 1.00 | 0.67 - 1.49 | 1.0000 | DESCARTAR |
+| 6 | ofensivo_fraco_vs_defesa_forte | 52 | 25 | 27 | 48.1% | 49.7% | -1.7 | 0.93 | 0.52 - 1.66 | 0.8816 | DESCARTAR |
+| 7 | defesa_fragil_vs_defesa_fragil | 26 | 12 | 14 | 46.2% | 49.7% | -3.6 | 0.86 | 0.39 - 1.91 | 0.8395 | DESCARTAR |
+| 8 | ofensivo_forte_vs_ofensivo_forte | 27 | 12 | 15 | 44.4% | 49.7% | -5.3 | 0.80 | 0.36 - 1.75 | 0.6905 | DESCARTAR |
 
-## Riscos e Limitacoes
+---
 
-- Estatisticas full-match de uma partida sao usadas apenas depois que essa partida virou historico de jogos futuros do time.
-- Como a base cobre uma unica temporada EPL, perfis de inicio de temporada usam poucas partidas e podem ser instaveis.
-- Nao foi criada feature permanente nem dataset novo.
-- Nao houve correcao formal para multiplos testes; p-values sao exploratorios.
-- Odds ratio com intervalo de confianca usa correcao 0.5 quando ha celulas pequenas ou zero.
-- O documento base `TEAM_PROFILE_SEGMENTATION_EXPLORATION.md` estava ausente, portanto nao foi possivel comparar contra uma especificacao previa alem da tarefa recebida.
+## 6. Segmentos PROMISSOR
 
-## Recomendacao
+Nenhum segmento foi classificado como `PROMISSOR` nesta validacao formal.
 
-1. Encaminhar o relatorio para Quant Research revisar os segmentos `PROMISSOR` e `OBSERVAR`.
-2. Se aprovado, criar uma especificacao separada de `Team Profile Segment Feature Builder` com whitelist explicita, sem modelagem ainda.
-3. Repetir a validacao com split temporal ou por blocos de rodada antes de qualquer baseline.
-4. Nao iniciar backtesting ou producao.
+Motivo:
 
-## Status Final
+- O maior efeito positivo foi `ofensivo_forte_vs_defesa_fragil`, com +7.4 p.p., mas p-value = 0.2492 e intervalo de confianca do OR cruzando 1.
+- Nenhum segmento combinou efeito relevante com suporte estatistico suficiente.
 
-Status: ANALISE EXPLORATORIA CONCLUIDA.
+---
 
-Decisao recomendada: manter a segmentacao dinamica como candidata de pesquisa, com foco inicial nos segmentos classificados como `PROMISSOR` e revisao metodologica dos segmentos `OBSERVAR`.
+## 7. Segmentos OBSERVAR
+
+### 7.1 ofensivo_forte_vs_defesa_fragil
+
+Resultado:
+
+- N: 56.
+- Positivos: 32.
+- Taxa: 57.1%.
+- Diferenca: +7.4 p.p.
+- OR: 1.42.
+- IC 95% OR: 0.80 - 2.51.
+- p-value: 0.2492.
+
+Classificacao:
+
+```text
+OBSERVAR
+```
+
+Interpretacao:
+
+- E o segmento com maior efeito observado.
+- A direcao e coerente com a hipotese original.
+- A significancia ainda e insuficiente.
+- Deve ser mantido como principal candidato exploratorio em futuras temporadas/amostras.
+
+### 7.2 sem_ofensivo_forte_sem_defesa_fragil
+
+Resultado:
+
+- N: 43.
+- Positivos: 23.
+- Taxa: 53.5%.
+- Diferenca: +3.7 p.p.
+- OR: 1.18.
+- IC 95% OR: 0.63 - 2.24.
+- p-value: 0.6302.
+
+Classificacao:
+
+```text
+OBSERVAR
+```
+
+Interpretacao:
+
+- Efeito positivo pequeno.
+- Significancia fraca.
+- Deve ser mantido apenas como controle exploratorio, nao como candidato principal.
+
+### 7.3 ambos_defesa_forte
+
+Resultado:
+
+- N: 30.
+- Positivos: 16.
+- Taxa: 53.3%.
+- Diferenca: +3.6 p.p.
+- OR: 1.17.
+- IC 95% OR: 0.55 - 2.47.
+- p-value: 0.7077.
+
+Classificacao:
+
+```text
+OBSERVAR COM RESSALVA
+```
+
+Interpretacao:
+
+- O comportamento e contraintuitivo.
+- O efeito e pequeno.
+- O suporte estatistico e fraco.
+- O resultado anterior em cutoff especifico provavelmente foi artefato de amostra/cutoff.
+- Nao deve ser usado como segmento prioritario.
+
+---
+
+## 8. Segmentos DESCARTAR
+
+### 8.1 ao_menos_uma_defesa_fragil
+
+- N alto: 163.
+- Taxa: 50.9%.
+- Diferenca: +1.2 p.p.
+- p-value: 0.7559.
+
+Classificacao:
+
+```text
+DESCARTAR
+```
+
+Motivo:
+
+- Apesar da amostra grande, o efeito e muito fraco.
+
+### 8.2 ao_menos_um_ofensivo_forte
+
+- N: 177.
+- Taxa: 49.7%.
+- Diferenca: aproximadamente 0.
+- p-value: 1.0000.
+
+Classificacao:
+
+```text
+DESCARTAR
+```
+
+Motivo:
+
+- Nao ha efeito observavel.
+
+### 8.3 ofensivo_fraco_vs_defesa_forte
+
+- N: 52.
+- Taxa: 48.1%.
+- Diferenca: -1.7 p.p.
+- OR: 0.93.
+- p-value: 0.8816.
+
+Classificacao:
+
+```text
+DESCARTAR
+```
+
+Motivo:
+
+- Efeito fraco e negativo.
+
+### 8.4 defesa_fragil_vs_defesa_fragil
+
+- N: 26.
+- Taxa: 46.2%.
+- Diferenca: -3.6 p.p.
+- OR: 0.86.
+- p-value: 0.8395.
+
+Classificacao:
+
+```text
+DESCARTAR
+```
+
+Motivo:
+
+- Amostra pequena.
+- Efeito negativo.
+- Sem suporte estatistico.
+
+### 8.5 ofensivo_forte_vs_ofensivo_forte
+
+- N: 27.
+- Taxa: 44.4%.
+- Diferenca: -5.3 p.p.
+- OR: 0.80.
+- p-value: 0.6905.
+
+Classificacao:
+
+```text
+DESCARTAR
+```
+
+Motivo:
+
+- Amostra pequena.
+- Efeito negativo.
+- Sem suporte estatistico.
+
+---
+
+## 9. Respostas as Perguntas Principais
+
+### 1. Existem segmentos com frequencia anormalmente alta de gols apos 75?
+
+Nao de forma estatisticamente consistente.
+
+O segmento com maior taxa foi:
+
+- `ofensivo_forte_vs_defesa_fragil`: 57.1%, +7.4 p.p.
+
+Mas p-value = 0.2492, insuficiente para classificar como PROMISSOR.
+
+### 2. Existem segmentos com frequencia anormalmente baixa?
+
+Nao de forma estatisticamente consistente.
+
+O menor segmento foi:
+
+- `ofensivo_forte_vs_ofensivo_forte`: 44.4%, -5.3 p.p.
+
+Mas N = 27 e p-value = 0.6905.
+
+### 3. Quais segmentos apresentam maior efeito observado?
+
+Ranking por diferenca positiva:
+
+1. `ofensivo_forte_vs_defesa_fragil`: +7.4 p.p.
+2. `sem_ofensivo_forte_sem_defesa_fragil`: +3.7 p.p.
+3. `ambos_defesa_forte`: +3.6 p.p.
+4. `ao_menos_uma_defesa_fragil`: +1.2 p.p.
+
+### 4. O efeito e estatisticamente consistente?
+
+Nao.
+
+Nenhum segmento apresentou p-value < 0.10 na validacao formal do dataset versionado.
+
+### 5. Existem segmentos inviaveis por amostra pequena?
+
+Sim.
+
+Segmentos com N < 30:
+
+- `defesa_fragil_vs_defesa_fragil`: N = 26.
+- `ofensivo_forte_vs_ofensivo_forte`: N = 27.
+
+Estes segmentos nao devem ser usados como base de decisao nesta temporada.
+
+### 6. O segmento `ambos_defesa_forte` possui comportamento real ou artefato?
+
+A evidencia atual favorece a interpretacao de artefato.
+
+Motivos:
+
+- N minimo: 30.
+- Efeito pequeno: +3.6 p.p.
+- OR proximo de 1: 1.17.
+- IC 95% cruza 1 amplamente: 0.55 - 2.47.
+- p-value muito fraco: 0.7077.
+
+Decisao Quant:
+
+```text
+MANTER EM OBSERVAR COM RESSALVA
+NAO USAR COMO SEGMENTO PRIORITARIO
+```
+
+---
+
+## 10. Riscos Metodologicos
+
+### Risco 1 - Uma temporada apenas
+
+A amostra de 380 partidas limita conclusoes estatisticas.
+
+### Risco 2 - Segmentos sobrepostos
+
+Alguns segmentos nao sao mutuamente exclusivos.
+
+Exemplo:
+
+- `ofensivo_forte_vs_defesa_fragil` pode tambem compor `ao_menos_um_ofensivo_forte`.
+
+### Risco 3 - Multipla testagem
+
+Foram avaliados multiplos segmentos.
+
+Mesmo achados com p-value moderado deveriam ser tratados com cautela.
+
+### Risco 4 - Segmentos pequenos
+
+Segmentos com N < 30 sao instaveis.
+
+### Risco 5 - Sinal anterior por cutoff nao se manteve no target fixo pos-75
+
+A analise exploratoria anterior por cutoffs sugeriu sinais mais fortes. No dataset versionado focado em `target_late_goal_75`, o sinal ficou mais fraco.
+
+---
+
+## 11. Decisao Quant
+
+```text
+VALIDACAO ESTATISTICA FORMAL CONCLUIDA
+```
+
+Status dos segmentos:
+
+```text
+PROMISSOR: 0
+OBSERVAR: 3
+DESCARTAR: 5
+```
+
+Segmentos em OBSERVAR:
+
+- `ofensivo_forte_vs_defesa_fragil`.
+- `sem_ofensivo_forte_sem_defesa_fragil`.
+- `ambos_defesa_forte` com ressalva.
+
+Segmentos DESCARTAR:
+
+- `ao_menos_uma_defesa_fragil`.
+- `ao_menos_um_ofensivo_forte`.
+- `ofensivo_fraco_vs_defesa_forte`.
+- `defesa_fragil_vs_defesa_fragil`.
+- `ofensivo_forte_vs_ofensivo_forte`.
+
+---
+
+## 12. Recomendacao da Proxima Etapa
+
+Nao avançar para baseline de segmentacao neste momento.
+
+Recomendacao Quant:
+
+1. Registrar a validacao formal como inconclusiva para uso preditivo.
+2. Manter `ofensivo_forte_vs_defesa_fragil` como hipotese exploratoria principal.
+3. Reavaliar segmentacao apenas quando houver amostra multi-temporada.
+4. Nao usar `ambos_defesa_forte` como driver prioritario.
+5. Nao criar modelo, baseline, backtesting ou producao com estes segmentos nesta fase.
+
+Proxima frente sugerida:
+
+```text
+AMPLIAR AMOSTRA MULTI-TEMPORADA
+```
+
+ou, se o PM preferir seguir apenas com a temporada atual:
+
+```text
+ENCERRAR FRENTE DE SEGMENTACAO COMO EXPLORATORIA INCONCLUSIVA
+```
+
+---
+
+## 13. Restricoes Mantidas
+
+- Nao criar modelo.
+- Nao executar baseline.
+- Nao fazer backtesting.
+- Nao criar producao.
+- Nao usar segmentos como sistema decisorio.
+- Nao misturar segmentos com H8/H6/H9 em modelo sem nova aprovacao.
