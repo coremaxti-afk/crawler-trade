@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem iniciar producao, automacao operacional ou backtesting financeiro.
+Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem iniciar producao, automacao operacional ou backtesting financeiro. Registrar discoveries auxiliares de fontes quando concluirem etapa exploratoria, sem promover importer, schema ou producao sem aprovacao.
 
 ---
 
@@ -27,6 +27,8 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - [x] Confirmar validation report do Dataset H8 V1 antes do baseline.
 - [x] Executar Baseline H8 V1 controlado.
 - [x] Documentar resultado do Baseline H8 V1.
+- [x] Executar discovery Football-Data EPL 2024/25 para odds historicas.
+- [x] Executar match mapping exploratorio Football-Data x SofaScore com 380/380 partidas pareadas.
 
 ---
 
@@ -42,6 +44,14 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`
 - `docs/04_RESEARCH/H8_DATASET_BASELINE_RECOMMENDATION.md`
 - `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`
+
+---
+
+## Documentos Odds Historicas
+
+- `docs/03_SOURCES/ODDS/FOOTBALL_DATA_DISCOVERY_20260607.md`
+- `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md`
+- `docs/03_SOURCES/ODDS/ODDSPORTAL_DISCOVERY_20260607.md`
 
 ---
 
@@ -88,6 +98,23 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 ---
 
+## Estado Atual Odds Historicas
+
+### Football-Data EPL 2024/25
+
+- CSV publico analisado: 380 partidas.
+- Mercados encontrados: 1X2, Over/Under 2.5 e Asian Handicap.
+- Odds closing presentes.
+- Odds opening-like/pre-close presentes em colunas Pinnacle/closing sequence.
+- Odds live ausentes.
+- Match mapping com SofaScore: 380/380 partidas importaveis pareadas.
+- Taxa de pareamento: 100%.
+- Conflitos de placar: 0.
+- Ambiguidades relevantes: 0.
+- Recomendacao: avancar para Data Engineer/CTO definir contrato de mapping antes de importer ou schema.
+
+---
+
 ## Restricoes Ativas
 
 - Nao iniciar backtesting financeiro.
@@ -96,6 +123,8 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
 - Nao usar features fora de whitelist aprovada.
 - Nao usar eventos apos cutoff como features.
+- Nao criar importer Football-Data sem aprovacao CTO.
+- Nao alterar schema para odds sem aprovacao CTO.
 
 ---
 
@@ -103,10 +132,11 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 - [ ] Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 - [ ] PM decidir se H8 deve ser refinado, combinado com outras familias ou pausado nesta formulacao.
+- [ ] Data Engineer/CTO revisar `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md` e decidir contrato de mapping Football-Data x SofaScore.
 - [ ] Manter backtesting e producao bloqueados.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. PROXIMA DECISAO E METODOLOGICA, NAO OPERACIONAL.
+EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY E MATCH MAPPING EXPLORATORIOS CONCLUIDOS E RECOMENDACAO DE AVANCAR PARA DATA ENGINEER/CTO. PROXIMA DECISAO E METODOLOGICA/DE DADOS, NAO OPERACIONAL.
