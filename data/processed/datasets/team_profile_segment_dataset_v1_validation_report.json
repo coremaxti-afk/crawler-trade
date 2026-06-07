@@ -1,0 +1,119 @@
+{
+  "dataset_name": "team_profile_segment_dataset_v1",
+  "dataset_version": "v1",
+  "generated_at_utc": "2026-06-07T11:32:46.068971+00:00",
+  "status": "APTO COM RESSALVAS",
+  "row_count": 380,
+  "expected_rows": 380,
+  "unique_matches": 380,
+  "source_feature_rows": 380,
+  "source_target_rows": 380,
+  "duplicate_match_id_rows": 0,
+  "target_column": "target_late_goal_75",
+  "target_joined_count": 380,
+  "target_null_count": 0,
+  "target_mismatch_count": 0,
+  "target_counts": {
+    "0": 191,
+    "1": 189
+  },
+  "source_target_counts": {
+    "0": 191,
+    "1": 189
+  },
+  "match_profile_eligible_count": 330,
+  "match_segment_eligible_count": 320,
+  "match_profile_ineligible_count": 50,
+  "segment_summary": {
+    "ofensivo_forte_vs_defesa_fragil": {
+      "n": 56,
+      "positives": 32,
+      "negatives": 24,
+      "target_rate": 0.5714285714285714
+    },
+    "ambos_defesa_forte": {
+      "n": 30,
+      "positives": 16,
+      "negatives": 14,
+      "target_rate": 0.5333333333333333
+    },
+    "defesa_fragil_vs_defesa_fragil": {
+      "n": 26,
+      "positives": 12,
+      "negatives": 14,
+      "target_rate": 0.46153846153846156
+    },
+    "ofensivo_forte_vs_ofensivo_forte": {
+      "n": 27,
+      "positives": 12,
+      "negatives": 15,
+      "target_rate": 0.4444444444444444
+    },
+    "ofensivo_fraco_vs_defesa_forte": {
+      "n": 52,
+      "positives": 25,
+      "negatives": 27,
+      "target_rate": 0.4807692307692308
+    },
+    "ao_menos_um_ofensivo_forte": {
+      "n": 177,
+      "positives": 88,
+      "negatives": 89,
+      "target_rate": 0.4971751412429379
+    },
+    "ao_menos_uma_defesa_fragil": {
+      "n": 163,
+      "positives": 83,
+      "negatives": 80,
+      "target_rate": 0.50920245398773
+    },
+    "sem_ofensivo_forte_sem_defesa_fragil": {
+      "n": 43,
+      "positives": 23,
+      "negatives": 20,
+      "target_rate": 0.5348837209302325
+    }
+  },
+  "feature_columns_for_x": [
+    "home_offense_profile",
+    "away_offense_profile",
+    "home_defense_profile",
+    "away_defense_profile",
+    "home_offense_index_prior",
+    "away_offense_index_prior",
+    "home_defense_fragility_index_prior",
+    "away_defense_fragility_index_prior",
+    "home_ofensivo_strong",
+    "home_ofensivo_middle",
+    "home_ofensivo_weak",
+    "away_ofensivo_strong",
+    "away_ofensivo_middle",
+    "away_ofensivo_weak",
+    "home_defensivo_fragile",
+    "home_defensivo_middle",
+    "home_defensivo_strong",
+    "away_defensivo_fragile",
+    "away_defensivo_middle",
+    "away_defensivo_strong",
+    "ofensivo_forte_vs_defesa_fragil",
+    "ambos_defesa_forte",
+    "defesa_fragil_vs_defesa_fragil",
+    "ofensivo_forte_vs_ofensivo_forte",
+    "ofensivo_fraco_vs_defesa_forte",
+    "ao_menos_um_ofensivo_forte",
+    "ao_menos_uma_defesa_fragil",
+    "sem_ofensivo_forte_sem_defesa_fragil"
+  ],
+  "missing_whitelist_features": [],
+  "target_derived_features_in_x": [],
+  "forbidden_columns_in_x": [],
+  "full_match_columns_present_in_dataset": [],
+  "temporal_leakage_violations": 0,
+  "parquet_written": true,
+  "validation_errors": [],
+  "validation_warnings": [
+    "Some profile-eligible matches remain unsegmentable because strict prior-date threshold pools were insufficient early in the season.",
+    "Segment classifications must be reviewed by Quant as PROMISSOR, OBSERVAR or DESCARTAR before baseline use.",
+    "Segment ambos_defesa_forte remains under Quant review."
+  ]
+}
