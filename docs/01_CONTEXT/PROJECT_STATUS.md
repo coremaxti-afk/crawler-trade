@@ -41,6 +41,8 @@ Ressalvas:
 - Feature Builder H8 V1 implementado e executado localmente.
 - Dataset H8 V1 criado com join explicito do target e validation report APTO COM RESSALVAS.
 - Baseline H8 V1 executado e NAO APROVADO quantitativamente.
+- Discovery Football-Data EPL 2024/25 concluido com 380 partidas e odds historicas 1X2, Over/Under 2.5 e Asian Handicap.
+- Match mapping Football-Data x SofaScore executado: 380/380 partidas pareadas, 100%, 0 conflitos de placar e 0 ambiguidades relevantes.
 
 ---
 
@@ -121,6 +123,29 @@ Resultado:
 
 ---
 
+## Odds Historicas - Football-Data
+
+Documentos:
+
+- `docs/03_SOURCES/ODDS/FOOTBALL_DATA_DISCOVERY_20260607.md`
+- `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md`
+
+Estado:
+
+- Fonte avaliada: Football-Data.co.uk EPL 2024/25.
+- CSV publico baixado e analisado: 380 partidas.
+- Mercados encontrados: 1X2, Over/Under 2.5 e Asian Handicap.
+- Odds closing presentes.
+- Odds opening-like/pre-close presentes em colunas Pinnacle/closing sequence.
+- Odds live nao presentes.
+- Match mapping exploratorio com SofaScore: 380/380 partidas importaveis pareadas.
+- Taxa de pareamento: 100%.
+- Conflitos de placar: 0.
+- Ambiguidades relevantes: 0.
+- Recomendacao atual: avancar para Data Engineer/CTO especificar contrato de mapping antes de importer ou schema.
+
+---
+
 ## Status das Hipoteses
 
 - H1 - BLOQUEADA por data leakage.
@@ -139,12 +164,14 @@ Resultado:
 
 1. Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 2. PM decidir se H8 deve ser refinado, combinado com outras familias ou encerrado nesta formulacao.
-3. Nao iniciar backtesting financeiro.
-4. Nao iniciar producao.
-5. Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
+3. Data Engineer/CTO revisar `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md` para decidir contrato de mapping Football-Data x SofaScore.
+4. Nao iniciar backtesting financeiro.
+5. Nao iniciar producao.
+6. Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
+7. Nao criar importer Football-Data ou alterar schema sem aprovacao CTO.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS.
+EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY E MATCH MAPPING APROVADOS EXPLORATORIAMENTE PARA AVANCAR A DATA ENGINEER/CTO. PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS.
