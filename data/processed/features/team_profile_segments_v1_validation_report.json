@@ -1,0 +1,58 @@
+{
+  "feature_set_name": "team_profile_segments_v1",
+  "feature_set_version": "v1",
+  "generated_at_utc": "2026-06-07T05:05:54.720267+00:00",
+  "status": "APTO COM RESSALVAS",
+  "row_count": 380,
+  "expected_rows": 380,
+  "unique_matches": 380,
+  "team_rows": 760,
+  "min_games": 5,
+  "match_profile_eligible_count": 330,
+  "match_segment_eligible_count": 320,
+  "match_profile_ineligible_count": 50,
+  "threshold_unknown_eligible_count": 10,
+  "segment_counts": {
+    "ofensivo_forte_vs_defesa_fragil": 56,
+    "ambos_defesa_forte": 30,
+    "defesa_fragil_vs_defesa_fragil": 26,
+    "ofensivo_forte_vs_ofensivo_forte": 27,
+    "ofensivo_fraco_vs_defesa_forte": 52,
+    "ao_menos_um_ofensivo_forte": 177,
+    "ao_menos_uma_defesa_fragil": 163,
+    "sem_ofensivo_forte_sem_defesa_fragil": 43
+  },
+  "duplicate_match_id_rows": 0,
+  "required_null_counts": {
+    "match_id": 0,
+    "sofascore_event_id": 0,
+    "season": 0,
+    "match_date": 0,
+    "home_team": 0,
+    "away_team": 0
+  },
+  "forbidden_columns_present": [],
+  "target_like_columns_present": [],
+  "missing_whitelist_columns": [],
+  "missing_audit_columns": [],
+  "temporal_leakage_validation": {
+    "profile_recompute": {
+      "checks_run": 6080,
+      "mismatch_count": 0,
+      "sample_mismatches": []
+    },
+    "home_profile_max_date_violations": 0,
+    "away_profile_max_date_violations": 0,
+    "shift_1_before_expanding": true,
+    "same_day_threshold_policy": "prior_match_dates_only",
+    "target_columns_excluded": true
+  },
+  "parquet_written": true,
+  "validation_errors": [],
+  "validation_warnings": [
+    "10 matches have min_games satisfied but unknown segments because strict prior-date threshold pools were not yet sufficient.",
+    "Segment ambos_defesa_forte remains under Quant review due to counterintuitive exploratory signal.",
+    "Dynamic tercile classification may be unstable in small early-season samples.",
+    "Same-day matches are handled conservatively: threshold pools use prior match dates only."
+  ]
+}
