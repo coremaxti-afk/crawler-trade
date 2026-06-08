@@ -31,6 +31,9 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - [x] Executar match mapping exploratorio Football-Data x SofaScore com 380/380 partidas pareadas.
 - [x] Criar e revisar especificacao Football-Data Storage/Import.
 - [x] Aprovar especificacao Football-Data pela area Data Engineer / Database.
+- [x] Consolidar `FOOTBALL_DATA_SCHEMA_SPEC.md`.
+- [x] Criar `FOOTBALL_DATA_MIGRATION_SPEC.md`.
+- [x] Criar `FOOTBALL_DATA_IMPORTER_SPEC.md`.
 
 ---
 
@@ -55,6 +58,9 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md`
 - `docs/03_SOURCES/ODDS/ODDSPORTAL_DISCOVERY_20260607.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_SCHEMA_SPEC.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_MIGRATION_SPEC.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_IMPORTER_SPEC.md`
 
 ---
 
@@ -115,7 +121,8 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Conflitos de placar: 0.
 - Ambiguidades relevantes: 0.
 - Especificacao Storage/Import criada em `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`.
-- Parecer Data Engineer / Database: APROVADO.
+- Specs Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`.
+- Parecer Data Engineer / Database: APROVADO COM AJUSTES para storage/import; specs tecnicas prontas para revisao CTO.
 - Pronto para decisao CTO sobre futura implementacao de schema, migration e importer.
 
 ---
@@ -130,6 +137,7 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Nao usar eventos apos cutoff como features.
 - Nao criar importer Football-Data sem aprovacao CTO.
 - Nao alterar schema para odds sem aprovacao CTO.
+- Nao executar migration Football-Data sem aprovacao CTO.
 
 ---
 
@@ -137,6 +145,7 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 - [ ] Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 - [ ] PM decidir se H8 deve ser refinado, combinado com outras familias ou pausado nesta formulacao.
+- [ ] CTO revisar specs Football-Data em `docs/08_DATABASE/`.
 - [ ] CTO decidir se autoriza schema Football-Data.
 - [ ] CTO decidir se autoriza migration Football-Data.
 - [ ] CTO decidir se autoriza importer Football-Data.
@@ -146,4 +155,4 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 ## Status
 
-EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY, MATCH MAPPING E STORAGE/IMPORT SPEC APROVADOS PELA AREA DATA ENGINEER PARA FUTURA DECISAO CTO SOBRE SCHEMA, MIGRATION E IMPORTER. PROXIMA DECISAO E ARQUITETURAL/DE DADOS, NAO OPERACIONAL.
+EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY, MATCH MAPPING, STORAGE/IMPORT SPEC E SPECS DOCUMENTAIS DE SCHEMA/MIGRATION/IMPORTER CONSOLIDADOS PARA FUTURA DECISAO CTO. PROXIMA DECISAO E ARQUITETURAL/DE DADOS, NAO OPERACIONAL.
