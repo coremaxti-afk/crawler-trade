@@ -1,0 +1,74 @@
+{
+  "dataset_name": "late_goal_dataset_odds_v1",
+  "dataset_version": "odds_v1",
+  "generated_at_utc": "2026-06-08T18:10:01.017399+00:00",
+  "status": "APTO COM RESSALVAS",
+  "row_count": 380,
+  "expected_rows": 380,
+  "unique_matches": 380,
+  "duplicate_match_id_rows": 0,
+  "target_column": "target_late_goal_75",
+  "target_counts": {
+    "0": 191,
+    "1": 189
+  },
+  "target_mismatches": 0,
+  "null_required": {
+    "match_id": 0,
+    "sofascore_event_id": 0,
+    "match_date": 0,
+    "target_late_goal_75": 0
+  },
+  "feature_columns_for_x": [
+    "odds_over25_close",
+    "odds_under25_close",
+    "implied_prob_over25_raw",
+    "implied_prob_under25_raw",
+    "implied_prob_over25_norm",
+    "implied_prob_under25_norm",
+    "over25_closing_strength",
+    "over25_market_balance",
+    "odds_home_close",
+    "odds_draw_close",
+    "odds_away_close",
+    "implied_prob_home_raw",
+    "implied_prob_draw_raw",
+    "implied_prob_away_raw",
+    "implied_prob_home_norm",
+    "implied_prob_draw_norm",
+    "implied_prob_away_norm",
+    "favorite_side",
+    "favorite_strength",
+    "match_balance"
+  ],
+  "audit_columns_not_for_x": [
+    "ou25_closing_bookmakers_count",
+    "match_odds_closing_bookmakers_count",
+    "ou25_source_columns",
+    "match_odds_source_columns"
+  ],
+  "blocked_columns_present": [],
+  "asian_handicap_columns_present": [],
+  "live_inplay_columns_present": [],
+  "unexpected_columns": [],
+  "invalid_odds_count": 0,
+  "invalid_probability_count": 0,
+  "probability_sum_1x2_max_abs_error": 3.3306690738754696e-16,
+  "probability_sum_ou25_max_abs_error": 2.220446049250313e-16,
+  "source_feature_validation_status": "APTO",
+  "anti_leakage_checks": {
+    "target_join_explicit": true,
+    "features_source_apto": true,
+    "feature_whitelist_enforced": true,
+    "no_target_derived_columns_in_x": true,
+    "no_final_score_columns": true,
+    "no_asian_handicap": true,
+    "no_live_inplay_odds": true,
+    "no_full_match_columns": true
+  },
+  "errors": [],
+  "warnings": [
+    "Dataset Odds V1 includes the target column for supervised validation; X must use only odds_feature_columns.",
+    "Football-Data closing odds do not include individual timestamps; source semantics are treated as pre-match closing."
+  ]
+}
