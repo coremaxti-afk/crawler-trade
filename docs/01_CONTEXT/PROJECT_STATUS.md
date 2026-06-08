@@ -12,6 +12,7 @@
 - `match_shotmap`: 9883 finalizacoes em 380 partidas.
 - `match_source_status`: 760 registros.
 - Football-Data: 380 staging rows, 380 mappings e 34280 odds importadas localmente.
+- Odds Features V1: 380 linhas, 380 partidas unicas, status APTO.
 
 Ressalvas:
 
@@ -20,6 +21,7 @@ Ressalvas:
 - `12437015` segue como `known_missing` para `graph.json`, HTTP 404 confirmado.
 - Football-Data `opening_like` nao deve ser tratado automaticamente como opening odds oficial.
 - Football-Data nao contem odds live/in-game.
+- Odds Features V1 usa closing odds sem timestamp individual; tratado como pre-match closing pela semantica da fonte.
 
 ---
 
@@ -50,6 +52,7 @@ Ressalvas:
 - Specs documentais Football-Data Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`.
 - Football-Data Fase 1 implementada: migration, importer, dry-run, validacao e teste controlado em 5 linhas.
 - Football-Data Fase 2 executada: importacao completa local das 380 partidas e validacao idempotente.
+- Odds Feature Builder V1 implementado e executado localmente com status APTO.
 
 ---
 
@@ -82,11 +85,17 @@ Documentos:
 - `docs/08_DATABASE/FOOTBALL_DATA_IMPORTER_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`
+- `docs/04_RESEARCH/ODDS_DATASET_SPEC_V1.md`
 
 Artefatos:
 
 - `database/migrations/20260608_create_football_data_storage_tables.sql`
 - `Importer/FootballData/football_data_importer.py`
+- `Analytics/FeatureBuilder/odds_feature_builder_v1.py`
+- `data/processed/features/odds_features_v1.csv`
+- `data/processed/features/odds_features_v1.parquet`
+- `data/processed/features/odds_features_v1_metadata.json`
+- `data/processed/features/odds_features_v1_validation_report.json`
 
 Estado:
 
@@ -104,7 +113,10 @@ Estado:
 - Orfaos: 0.
 - Odds invalidas: 0.
 - `Max`, `MaxC`, `Avg` e `AvgC` preservados como agregadores distintos.
-- Recomendacao atual: APTO PARA PROXIMA ETAPA DE DATA ENGINEER / QUANT RESEARCH.
+- Odds Features V1 geradas com 380 linhas e 1 linha por `match_id`.
+- Cobertura Odds Features V1: 380/380 para 1X2, 380/380 para Over/Under 2.5 e 380/380 para ambos.
+- Validation report Odds Features V1: APTO, 0 duplicatas, 0 odds invalidas, 0 probabilidades invalidas, 0 target columns e 0 Asian Handicap.
+- Recomendacao atual: APTO PARA REVISAO QUANT RESEARCH E AUTORIZACAO DA VALIDACAO ESTATISTICA INICIAL DE ODDS.
 
 ---
 
@@ -119,15 +131,16 @@ Estado:
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
 - H8 - BASELINE V1 EXECUTADO E NAO APROVADO quantitativamente.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
+- Odds Historicas - FEATURES V1 GERADAS, aguardando validacao estatistica inicial isolada.
 
 ---
 
 ## Proximas Etapas
 
-1. Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
-2. PM decidir se H8 deve ser refinado, combinado com outras familias ou encerrado nesta formulacao.
-3. Data Engineer / Quant Research revisar `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`.
-4. Definir contrato de consumo das odds antes de criar dataset ou features.
+1. Quant Research revisar `data/processed/features/odds_features_v1_validation_report.json`.
+2. Quant Research autorizar ou bloquear validacao estatistica inicial das Odds Features V1.
+3. Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
+4. PM decidir se H8 deve ser refinado, combinado com outras familias ou encerrado nesta formulacao.
 5. Nao iniciar backtesting financeiro.
 6. Nao iniciar producao.
 7. Nao tratar `opening_like` como opening odds oficial sem auditoria metodologica.
@@ -136,4 +149,4 @@ Estado:
 
 ## Status
 
-EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 FOI EXECUTADA LOCALMENTE COM 380 PARTIDAS, 34280 ODDS, 0 DUPLICATAS, 0 ORFAOS E 0 ODDS INVALIDAS. FEATURES, DATASETS, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE NOVA AUTORIZACAO.
+EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 FOI EXECUTADA LOCALMENTE COM 380 PARTIDAS, 34280 ODDS, 0 DUPLICATAS, 0 ORFAOS E 0 ODDS INVALIDAS. ODDS FEATURE BUILDER V1 FOI IMPLEMENTADO E EXECUTADO COM 380 LINHAS, COBERTURA 100% EM 1X2 E OVER/UNDER 2.5, STATUS APTO. DATASETS DE ODDS, MODELAGEM, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE NOVA AUTORIZACAO.
