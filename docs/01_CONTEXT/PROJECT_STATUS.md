@@ -45,6 +45,7 @@ Ressalvas:
 - Match mapping Football-Data x SofaScore executado: 380/380 partidas pareadas, 100%, 0 conflitos de placar e 0 ambiguidades relevantes.
 - Especificacao Football-Data Storage/Import criada e revisada pela area Data Engineer / Database.
 - `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md` aprovado pela area Data Engineer / Database para futura decisao CTO sobre schema/migration/importer.
+- Specs documentais Football-Data Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`, sem implementacao executada.
 
 ---
 
@@ -132,6 +133,9 @@ Documentos:
 - `docs/03_SOURCES/ODDS/FOOTBALL_DATA_DISCOVERY_20260607.md`
 - `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_SCHEMA_SPEC.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_MIGRATION_SPEC.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_IMPORTER_SPEC.md`
 
 Estado:
 
@@ -146,7 +150,8 @@ Estado:
 - Conflitos de placar: 0.
 - Ambiguidades relevantes: 0.
 - Especificacao Storage/Import criada em `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`.
-- Parecer Data Engineer / Database: APROVADO.
+- Specs Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`.
+- Parecer Data Engineer / Database: APROVADO COM AJUSTES para especificacao de storage/import; specs tecnicas prontas para revisao CTO.
 - Pronto para decisao CTO sobre futura implementacao de schema, migration e importer.
 
 ---
@@ -169,7 +174,7 @@ Estado:
 
 1. Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 2. PM decidir se H8 deve ser refinado, combinado com outras familias ou encerrado nesta formulacao.
-3. CTO decidir se autoriza schema, migration e importer Football-Data com base em `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`.
+3. CTO revisar specs Football-Data em `docs/08_DATABASE/` e decidir se autoriza schema, migration e importer.
 4. Nao iniciar backtesting financeiro.
 5. Nao iniciar producao.
 6. Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
@@ -179,4 +184,4 @@ Estado:
 
 ## Status
 
-EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY, MATCH MAPPING E STORAGE/IMPORT SPEC APROVADOS PELA AREA DATA ENGINEER PARA FUTURA DECISAO CTO SOBRE SCHEMA, MIGRATION E IMPORTER. PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS.
+EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY, MATCH MAPPING, STORAGE/IMPORT SPEC E SPECS DOCUMENTAIS DE SCHEMA/MIGRATION/IMPORTER CONSOLIDADOS PARA FUTURA DECISAO CTO. PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS.
