@@ -1,0 +1,1731 @@
+{
+  "report_name": "h8_short_term_signal_validation_v1",
+  "generated_at_utc": "2026-06-08T20:49:51.854349+00:00",
+  "inputs": {
+    "h8_dataset": "C:\\LateGoalResearch\\data\\processed\\datasets\\late_goal_dataset_h8_v1.csv",
+    "raw_matches": "C:\\LateGoalResearch\\Crawler\\Sofascore\\data\\raw\\sofascore\\premier_league_61627\\matches"
+  },
+  "cutoff": 60,
+  "thresholds": {
+    "shots_last_10m_high_q75": 4.0,
+    "shots_last_10m_low_q25": 2.0,
+    "xg_last_10m_high_q75": 0.44782058242707923,
+    "xg_last_10m_low_q25": 0.087493686005473,
+    "momentum_last_10m_avg_high_q75": 17.75,
+    "momentum_last_10m_avg_low_q25": -13.65
+  },
+  "row_count": 380,
+  "target_baselines": {
+    "goal_60_70": {
+      "positive_event": "goal",
+      "window": "60-70",
+      "n": 380,
+      "positives": 102,
+      "positive_rate": 0.26842105263157895
+    },
+    "goal_60_75": {
+      "positive_event": "goal",
+      "window": "60-75",
+      "n": 380,
+      "positives": 141,
+      "positive_rate": 0.37105263157894736
+    },
+    "goal_60_80": {
+      "positive_event": "goal",
+      "window": "60-80",
+      "n": 380,
+      "positives": 174,
+      "positive_rate": 0.45789473684210524
+    },
+    "goal_65_80": {
+      "positive_event": "goal",
+      "window": "65-80",
+      "n": 380,
+      "positives": 140,
+      "positive_rate": 0.3684210526315789
+    },
+    "no_goal_60_75": {
+      "positive_event": "no_goal",
+      "window": "60-75",
+      "n": 380,
+      "positives": 239,
+      "positive_rate": 0.6289473684210526
+    },
+    "no_goal_60_80": {
+      "positive_event": "no_goal",
+      "window": "60-80",
+      "n": 380,
+      "positives": 206,
+      "positive_rate": 0.5421052631578948
+    }
+  },
+  "results": [
+    {
+      "signal_group": "Hot",
+      "signal": "shots_last_10m_high",
+      "target": "goal_60_70",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-70",
+      "description": "Volume alto de finalizacoes nos 10 minutos anteriores ao cutoff 60.",
+      "n": 122,
+      "positives": 31,
+      "negatives": 91,
+      "positive_rate": 0.2540983606557377,
+      "baseline_n": 380,
+      "baseline_positives": 102,
+      "baseline_rate": 0.26842105263157895,
+      "diff_pp": -1.432269197584124,
+      "odds_ratio": 0.8972295310323479,
+      "odds_ratio_fisher": 0.8972295310323479,
+      "ci95_low": 0.5492808345192149,
+      "ci95_high": 1.4655906064175004,
+      "p_value": 0.7109866131250315,
+      "table": [
+        [
+          31,
+          91
+        ],
+        [
+          71,
+          187
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.2540983606557377,
+            "diff_pp": -1.432269197584124,
+            "odds_ratio": 0.8972295310323479
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Tottenham Hotspur",
+        "top_team_matches": 18,
+        "top_team_share": 0.14754098360655737
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "shots_last_10m_high",
+      "target": "goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-75",
+      "description": "Volume alto de finalizacoes nos 10 minutos anteriores ao cutoff 60.",
+      "n": 122,
+      "positives": 44,
+      "negatives": 78,
+      "positive_rate": 0.36065573770491804,
+      "baseline_n": 380,
+      "baseline_positives": 141,
+      "baseline_rate": 0.37105263157894736,
+      "diff_pp": -1.0396893874029312,
+      "odds_ratio": 0.936293946603225,
+      "odds_ratio_fisher": 0.936293946603225,
+      "ci95_low": 0.5986562245635066,
+      "ci95_high": 1.464356868727164,
+      "p_value": 0.8204908882123004,
+      "table": [
+        [
+          44,
+          78
+        ],
+        [
+          97,
+          161
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.36065573770491804,
+            "diff_pp": -1.0396893874029312,
+            "odds_ratio": 0.936293946603225
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Tottenham Hotspur",
+        "top_team_matches": 18,
+        "top_team_share": 0.14754098360655737
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "shots_last_10m_high",
+      "target": "goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-80",
+      "description": "Volume alto de finalizacoes nos 10 minutos anteriores ao cutoff 60.",
+      "n": 122,
+      "positives": 58,
+      "negatives": 64,
+      "positive_rate": 0.47540983606557374,
+      "baseline_n": 380,
+      "baseline_positives": 174,
+      "baseline_rate": 0.45789473684210524,
+      "diff_pp": 1.75150992234685,
+      "odds_ratio": 1.109375,
+      "odds_ratio_fisher": 1.109375,
+      "ci95_low": 0.720378223187175,
+      "ci95_high": 1.7084260059666259,
+      "p_value": 0.6601968881576389,
+      "table": [
+        [
+          58,
+          64
+        ],
+        [
+          116,
+          142
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.47540983606557374,
+            "diff_pp": 1.75150992234685,
+            "odds_ratio": 1.109375
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Tottenham Hotspur",
+        "top_team_matches": 18,
+        "top_team_share": 0.14754098360655737
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "shots_last_10m_high",
+      "target": "goal_65_80",
+      "target_priority": "secundario",
+      "target_positive_event": "goal",
+      "window": "65-80",
+      "description": "Volume alto de finalizacoes nos 10 minutos anteriores ao cutoff 60.",
+      "n": 122,
+      "positives": 50,
+      "negatives": 72,
+      "positive_rate": 0.4098360655737705,
+      "baseline_n": 380,
+      "baseline_positives": 140,
+      "baseline_rate": 0.3684210526315789,
+      "diff_pp": 4.141501294219157,
+      "odds_ratio": 1.2962962962962963,
+      "odds_ratio_fisher": 1.2962962962962963,
+      "ci95_low": 0.8328410822922891,
+      "ci95_high": 2.017652735341119,
+      "p_value": 0.2568429298758348,
+      "table": [
+        [
+          50,
+          72
+        ],
+        [
+          90,
+          168
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.4098360655737705,
+            "diff_pp": 4.141501294219157,
+            "odds_ratio": 1.2962962962962963
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Tottenham Hotspur",
+        "top_team_matches": 18,
+        "top_team_share": 0.14754098360655737
+      },
+      "coherent_interpretation": true,
+      "classification": "OBSERVAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "xg_last_10m_high",
+      "target": "goal_60_70",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-70",
+      "description": "xG alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 22,
+      "negatives": 73,
+      "positive_rate": 0.23157894736842105,
+      "baseline_n": 380,
+      "baseline_positives": 102,
+      "baseline_rate": 0.26842105263157895,
+      "diff_pp": -3.68421052631579,
+      "odds_ratio": 0.7722602739726028,
+      "odds_ratio_fisher": 0.7722602739726028,
+      "ci95_low": 0.44903543243527055,
+      "ci95_high": 1.3281489336416894,
+      "p_value": 0.4226467179943131,
+      "table": [
+        [
+          22,
+          73
+        ],
+        [
+          80,
+          205
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.23157894736842105,
+            "diff_pp": -3.68421052631579,
+            "odds_ratio": 0.7722602739726028
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Southampton",
+        "top_team_matches": 13,
+        "top_team_share": 0.1368421052631579
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "xg_last_10m_high",
+      "target": "goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-75",
+      "description": "xG alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 34,
+      "negatives": 61,
+      "positive_rate": 0.35789473684210527,
+      "baseline_n": 380,
+      "baseline_positives": 141,
+      "baseline_rate": 0.37105263157894736,
+      "diff_pp": -1.315789473684209,
+      "odds_ratio": 0.9272253715336295,
+      "odds_ratio_fisher": 0.9272253715336295,
+      "ci95_low": 0.5719376047318157,
+      "ci95_high": 1.5032179778051433,
+      "p_value": 0.8069209286080353,
+      "table": [
+        [
+          34,
+          61
+        ],
+        [
+          107,
+          178
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.35789473684210527,
+            "diff_pp": -1.315789473684209,
+            "odds_ratio": 0.9272253715336295
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Southampton",
+        "top_team_matches": 13,
+        "top_team_share": 0.1368421052631579
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "xg_last_10m_high",
+      "target": "goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-80",
+      "description": "xG alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 46,
+      "negatives": 49,
+      "positive_rate": 0.4842105263157895,
+      "baseline_n": 380,
+      "baseline_positives": 174,
+      "baseline_rate": 0.45789473684210524,
+      "diff_pp": 2.631578947368424,
+      "odds_ratio": 1.1514668367346939,
+      "odds_ratio_fisher": 1.1514668367346939,
+      "ci95_low": 0.7231450870080783,
+      "ci95_high": 1.8334852852080439,
+      "p_value": 0.5549267556622453,
+      "table": [
+        [
+          46,
+          49
+        ],
+        [
+          128,
+          157
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.4842105263157895,
+            "diff_pp": 2.631578947368424,
+            "odds_ratio": 1.1514668367346939
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Southampton",
+        "top_team_matches": 13,
+        "top_team_share": 0.1368421052631579
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "xg_last_10m_high",
+      "target": "goal_65_80",
+      "target_priority": "secundario",
+      "target_positive_event": "goal",
+      "window": "65-80",
+      "description": "xG alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 38,
+      "negatives": 57,
+      "positive_rate": 0.4,
+      "baseline_n": 380,
+      "baseline_positives": 140,
+      "baseline_rate": 0.3684210526315789,
+      "diff_pp": 3.1578947368421098,
+      "odds_ratio": 1.196078431372549,
+      "odds_ratio_fisher": 1.196078431372549,
+      "ci95_low": 0.7426351009577099,
+      "ci95_high": 1.926388359706801,
+      "p_value": 0.46400643283346216,
+      "table": [
+        [
+          38,
+          57
+        ],
+        [
+          102,
+          183
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.4,
+            "diff_pp": 3.1578947368421098,
+            "odds_ratio": 1.196078431372549
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Southampton",
+        "top_team_matches": 13,
+        "top_team_share": 0.1368421052631579
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_trend_last_10m_positive",
+      "target": "goal_60_70",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-70",
+      "description": "Tendencia positiva de momentum nos 10 minutos anteriores ao cutoff 60.",
+      "n": 182,
+      "positives": 56,
+      "negatives": 126,
+      "positive_rate": 0.3076923076923077,
+      "baseline_n": 380,
+      "baseline_positives": 102,
+      "baseline_rate": 0.26842105263157895,
+      "diff_pp": 3.9271255060728762,
+      "odds_ratio": 1.4685990338164252,
+      "odds_ratio_fisher": 1.4685990338164252,
+      "ci95_low": 0.9308800246836737,
+      "ci95_high": 2.316929212074825,
+      "p_value": 0.10567158521370917,
+      "table": [
+        [
+          56,
+          126
+        ],
+        [
+          46,
+          152
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.3076923076923077,
+            "diff_pp": 3.9271255060728762,
+            "odds_ratio": 1.4685990338164252
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Manchester United",
+        "top_team_matches": 21,
+        "top_team_share": 0.11538461538461539
+      },
+      "coherent_interpretation": true,
+      "classification": "OBSERVAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_trend_last_10m_positive",
+      "target": "goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-75",
+      "description": "Tendencia positiva de momentum nos 10 minutos anteriores ao cutoff 60.",
+      "n": 182,
+      "positives": 75,
+      "negatives": 107,
+      "positive_rate": 0.41208791208791207,
+      "baseline_n": 380,
+      "baseline_positives": 141,
+      "baseline_rate": 0.37105263157894736,
+      "diff_pp": 4.103528050896471,
+      "odds_ratio": 1.4018691588785046,
+      "odds_ratio_fisher": 1.4018691588785046,
+      "ci95_low": 0.9232589030631275,
+      "ci95_high": 2.1285872598624196,
+      "p_value": 0.13663113238529834,
+      "table": [
+        [
+          75,
+          107
+        ],
+        [
+          66,
+          132
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.41208791208791207,
+            "diff_pp": 4.103528050896471,
+            "odds_ratio": 1.4018691588785046
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Manchester United",
+        "top_team_matches": 21,
+        "top_team_share": 0.11538461538461539
+      },
+      "coherent_interpretation": true,
+      "classification": "OBSERVAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_trend_last_10m_positive",
+      "target": "goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-80",
+      "description": "Tendencia positiva de momentum nos 10 minutos anteriores ao cutoff 60.",
+      "n": 182,
+      "positives": 86,
+      "negatives": 96,
+      "positive_rate": 0.4725274725274725,
+      "baseline_n": 380,
+      "baseline_positives": 174,
+      "baseline_rate": 0.45789473684210524,
+      "diff_pp": 1.463273568536727,
+      "odds_ratio": 1.1197916666666667,
+      "odds_ratio_fisher": 1.1197916666666667,
+      "ci95_low": 0.7475773448891769,
+      "ci95_high": 1.6773292894824123,
+      "p_value": 0.6072797131883598,
+      "table": [
+        [
+          86,
+          96
+        ],
+        [
+          88,
+          110
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.4725274725274725,
+            "diff_pp": 1.463273568536727,
+            "odds_ratio": 1.1197916666666667
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Manchester United",
+        "top_team_matches": 21,
+        "top_team_share": 0.11538461538461539
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_trend_last_10m_positive",
+      "target": "goal_65_80",
+      "target_priority": "secundario",
+      "target_positive_event": "goal",
+      "window": "65-80",
+      "description": "Tendencia positiva de momentum nos 10 minutos anteriores ao cutoff 60.",
+      "n": 182,
+      "positives": 71,
+      "negatives": 111,
+      "positive_rate": 0.3901098901098901,
+      "baseline_n": 380,
+      "baseline_positives": 140,
+      "baseline_rate": 0.3684210526315789,
+      "diff_pp": 2.1688837478311185,
+      "odds_ratio": 1.1958480219349785,
+      "odds_ratio_fisher": 1.1958480219349785,
+      "ci95_low": 0.7878222963691841,
+      "ci95_high": 1.815196774902724,
+      "p_value": 0.45630392019946875,
+      "table": [
+        [
+          71,
+          111
+        ],
+        [
+          69,
+          129
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.3901098901098901,
+            "diff_pp": 2.1688837478311185,
+            "odds_ratio": 1.1958480219349785
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Manchester United",
+        "top_team_matches": 21,
+        "top_team_share": 0.11538461538461539
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_last_10m_avg_high",
+      "target": "goal_60_70",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-70",
+      "description": "Momentum medio alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 25,
+      "negatives": 70,
+      "positive_rate": 0.2631578947368421,
+      "baseline_n": 380,
+      "baseline_positives": 102,
+      "baseline_rate": 0.26842105263157895,
+      "diff_pp": -0.5263157894736858,
+      "odds_ratio": 0.9647495361781077,
+      "odds_ratio_fisher": 0.9647495361781077,
+      "ci95_low": 0.5700087441643653,
+      "ci95_high": 1.632855069478529,
+      "p_value": 1.0,
+      "table": [
+        [
+          25,
+          70
+        ],
+        [
+          77,
+          208
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.2631578947368421,
+            "diff_pp": -0.5263157894736858,
+            "odds_ratio": 0.9647495361781077
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 14,
+        "top_team_share": 0.14736842105263157
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_last_10m_avg_high",
+      "target": "goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-75",
+      "description": "Momentum medio alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 32,
+      "negatives": 63,
+      "positive_rate": 0.3368421052631579,
+      "baseline_n": 380,
+      "baseline_positives": 141,
+      "baseline_rate": 0.37105263157894736,
+      "diff_pp": -3.421052631578947,
+      "odds_ratio": 0.8201543614387651,
+      "odds_ratio_fisher": 0.8201543614387651,
+      "ci95_low": 0.5034772802872584,
+      "ci95_high": 1.3360149562324781,
+      "p_value": 0.4632267854404445,
+      "table": [
+        [
+          32,
+          63
+        ],
+        [
+          109,
+          176
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.3368421052631579,
+            "diff_pp": -3.421052631578947,
+            "odds_ratio": 0.8201543614387651
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 14,
+        "top_team_share": 0.14736842105263157
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_last_10m_avg_high",
+      "target": "goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-80",
+      "description": "Momentum medio alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 39,
+      "negatives": 56,
+      "positive_rate": 0.4105263157894737,
+      "baseline_n": 380,
+      "baseline_positives": 174,
+      "baseline_rate": 0.45789473684210524,
+      "diff_pp": -4.736842105263156,
+      "odds_ratio": 0.7738095238095238,
+      "odds_ratio_fisher": 0.7738095238095238,
+      "ci95_low": 0.48349409728883835,
+      "ci95_high": 1.2384456862988578,
+      "p_value": 0.34156283436961327,
+      "table": [
+        [
+          39,
+          56
+        ],
+        [
+          135,
+          150
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.4105263157894737,
+            "diff_pp": -4.736842105263156,
+            "odds_ratio": 0.7738095238095238
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 14,
+        "top_team_share": 0.14736842105263157
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "momentum_last_10m_avg_high",
+      "target": "goal_65_80",
+      "target_priority": "secundario",
+      "target_positive_event": "goal",
+      "window": "65-80",
+      "description": "Momentum medio alto nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 32,
+      "negatives": 63,
+      "positive_rate": 0.3368421052631579,
+      "baseline_n": 380,
+      "baseline_positives": 140,
+      "baseline_rate": 0.3684210526315789,
+      "diff_pp": -3.157894736842104,
+      "odds_ratio": 0.8324514991181657,
+      "odds_ratio_fisher": 0.8324514991181657,
+      "ci95_low": 0.5109199871323943,
+      "ci95_high": 1.3563288104532722,
+      "p_value": 0.5393769751265824,
+      "table": [
+        [
+          32,
+          63
+        ],
+        [
+          108,
+          177
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.3368421052631579,
+            "diff_pp": -3.157894736842104,
+            "odds_ratio": 0.8324514991181657
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 14,
+        "top_team_share": 0.14736842105263157
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "hot_game_2of4",
+      "target": "goal_60_70",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-70",
+      "description": "Jogo quente com pelo menos 2 dos 4 sinais H8 ativos.",
+      "n": 148,
+      "positives": 39,
+      "negatives": 109,
+      "positive_rate": 0.2635135135135135,
+      "baseline_n": 380,
+      "baseline_positives": 102,
+      "baseline_rate": 0.26842105263157895,
+      "diff_pp": -0.49075391180654626,
+      "odds_ratio": 0.9598077763215378,
+      "odds_ratio_fisher": 0.9598077763215378,
+      "ci95_low": 0.6020927681688097,
+      "ci95_high": 1.5300482187970874,
+      "p_value": 0.9058346662369012,
+      "table": [
+        [
+          39,
+          109
+        ],
+        [
+          63,
+          169
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.2540983606557377,
+            "diff_pp": -1.432269197584124,
+            "odds_ratio": 0.8972295310323479
+          },
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.23157894736842105,
+            "diff_pp": -3.68421052631579,
+            "odds_ratio": 0.7722602739726028
+          },
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.3076923076923077,
+            "diff_pp": 3.9271255060728762,
+            "odds_ratio": 1.4685990338164252
+          },
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.2631578947368421,
+            "diff_pp": -0.5263157894736858,
+            "odds_ratio": 0.9647495361781077
+          }
+        ],
+        "superior_to_components": false
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 25,
+        "top_team_share": 0.16891891891891891
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "hot_game_2of4",
+      "target": "goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-75",
+      "description": "Jogo quente com pelo menos 2 dos 4 sinais H8 ativos.",
+      "n": 148,
+      "positives": 53,
+      "negatives": 95,
+      "positive_rate": 0.3581081081081081,
+      "baseline_n": 380,
+      "baseline_positives": 141,
+      "baseline_rate": 0.37105263157894736,
+      "diff_pp": -1.2944523470839242,
+      "odds_ratio": 0.9129186602870814,
+      "odds_ratio_fisher": 0.9129186602870814,
+      "ci95_low": 0.5950026798692388,
+      "ci95_high": 1.400700380851254,
+      "p_value": 0.7440758649777626,
+      "table": [
+        [
+          53,
+          95
+        ],
+        [
+          88,
+          144
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.36065573770491804,
+            "diff_pp": -1.0396893874029312,
+            "odds_ratio": 0.936293946603225
+          },
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.35789473684210527,
+            "diff_pp": -1.315789473684209,
+            "odds_ratio": 0.9272253715336295
+          },
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.41208791208791207,
+            "diff_pp": 4.103528050896471,
+            "odds_ratio": 1.4018691588785046
+          },
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.3368421052631579,
+            "diff_pp": -3.421052631578947,
+            "odds_ratio": 0.8201543614387651
+          }
+        ],
+        "superior_to_components": false
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 25,
+        "top_team_share": 0.16891891891891891
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "hot_game_2of4",
+      "target": "goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "goal",
+      "window": "60-80",
+      "description": "Jogo quente com pelo menos 2 dos 4 sinais H8 ativos.",
+      "n": 148,
+      "positives": 68,
+      "negatives": 80,
+      "positive_rate": 0.4594594594594595,
+      "baseline_n": 380,
+      "baseline_positives": 174,
+      "baseline_rate": 0.45789473684210524,
+      "diff_pp": 0.15647226173542417,
+      "odds_ratio": 1.010377358490566,
+      "odds_ratio_fisher": 1.010377358490566,
+      "ci95_low": 0.6679826195050416,
+      "ci95_high": 1.528276899340296,
+      "p_value": 1.0,
+      "table": [
+        [
+          68,
+          80
+        ],
+        [
+          106,
+          126
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.47540983606557374,
+            "diff_pp": 1.75150992234685,
+            "odds_ratio": 1.109375
+          },
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.4842105263157895,
+            "diff_pp": 2.631578947368424,
+            "odds_ratio": 1.1514668367346939
+          },
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.4725274725274725,
+            "diff_pp": 1.463273568536727,
+            "odds_ratio": 1.1197916666666667
+          },
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.4105263157894737,
+            "diff_pp": -4.736842105263156,
+            "odds_ratio": 0.7738095238095238
+          }
+        ],
+        "superior_to_components": false
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 25,
+        "top_team_share": 0.16891891891891891
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Hot",
+      "signal": "hot_game_2of4",
+      "target": "goal_65_80",
+      "target_priority": "secundario",
+      "target_positive_event": "goal",
+      "window": "65-80",
+      "description": "Jogo quente com pelo menos 2 dos 4 sinais H8 ativos.",
+      "n": 148,
+      "positives": 57,
+      "negatives": 91,
+      "positive_rate": 0.38513513513513514,
+      "baseline_n": 380,
+      "baseline_positives": 140,
+      "baseline_rate": 0.3684210526315789,
+      "diff_pp": 1.6714082503556216,
+      "odds_ratio": 1.1244538593936184,
+      "odds_ratio_fisher": 1.1244538593936184,
+      "ci95_low": 0.7342244848492444,
+      "ci95_high": 1.7220843325114896,
+      "p_value": 0.6627919550352601,
+      "table": [
+        [
+          57,
+          91
+        ],
+        [
+          83,
+          149
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_high",
+            "n": 122,
+            "positive_rate": 0.4098360655737705,
+            "diff_pp": 4.141501294219157,
+            "odds_ratio": 1.2962962962962963
+          },
+          {
+            "component": "xg_last_10m_high",
+            "n": 95,
+            "positive_rate": 0.4,
+            "diff_pp": 3.1578947368421098,
+            "odds_ratio": 1.196078431372549
+          },
+          {
+            "component": "momentum_trend_last_10m_positive",
+            "n": 182,
+            "positive_rate": 0.3901098901098901,
+            "diff_pp": 2.1688837478311185,
+            "odds_ratio": 1.1958480219349785
+          },
+          {
+            "component": "momentum_last_10m_avg_high",
+            "n": 95,
+            "positive_rate": 0.3368421052631579,
+            "diff_pp": -3.157894736842104,
+            "odds_ratio": 0.8324514991181657
+          }
+        ],
+        "superior_to_components": false
+      },
+      "team_concentration": {
+        "top_team": "Brentford",
+        "top_team_matches": 25,
+        "top_team_share": 0.16891891891891891
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "shots_last_10m_low",
+      "target": "no_goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-75",
+      "description": "Volume baixo de finalizacoes nos 10 minutos anteriores ao cutoff 60.",
+      "n": 166,
+      "positives": 108,
+      "negatives": 58,
+      "positive_rate": 0.6506024096385542,
+      "baseline_n": 380,
+      "baseline_positives": 239,
+      "baseline_rate": 0.6289473684210526,
+      "diff_pp": 2.1655041217501614,
+      "odds_ratio": 1.1797841537246643,
+      "odds_ratio_fisher": 1.1797841537246643,
+      "ci95_low": 0.7742392345782069,
+      "ci95_high": 1.7977526676726763,
+      "p_value": 0.455523932334757,
+      "table": [
+        [
+          108,
+          58
+        ],
+        [
+          131,
+          83
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_low",
+            "n": 166,
+            "positive_rate": 0.6506024096385542,
+            "diff_pp": 2.1655041217501614,
+            "odds_ratio": 1.1797841537246643
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Wolverhampton",
+        "top_team_matches": 24,
+        "top_team_share": 0.14457831325301204
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "shots_last_10m_low",
+      "target": "no_goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-80",
+      "description": "Volume baixo de finalizacoes nos 10 minutos anteriores ao cutoff 60.",
+      "n": 166,
+      "positives": 91,
+      "negatives": 75,
+      "positive_rate": 0.5481927710843374,
+      "baseline_n": 380,
+      "baseline_positives": 206,
+      "baseline_rate": 0.5421052631578948,
+      "diff_pp": 0.6087507926442637,
+      "odds_ratio": 1.044521739130435,
+      "odds_ratio_fisher": 1.044521739130435,
+      "ci95_low": 0.6952824104870304,
+      "ci95_high": 1.5691834671206888,
+      "p_value": 0.8364378998332749,
+      "table": [
+        [
+          91,
+          75
+        ],
+        [
+          115,
+          99
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_low",
+            "n": 166,
+            "positive_rate": 0.5481927710843374,
+            "diff_pp": 0.6087507926442637,
+            "odds_ratio": 1.044521739130435
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Wolverhampton",
+        "top_team_matches": 24,
+        "top_team_share": 0.14457831325301204
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "xg_last_10m_low",
+      "target": "no_goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-75",
+      "description": "xG baixo nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 60,
+      "negatives": 35,
+      "positive_rate": 0.631578947368421,
+      "baseline_n": 380,
+      "baseline_positives": 239,
+      "baseline_rate": 0.6289473684210526,
+      "diff_pp": 0.2631578947368429,
+      "odds_ratio": 1.0151636073423782,
+      "odds_ratio_fisher": 1.0151636073423782,
+      "ci95_low": 0.6274546371427738,
+      "ci95_high": 1.6424408852330987,
+      "p_value": 1.0,
+      "table": [
+        [
+          60,
+          35
+        ],
+        [
+          179,
+          106
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "xg_last_10m_low",
+            "n": 95,
+            "positive_rate": 0.631578947368421,
+            "diff_pp": 0.2631578947368429,
+            "odds_ratio": 1.0151636073423782
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Everton",
+        "top_team_matches": 13,
+        "top_team_share": 0.1368421052631579
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "xg_last_10m_low",
+      "target": "no_goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-80",
+      "description": "xG baixo nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 54,
+      "negatives": 41,
+      "positive_rate": 0.5684210526315789,
+      "baseline_n": 380,
+      "baseline_positives": 206,
+      "baseline_rate": 0.5421052631578948,
+      "diff_pp": 2.631578947368418,
+      "odds_ratio": 1.1524390243902438,
+      "odds_ratio_fisher": 1.1524390243902438,
+      "ci95_low": 0.7217404392296823,
+      "ci95_high": 1.8401569771468569,
+      "p_value": 0.6345225836619002,
+      "table": [
+        [
+          54,
+          41
+        ],
+        [
+          152,
+          133
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "xg_last_10m_low",
+            "n": 95,
+            "positive_rate": 0.5684210526315789,
+            "diff_pp": 2.631578947368418,
+            "odds_ratio": 1.1524390243902438
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Everton",
+        "top_team_matches": 13,
+        "top_team_share": 0.1368421052631579
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "momentum_trend_last_10m_non_positive",
+      "target": "no_goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-75",
+      "description": "Tendencia de momentum nao positiva nos 10 minutos anteriores ao cutoff 60.",
+      "n": 197,
+      "positives": 131,
+      "negatives": 66,
+      "positive_rate": 0.6649746192893401,
+      "baseline_n": 380,
+      "baseline_positives": 239,
+      "baseline_rate": 0.6289473684210526,
+      "diff_pp": 3.602725086828751,
+      "odds_ratio": 1.3783670033670035,
+      "odds_ratio_fisher": 1.3783670033670035,
+      "ci95_low": 0.9079004544072777,
+      "ci95_high": 2.092625448911443,
+      "p_value": 0.13813383528044998,
+      "table": [
+        [
+          131,
+          66
+        ],
+        [
+          108,
+          75
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_trend_last_10m_non_positive",
+            "n": 197,
+            "positive_rate": 0.6649746192893401,
+            "diff_pp": 3.602725086828751,
+            "odds_ratio": 1.3783670033670035
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Brighton & Hove Albion",
+        "top_team_matches": 27,
+        "top_team_share": 0.13705583756345177
+      },
+      "coherent_interpretation": true,
+      "classification": "OBSERVAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "momentum_trend_last_10m_non_positive",
+      "target": "no_goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-80",
+      "description": "Tendencia de momentum nao positiva nos 10 minutos anteriores ao cutoff 60.",
+      "n": 197,
+      "positives": 109,
+      "negatives": 88,
+      "positive_rate": 0.5532994923857868,
+      "baseline_n": 380,
+      "baseline_positives": 206,
+      "baseline_rate": 0.5421052631578948,
+      "diff_pp": 1.1194229227892039,
+      "odds_ratio": 1.0981724461105904,
+      "odds_ratio_fisher": 1.0981724461105904,
+      "ci95_low": 0.73322787810031,
+      "ci95_high": 1.6447584133339948,
+      "p_value": 0.6808495245510475,
+      "table": [
+        [
+          109,
+          88
+        ],
+        [
+          97,
+          86
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_trend_last_10m_non_positive",
+            "n": 197,
+            "positive_rate": 0.5532994923857868,
+            "diff_pp": 1.1194229227892039,
+            "odds_ratio": 1.0981724461105904
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Brighton & Hove Albion",
+        "top_team_matches": 27,
+        "top_team_share": 0.13705583756345177
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "momentum_last_10m_avg_low",
+      "target": "no_goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-75",
+      "description": "Momentum medio baixo nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 54,
+      "negatives": 41,
+      "positive_rate": 0.5684210526315789,
+      "baseline_n": 380,
+      "baseline_positives": 239,
+      "baseline_rate": 0.6289473684210526,
+      "diff_pp": -6.052631578947365,
+      "odds_ratio": 0.7119314436387607,
+      "odds_ratio_fisher": 0.7119314436387607,
+      "ci95_low": 0.44348962947908854,
+      "ci95_high": 1.1428595997541107,
+      "p_value": 0.17781218717446634,
+      "table": [
+        [
+          54,
+          41
+        ],
+        [
+          185,
+          100
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_last_10m_avg_low",
+            "n": 95,
+            "positive_rate": 0.5684210526315789,
+            "diff_pp": -6.052631578947365,
+            "odds_ratio": 0.7119314436387607
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 14,
+        "top_team_share": 0.14736842105263157
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "momentum_last_10m_avg_low",
+      "target": "no_goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-80",
+      "description": "Momentum medio baixo nos 10 minutos anteriores ao cutoff 60.",
+      "n": 95,
+      "positives": 45,
+      "negatives": 50,
+      "positive_rate": 0.47368421052631576,
+      "baseline_n": 380,
+      "baseline_positives": 206,
+      "baseline_rate": 0.5421052631578948,
+      "diff_pp": -6.842105263157899,
+      "odds_ratio": 0.6931677018633541,
+      "odds_ratio_fisher": 0.6931677018633541,
+      "ci95_low": 0.4350208079974868,
+      "ci95_high": 1.104502253853796,
+      "p_value": 0.12452824191937373,
+      "table": [
+        [
+          45,
+          50
+        ],
+        [
+          161,
+          124
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "momentum_last_10m_avg_low",
+            "n": 95,
+            "positive_rate": 0.47368421052631576,
+            "diff_pp": -6.842105263157899,
+            "odds_ratio": 0.6931677018633541
+          }
+        ],
+        "superior_to_components": null
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 14,
+        "top_team_share": 0.14736842105263157
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "cold_game_2of4",
+      "target": "no_goal_60_75",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-75",
+      "description": "Jogo morno com pelo menos 2 dos 4 sinais frios ativos.",
+      "n": 170,
+      "positives": 112,
+      "negatives": 58,
+      "positive_rate": 0.6588235294117647,
+      "baseline_n": 380,
+      "baseline_positives": 239,
+      "baseline_rate": 0.6289473684210526,
+      "diff_pp": 2.987616099071211,
+      "odds_ratio": 1.2620146619603585,
+      "odds_ratio_fisher": 1.2620146619603585,
+      "ci95_low": 0.8285445467347547,
+      "ci95_high": 1.9222635804913326,
+      "p_value": 0.28760146217528976,
+      "table": [
+        [
+          112,
+          58
+        ],
+        [
+          127,
+          83
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_low",
+            "n": 166,
+            "positive_rate": 0.6506024096385542,
+            "diff_pp": 2.1655041217501614,
+            "odds_ratio": 1.1797841537246643
+          },
+          {
+            "component": "xg_last_10m_low",
+            "n": 95,
+            "positive_rate": 0.631578947368421,
+            "diff_pp": 0.2631578947368429,
+            "odds_ratio": 1.0151636073423782
+          },
+          {
+            "component": "momentum_trend_last_10m_non_positive",
+            "n": 197,
+            "positive_rate": 0.6649746192893401,
+            "diff_pp": 3.602725086828751,
+            "odds_ratio": 1.3783670033670035
+          },
+          {
+            "component": "momentum_last_10m_avg_low",
+            "n": 95,
+            "positive_rate": 0.5684210526315789,
+            "diff_pp": -6.052631578947365,
+            "odds_ratio": 0.7119314436387607
+          }
+        ],
+        "superior_to_components": false
+      },
+      "team_concentration": {
+        "top_team": "Everton",
+        "top_team_matches": 22,
+        "top_team_share": 0.12941176470588237
+      },
+      "coherent_interpretation": true,
+      "classification": "OBSERVAR"
+    },
+    {
+      "signal_group": "Cold",
+      "signal": "cold_game_2of4",
+      "target": "no_goal_60_80",
+      "target_priority": "principal",
+      "target_positive_event": "no_goal",
+      "window": "60-80",
+      "description": "Jogo morno com pelo menos 2 dos 4 sinais frios ativos.",
+      "n": 170,
+      "positives": 93,
+      "negatives": 77,
+      "positive_rate": 0.5470588235294118,
+      "baseline_n": 380,
+      "baseline_positives": 206,
+      "baseline_rate": 0.5421052631578948,
+      "diff_pp": 0.4953560371517063,
+      "odds_ratio": 1.0367773819101254,
+      "odds_ratio_fisher": 1.0367773819101254,
+      "ci95_low": 0.6908467745448,
+      "ci95_high": 1.5559272754058553,
+      "p_value": 0.9176011675249081,
+      "table": [
+        [
+          93,
+          77
+        ],
+        [
+          113,
+          97
+        ]
+      ],
+      "component_comparison": {
+        "components": [
+          {
+            "component": "shots_last_10m_low",
+            "n": 166,
+            "positive_rate": 0.5481927710843374,
+            "diff_pp": 0.6087507926442637,
+            "odds_ratio": 1.044521739130435
+          },
+          {
+            "component": "xg_last_10m_low",
+            "n": 95,
+            "positive_rate": 0.5684210526315789,
+            "diff_pp": 2.631578947368418,
+            "odds_ratio": 1.1524390243902438
+          },
+          {
+            "component": "momentum_trend_last_10m_non_positive",
+            "n": 197,
+            "positive_rate": 0.5532994923857868,
+            "diff_pp": 1.1194229227892039,
+            "odds_ratio": 1.0981724461105904
+          },
+          {
+            "component": "momentum_last_10m_avg_low",
+            "n": 95,
+            "positive_rate": 0.47368421052631576,
+            "diff_pp": -6.842105263157899,
+            "odds_ratio": 0.6931677018633541
+          }
+        ],
+        "superior_to_components": false
+      },
+      "team_concentration": {
+        "top_team": "Everton",
+        "top_team_matches": 22,
+        "top_team_share": 0.12941176470588237
+      },
+      "coherent_interpretation": true,
+      "classification": "DESCARTAR"
+    }
+  ],
+  "anti_leakage": {
+    "features_until_cutoff_60": true,
+    "targets_after_cutoff_window": true,
+    "no_final_score_feature": true,
+    "no_full_match_statistics": true,
+    "no_live_odds": true,
+    "no_model": true,
+    "no_baseline": true,
+    "no_backtesting": true,
+    "no_production": true
+  }
+}
