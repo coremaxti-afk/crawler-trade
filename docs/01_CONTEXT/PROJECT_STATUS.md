@@ -11,12 +11,14 @@
 - `match_graph`: 34861 pontos em 379 partidas.
 - `match_shotmap`: 9883 finalizacoes em 380 partidas.
 - `match_source_status`: 760 registros.
+- Football-Data Phase 1: migration aplicada localmente e amostra controlada de 5 linhas importada para validacao.
 
 Ressalvas:
 
 - `big_chances_home` possui 7 nulos.
 - `big_chances_away` possui 7 nulos.
 - `12437015` segue como `known_missing` para `graph.json`, HTTP 404 confirmado.
+- Carga completa Football-Data das 380 partidas ainda nao autorizada.
 
 ---
 
@@ -44,8 +46,8 @@ Ressalvas:
 - Discovery Football-Data EPL 2024/25 concluido com 380 partidas e odds historicas 1X2, Over/Under 2.5 e Asian Handicap.
 - Match mapping Football-Data x SofaScore executado: 380/380 partidas pareadas, 100%, 0 conflitos de placar e 0 ambiguidades relevantes.
 - Especificacao Football-Data Storage/Import criada e revisada pela area Data Engineer / Database.
-- `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md` aprovado pela area Data Engineer / Database para futura decisao CTO sobre schema/migration/importer.
-- Specs documentais Football-Data Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`, sem implementacao executada.
+- Specs documentais Football-Data Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`.
+- Football-Data Fase 1 implementada: migration, importer, dry-run, validacao e teste controlado em 5 linhas.
 
 ---
 
@@ -64,66 +66,6 @@ Documentos:
 - `docs/04_RESEARCH/H8_DATASET_BASELINE_RECOMMENDATION.md`
 - `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`
 
-Artefatos:
-
-- `Analytics/FeatureBuilder/h8_feature_builder_v1.py`
-- `Analytics/DatasetBuilder/h8_dataset_builder_v1.py`
-- `Analytics/BaselineH8/run_baseline_h8_v1.py`
-- `data/processed/datasets/late_goal_dataset_h8_v1_metadata.json`
-- `data/processed/datasets/late_goal_dataset_h8_v1_validation_report.json`
-- `data/processed/reports/baseline_h8_v1_validation_report.json`
-- `data/processed/reports/baseline_h8_v1_metrics_summary.json`
-
-### Feature Builder H8 V1
-
-- Grain: 1 linha por `match_id + cutoff_minute`.
-- Cutoffs: 60, 65, 70 e 75.
-- Linhas: 1520.
-- Partidas unicas: 380.
-- Graph disponivel: 379 partidas.
-- Shotmap disponivel: 380 partidas.
-- Validation status: APTO COM RESSALVAS.
-- Erros: 0.
-
-### Dataset H8 V1
-
-- Linhas: 1520.
-- Partidas unicas: 380.
-- Cutoffs: 60, 65, 70 e 75.
-- Target: `target_late_goal_75`.
-- `match_id + cutoff_minute` duplicados: 0.
-- Target mismatches: 0.
-- Graph known_missing rows: 4.
-- Shotmap available rows: 1520.
-- Validation status: APTO COM RESSALVAS.
-- Erros: 0.
-
-### Baseline H8 V1
-
-Gate confirmado antes da execucao:
-
-- `target_late_goal_75` unido corretamente.
-- Ausencia de target-derived features.
-- Ausencia de colunas full-match.
-- Ausencia de placar final.
-- `graph_known_missing` preservado.
-- 0 duplicatas `match_id + cutoff_minute`.
-
-Resultado:
-
-- Cutoffs avaliados separadamente: 60, 65, 70 e 75.
-- Split temporal por `match_id`, 60/20/20, sem shuffle.
-- Baseline nulo executado.
-- Features usadas: somente whitelist H8.
-- Melhor cutoff: 60.
-- ROC-AUC Test melhor cutoff: 0,5076.
-- PR-AUC Test melhor cutoff: 0,5232.
-- Delta Brier Test: +0,0155 contra o nulo.
-- Delta LogLoss Test: +0,0345 contra o nulo.
-- Melhor feature do melhor cutoff: `momentum_last_10m_avg`.
-- Melhor grupo do melhor cutoff: Graph.
-- Decisao quantitativa: NAO APROVADO.
-
 ---
 
 ## Odds Historicas - Football-Data
@@ -136,6 +78,12 @@ Documentos:
 - `docs/08_DATABASE/FOOTBALL_DATA_SCHEMA_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_MIGRATION_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_IMPORTER_SPEC.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`
+
+Artefatos:
+
+- `database/migrations/20260608_create_football_data_storage_tables.sql`
+- `Importer/FootballData/football_data_importer.py`
 
 Estado:
 
@@ -143,16 +91,15 @@ Estado:
 - CSV publico baixado e analisado: 380 partidas.
 - Mercados encontrados: 1X2, Over/Under 2.5 e Asian Handicap.
 - Odds closing presentes.
-- Odds opening-like/pre-close presentes em colunas Pinnacle/closing sequence.
-- Odds live nao presentes.
+- Odds opening-like/pre-close preservadas como `opening_like`, sem assumir opening odds oficiais.
+- Odds live ausentes.
 - Match mapping exploratorio com SofaScore: 380/380 partidas importaveis pareadas.
-- Taxa de pareamento: 100%.
-- Conflitos de placar: 0.
-- Ambiguidades relevantes: 0.
-- Especificacao Storage/Import criada em `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`.
-- Specs Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`.
-- Parecer Data Engineer / Database: APROVADO COM AJUSTES para especificacao de storage/import; specs tecnicas prontas para revisao CTO.
-- Pronto para decisao CTO sobre futura implementacao de schema, migration e importer.
+- Migration Football-Data aplicada localmente.
+- Dry-run executado com 5 linhas: 5 mapped, 470 odds estimadas, 0 escritas.
+- Teste controlado importado com 5 linhas: 5 staging, 5 mapping, 470 odds, 0 duplicatas, 0 orfaos.
+- Idempotencia validada: reexecucao gerou 0 inserts e 470 updates, mantendo 470 odds totais.
+- Recomendacao atual: APTO PARA REVISAO CTO DA CARGA COMPLETA.
+- Carga completa das 380 partidas segue bloqueada ate aprovacao CTO.
 
 ---
 
@@ -174,14 +121,14 @@ Estado:
 
 1. Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 2. PM decidir se H8 deve ser refinado, combinado com outras familias ou encerrado nesta formulacao.
-3. CTO revisar specs Football-Data em `docs/08_DATABASE/` e decidir se autoriza schema, migration e importer.
-4. Nao iniciar backtesting financeiro.
-5. Nao iniciar producao.
-6. Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
-7. Nao criar importer Football-Data ou alterar schema sem aprovacao CTO.
+3. CTO revisar `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`.
+4. CTO decidir se autoriza carga completa Football-Data das 380 partidas.
+5. Nao iniciar backtesting financeiro.
+6. Nao iniciar producao.
+7. Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY, MATCH MAPPING, STORAGE/IMPORT SPEC E SPECS DOCUMENTAIS DE SCHEMA/MIGRATION/IMPORTER CONSOLIDADOS PARA FUTURA DECISAO CTO. PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS.
+EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 1 FOI IMPLEMENTADA E VALIDADA EM AMOSTRA CONTROLADA DE 5 LINHAS. CARGA COMPLETA DAS 380 PARTIDAS, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE APROVACAO CTO.
