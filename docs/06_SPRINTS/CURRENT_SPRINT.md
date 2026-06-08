@@ -29,6 +29,8 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - [x] Documentar resultado do Baseline H8 V1.
 - [x] Executar discovery Football-Data EPL 2024/25 para odds historicas.
 - [x] Executar match mapping exploratorio Football-Data x SofaScore com 380/380 partidas pareadas.
+- [x] Criar e revisar especificacao Football-Data Storage/Import.
+- [x] Aprovar especificacao Football-Data pela area Data Engineer / Database.
 
 ---
 
@@ -52,6 +54,7 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - `docs/03_SOURCES/ODDS/FOOTBALL_DATA_DISCOVERY_20260607.md`
 - `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md`
 - `docs/03_SOURCES/ODDS/ODDSPORTAL_DISCOVERY_20260607.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`
 
 ---
 
@@ -111,7 +114,9 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Taxa de pareamento: 100%.
 - Conflitos de placar: 0.
 - Ambiguidades relevantes: 0.
-- Recomendacao: avancar para Data Engineer/CTO definir contrato de mapping antes de importer ou schema.
+- Especificacao Storage/Import criada em `docs/08_DATABASE/FOOTBALL_DATA_STORAGE_IMPORT_SPEC.md`.
+- Parecer Data Engineer / Database: APROVADO.
+- Pronto para decisao CTO sobre futura implementacao de schema, migration e importer.
 
 ---
 
@@ -132,11 +137,13 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 - [ ] Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 - [ ] PM decidir se H8 deve ser refinado, combinado com outras familias ou pausado nesta formulacao.
-- [ ] Data Engineer/CTO revisar `docs/03_SOURCES/ODDS/FOOTBALL_DATA_MATCH_MAPPING_20260607.md` e decidir contrato de mapping Football-Data x SofaScore.
+- [ ] CTO decidir se autoriza schema Football-Data.
+- [ ] CTO decidir se autoriza migration Football-Data.
+- [ ] CTO decidir se autoriza importer Football-Data.
 - [ ] Manter backtesting e producao bloqueados.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY E MATCH MAPPING EXPLORATORIOS CONCLUIDOS E RECOMENDACAO DE AVANCAR PARA DATA ENGINEER/CTO. PROXIMA DECISAO E METODOLOGICA/DE DADOS, NAO OPERACIONAL.
+EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA TEM DISCOVERY, MATCH MAPPING E STORAGE/IMPORT SPEC APROVADOS PELA AREA DATA ENGINEER PARA FUTURA DECISAO CTO SOBRE SCHEMA, MIGRATION E IMPORTER. PROXIMA DECISAO E ARQUITETURAL/DE DADOS, NAO OPERACIONAL.
