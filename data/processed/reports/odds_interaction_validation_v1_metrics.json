@@ -1,0 +1,714 @@
+{
+  "primary_results": [
+    {
+      "group": "A - favorite_strength + H8",
+      "interaction": "favorite_strength_high + shots_last_10m_high",
+      "description": "Favorito forte com alta atividade de finalizacao nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 34,
+      "positives": 23,
+      "negatives": 11,
+      "positive_rate": 0.6764705882352942,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": -2.089783281733737,
+      "odds_ratio": 0.898572501878287,
+      "odds_ratio_fisher": 0.898572501878287,
+      "ci95_low": 0.4226044363096894,
+      "ci95_high": 1.910610660367295,
+      "p_value": 0.8452378822191726,
+      "table": [
+        [
+          23,
+          11
+        ],
+        [
+          242,
+          104
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "favorite_strength_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6947368421052632,
+        "dynamic_component": "shots_last_10m_high",
+        "dynamic_component_n": 122,
+        "dynamic_component_rate": 0.7213114754098361,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 8,
+        "top_team_share": 0.23529411764705882
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "A - favorite_strength + H8",
+      "interaction": "favorite_strength_high + momentum_trend_last_10m_positive",
+      "description": "Favorito forte com tendencia positiva de momentum nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 44,
+      "positives": 30,
+      "negatives": 14,
+      "positive_rate": 0.6818181818181818,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": -1.5550239234449759,
+      "odds_ratio": 0.9209726443768997,
+      "odds_ratio_fisher": 0.9209726443768997,
+      "ci95_low": 0.4684988916384963,
+      "ci95_high": 1.810443155423858,
+      "p_value": 0.8618013553107204,
+      "table": [
+        [
+          30,
+          14
+        ],
+        [
+          235,
+          101
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "favorite_strength_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6947368421052632,
+        "dynamic_component": "momentum_trend_last_10m_positive",
+        "dynamic_component_n": 182,
+        "dynamic_component_rate": 0.6703296703296703,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": true,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 11,
+        "top_team_share": 0.25
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "A - favorite_strength + H8",
+      "interaction": "favorite_strength_low + shots_last_10m_high",
+      "description": "Jogo sem favorito forte com alta atividade de finalizacao nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 33,
+      "positives": 24,
+      "negatives": 9,
+      "positive_rate": 0.7272727272727273,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": 2.9904306220095767,
+      "odds_ratio": 1.1728907330567082,
+      "odds_ratio_fisher": 1.1728907330567082,
+      "ci95_low": 0.5273127627543153,
+      "ci95_high": 2.6088362900695685,
+      "p_value": 0.843356961973903,
+      "table": [
+        [
+          24,
+          9
+        ],
+        [
+          241,
+          106
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "favorite_strength_low",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6736842105263158,
+        "dynamic_component": "shots_last_10m_high",
+        "dynamic_component_n": 122,
+        "dynamic_component_rate": 0.7213114754098361,
+        "superior_to_odds_component": true,
+        "superior_to_dynamic_component": true,
+        "superior_to_all_components": true
+      },
+      "team_concentration": {
+        "top_team": "Newcastle United",
+        "top_team_matches": 7,
+        "top_team_share": 0.21212121212121213
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "B - match_balance + H8",
+      "interaction": "match_balance_high + shots_last_10m_high",
+      "description": "Jogo equilibrado pre-jogo com alta atividade de finalizacao nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 30,
+      "positives": 23,
+      "negatives": 7,
+      "positive_rate": 0.7666666666666667,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": 6.929824561403519,
+      "odds_ratio": 1.4663518299881937,
+      "odds_ratio_fisher": 1.4663518299881937,
+      "ci95_low": 0.6106920810515984,
+      "ci95_high": 3.520903178582483,
+      "p_value": 0.5346850349068559,
+      "table": [
+        [
+          23,
+          7
+        ],
+        [
+          242,
+          108
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.7052631578947368,
+        "dynamic_component": "shots_last_10m_high",
+        "dynamic_component_n": 122,
+        "dynamic_component_rate": 0.7213114754098361,
+        "superior_to_odds_component": true,
+        "superior_to_dynamic_component": true,
+        "superior_to_all_components": true
+      },
+      "team_concentration": {
+        "top_team": "Newcastle United",
+        "top_team_matches": 7,
+        "top_team_share": 0.23333333333333334
+      },
+      "classification": "OBSERVAR"
+    },
+    {
+      "group": "B - match_balance + H8",
+      "interaction": "match_balance_high + momentum_trend_last_10m_positive",
+      "description": "Jogo equilibrado pre-jogo com tendencia positiva de momentum nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 44,
+      "positives": 27,
+      "negatives": 17,
+      "positive_rate": 0.6136363636363636,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": -8.373205741626787,
+      "odds_ratio": 0.6539792387543253,
+      "odds_ratio_fisher": 0.6539792387543253,
+      "ci95_low": 0.3411187549361072,
+      "ci95_high": 1.2537828499104207,
+      "p_value": 0.2226073554512287,
+      "table": [
+        [
+          27,
+          17
+        ],
+        [
+          238,
+          98
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.7052631578947368,
+        "dynamic_component": "momentum_trend_last_10m_positive",
+        "dynamic_component_n": 182,
+        "dynamic_component_rate": 0.6703296703296703,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Fulham",
+        "top_team_matches": 8,
+        "top_team_share": 0.18181818181818182
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "B - match_balance + H8",
+      "interaction": "match_balance_low + shots_last_10m_high",
+      "description": "Jogo desequilibrado pre-jogo com alta atividade de finalizacao nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 34,
+      "positives": 23,
+      "negatives": 11,
+      "positive_rate": 0.6764705882352942,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": -2.089783281733737,
+      "odds_ratio": 0.898572501878287,
+      "odds_ratio_fisher": 0.898572501878287,
+      "ci95_low": 0.4226044363096894,
+      "ci95_high": 1.910610660367295,
+      "p_value": 0.8452378822191726,
+      "table": [
+        [
+          23,
+          11
+        ],
+        [
+          242,
+          104
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_low",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6947368421052632,
+        "dynamic_component": "shots_last_10m_high",
+        "dynamic_component_n": 122,
+        "dynamic_component_rate": 0.7213114754098361,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 8,
+        "top_team_share": 0.23529411764705882
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "C - favorite_strength + Match State",
+      "interaction": "favorite_strength_high + empate_aos_cutoff",
+      "description": "Favorito forte em jogo empatado no cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 19,
+      "positives": 12,
+      "negatives": 7,
+      "positive_rate": 0.631578947368421,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": -6.578947368421051,
+      "odds_ratio": 0.7317899491812535,
+      "odds_ratio_fisher": 0.7317899491812535,
+      "ci95_low": 0.2804764948282643,
+      "ci95_high": 1.9093098337905223,
+      "p_value": 0.6089221162047779,
+      "table": [
+        [
+          12,
+          7
+        ],
+        [
+          253,
+          108
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "favorite_strength_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6947368421052632,
+        "dynamic_component": "draw_at_cutoff",
+        "dynamic_component_n": 105,
+        "dynamic_component_rate": 0.6857142857142857,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 6,
+        "top_team_share": 0.3157894736842105
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "C - favorite_strength + Match State",
+      "interaction": "favorite_strength_high + favorito_perdendo_aos_cutoff",
+      "description": "Favorito forte perdendo no cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 13,
+      "positives": 10,
+      "negatives": 3,
+      "positive_rate": 0.7692307692307693,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": 7.186234817813775,
+      "odds_ratio": 1.4640522875816993,
+      "odds_ratio_fisher": 1.4640522875816993,
+      "ci95_low": 0.3953387000642048,
+      "ci95_high": 5.421804393106722,
+      "p_value": 0.7619159907692348,
+      "table": [
+        [
+          10,
+          3
+        ],
+        [
+          255,
+          112
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "favorite_strength_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6947368421052632,
+        "dynamic_component": "favorite_losing_at_cutoff",
+        "dynamic_component_n": 73,
+        "dynamic_component_rate": 0.7671232876712328,
+        "superior_to_odds_component": true,
+        "superior_to_dynamic_component": true,
+        "superior_to_all_components": true
+      },
+      "team_concentration": {
+        "top_team": "Ipswich Town",
+        "top_team_matches": 5,
+        "top_team_share": 0.38461538461538464
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "C - favorite_strength + Match State",
+      "interaction": "favorite_strength_high + favorito_vencendo_por_1_aos_cutoff",
+      "description": "Favorito forte vencendo por 1 no cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 35,
+      "positives": 25,
+      "negatives": 10,
+      "positive_rate": 0.7142857142857143,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": 1.6917293233082775,
+      "odds_ratio": 1.09375,
+      "odds_ratio_fisher": 1.09375,
+      "ci95_low": 0.5072384710185421,
+      "ci95_high": 2.3584351953782896,
+      "p_value": 1.0,
+      "table": [
+        [
+          25,
+          10
+        ],
+        [
+          240,
+          105
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "favorite_strength_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6947368421052632,
+        "dynamic_component": "favorite_winning_by_1_at_cutoff",
+        "dynamic_component_n": 119,
+        "dynamic_component_rate": 0.7058823529411765,
+        "superior_to_odds_component": true,
+        "superior_to_dynamic_component": true,
+        "superior_to_all_components": true
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 8,
+        "top_team_share": 0.22857142857142856
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "D - match_balance + Match State",
+      "interaction": "match_balance_high + empate_aos_cutoff",
+      "description": "Jogo equilibrado pre-jogo e empatado no cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 28,
+      "positives": 20,
+      "negatives": 8,
+      "positive_rate": 0.7142857142857143,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": 1.6917293233082775,
+      "odds_ratio": 1.0918367346938775,
+      "odds_ratio_fisher": 1.0918367346938775,
+      "ci95_low": 0.46629354615875,
+      "ci95_high": 2.5565600576018586,
+      "p_value": 1.0,
+      "table": [
+        [
+          20,
+          8
+        ],
+        [
+          245,
+          107
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.7052631578947368,
+        "dynamic_component": "draw_at_cutoff",
+        "dynamic_component_n": 105,
+        "dynamic_component_rate": 0.6857142857142857,
+        "superior_to_odds_component": true,
+        "superior_to_dynamic_component": true,
+        "superior_to_all_components": true
+      },
+      "team_concentration": {
+        "top_team": "Manchester United",
+        "top_team_matches": 5,
+        "top_team_share": 0.17857142857142858
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "D - match_balance + Match State",
+      "interaction": "match_balance_high + total_goals_until_cutoff_eq_2_or_3",
+      "description": "Jogo equilibrado pre-jogo com 2 ou 3 gols ja marcados no cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 42,
+      "positives": 29,
+      "negatives": 13,
+      "positive_rate": 0.6904761904761905,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": -0.6892230576441061,
+      "odds_ratio": 0.9641460234680573,
+      "odds_ratio_fisher": 0.9641460234680573,
+      "ci95_low": 0.481564449567985,
+      "ci95_high": 1.9303284438940593,
+      "p_value": 1.0,
+      "table": [
+        [
+          29,
+          13
+        ],
+        [
+          236,
+          102
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.7052631578947368,
+        "dynamic_component": "total_goals_2_or_3_at_cutoff",
+        "dynamic_component_n": 159,
+        "dynamic_component_rate": 0.710691823899371,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Brighton & Hove Albion",
+        "top_team_matches": 9,
+        "top_team_share": 0.21428571428571427
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "D - match_balance + Match State",
+      "interaction": "match_balance_low + empate_aos_cutoff",
+      "description": "Jogo desequilibrado pre-jogo e empatado no cutoff.",
+      "cutoff": 60,
+      "target": "goal_after_60",
+      "n": 19,
+      "positives": 12,
+      "negatives": 7,
+      "positive_rate": 0.631578947368421,
+      "baseline_n": 380,
+      "baseline_positives": 265,
+      "baseline_rate": 0.6973684210526315,
+      "diff_pp": -6.578947368421051,
+      "odds_ratio": 0.7317899491812535,
+      "odds_ratio_fisher": 0.7317899491812535,
+      "ci95_low": 0.2804764948282643,
+      "ci95_high": 1.9093098337905223,
+      "p_value": 0.6089221162047779,
+      "table": [
+        [
+          12,
+          7
+        ],
+        [
+          253,
+          108
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_low",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6947368421052632,
+        "dynamic_component": "draw_at_cutoff",
+        "dynamic_component_n": 105,
+        "dynamic_component_rate": 0.6857142857142857,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Liverpool FC",
+        "top_team_matches": 6,
+        "top_team_share": 0.3157894736842105
+      },
+      "classification": "DESCARTAR"
+    }
+  ],
+  "robustness_results": [
+    {
+      "group": "B - match_balance + H8",
+      "interaction": "match_balance_high + shots_last_10m_high",
+      "description": "Jogo equilibrado pre-jogo com alta atividade de finalizacao nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 65,
+      "target": "goal_after_65",
+      "n": 31,
+      "positives": 20,
+      "negatives": 11,
+      "positive_rate": 0.6451612903225806,
+      "baseline_n": 380,
+      "baseline_positives": 247,
+      "baseline_rate": 0.65,
+      "diff_pp": -0.4838709677419395,
+      "odds_ratio": 0.9771726071285542,
+      "odds_ratio_fisher": 0.9771726071285542,
+      "ci95_low": 0.453377746605118,
+      "ci95_high": 2.1061163925058795,
+      "p_value": 1.0,
+      "table": [
+        [
+          20,
+          11
+        ],
+        [
+          227,
+          122
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.6421052631578947,
+        "dynamic_component": "shots_last_10m_high",
+        "dynamic_component_n": 127,
+        "dynamic_component_rate": 0.6535433070866141,
+        "superior_to_odds_component": true,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Crystal Palace",
+        "top_team_matches": 8,
+        "top_team_share": 0.25806451612903225
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "B - match_balance + H8",
+      "interaction": "match_balance_high + shots_last_10m_high",
+      "description": "Jogo equilibrado pre-jogo com alta atividade de finalizacao nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 70,
+      "target": "goal_after_70",
+      "n": 28,
+      "positives": 14,
+      "negatives": 14,
+      "positive_rate": 0.5,
+      "baseline_n": 380,
+      "baseline_positives": 222,
+      "baseline_rate": 0.5842105263157895,
+      "diff_pp": -8.421052631578952,
+      "odds_ratio": 0.6923076923076923,
+      "odds_ratio_fisher": 0.6923076923076923,
+      "ci95_low": 0.3203297465041999,
+      "ci95_high": 1.4962392536408364,
+      "p_value": 0.426188953516095,
+      "table": [
+        [
+          14,
+          14
+        ],
+        [
+          208,
+          144
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.5789473684210527,
+        "dynamic_component": "shots_last_10m_high",
+        "dynamic_component_n": 117,
+        "dynamic_component_rate": 0.5982905982905983,
+        "superior_to_odds_component": false,
+        "superior_to_dynamic_component": false,
+        "superior_to_all_components": false
+      },
+      "team_concentration": {
+        "top_team": "Nottingham Forest",
+        "top_team_matches": 6,
+        "top_team_share": 0.21428571428571427
+      },
+      "classification": "DESCARTAR"
+    },
+    {
+      "group": "B - match_balance + H8",
+      "interaction": "match_balance_high + shots_last_10m_high",
+      "description": "Jogo equilibrado pre-jogo com alta atividade de finalizacao nos 10 minutos anteriores ao cutoff.",
+      "cutoff": 75,
+      "target": "goal_after_75",
+      "n": 26,
+      "positives": 15,
+      "negatives": 11,
+      "positive_rate": 0.5769230769230769,
+      "baseline_n": 380,
+      "baseline_positives": 189,
+      "baseline_rate": 0.49736842105263157,
+      "diff_pp": 7.9554655870445306,
+      "odds_ratio": 1.4106583072100314,
+      "odds_ratio_fisher": 1.4106583072100314,
+      "ci95_low": 0.6303991862209993,
+      "ci95_high": 3.156661530021473,
+      "p_value": 0.42384825680265503,
+      "table": [
+        [
+          15,
+          11
+        ],
+        [
+          174,
+          180
+        ]
+      ],
+      "component_comparison": {
+        "odds_component": "match_balance_high",
+        "odds_component_n": 95,
+        "odds_component_rate": 0.5368421052631579,
+        "dynamic_component": "shots_last_10m_high",
+        "dynamic_component_n": 109,
+        "dynamic_component_rate": 0.5045871559633027,
+        "superior_to_odds_component": true,
+        "superior_to_dynamic_component": true,
+        "superior_to_all_components": true
+      },
+      "team_concentration": {
+        "top_team": "Newcastle United",
+        "top_team_matches": 5,
+        "top_team_share": 0.19230769230769232
+      },
+      "classification": "OBSERVAR"
+    }
+  ],
+  "interactions_selected_for_robustness": [
+    "match_balance_high + shots_last_10m_high"
+  ]
+}
