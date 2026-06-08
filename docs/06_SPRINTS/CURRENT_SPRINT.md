@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem iniciar producao, automacao operacional ou backtesting financeiro. Registrar e validar fontes auxiliares de odds historicas de forma controlada, sem promover carga completa, features, datasets ou producao sem aprovacao.
+Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem iniciar producao, automacao operacional ou backtesting financeiro. Registrar e validar fontes auxiliares de odds historicas de forma controlada, sem promover features, datasets ou producao sem aprovacao.
 
 ---
 
@@ -37,8 +37,12 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - [x] Implementar importer Football-Data Fase 1.
 - [x] Executar dry-run Football-Data com 5 linhas.
 - [x] Executar teste controlado Football-Data com 5 linhas.
-- [x] Validar idempotencia, FKs, contagens, rastreabilidade e mercados.
+- [x] Validar idempotencia, FKs, contagens, rastreabilidade e mercados na Fase 1.
 - [x] Documentar resultado em `FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`.
+- [x] Executar importacao completa Football-Data das 380 partidas.
+- [x] Reexecutar importacao completa para validar idempotencia.
+- [x] Validar contagens finais, orfaos, duplicatas, odds invalidas e agregadores.
+- [x] Documentar resultado em `FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`.
 
 ---
 
@@ -67,6 +71,7 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - `docs/08_DATABASE/FOOTBALL_DATA_MIGRATION_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_IMPORTER_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`
 
 ---
 
@@ -92,7 +97,7 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 ### Football-Data EPL 2024/25
 
 - CSV publico analisado: 380 partidas.
-- Mercados encontrados: 1X2, Over/Under 2.5 e Asian Handicap.
+- Mercados importados: 1X2, Over/Under 2.5 e Asian Handicap.
 - Odds closing presentes.
 - Odds opening-like/pre-close preservadas como `opening_like`, sem assumir opening odds oficiais.
 - Odds live ausentes.
@@ -100,12 +105,15 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Taxa de pareamento: 100%.
 - Conflitos de placar: 0.
 - Ambiguidades relevantes: 0.
-- Migration Football-Data aplicada localmente.
-- Dry-run com 5 linhas: 5 mapped, 470 odds estimadas, 0 escritas.
-- Teste controlado: 5 staging, 5 mapping, 470 odds, 0 duplicatas, 0 orfaos.
-- Idempotencia: reexecucao com 0 inserts, 470 updates, 470 odds totais.
-- Recomendacao: APTO PARA REVISAO CTO DA CARGA COMPLETA.
-- Carga completa das 380 partidas ainda bloqueada.
+- Football-Data staging rows: 380.
+- Football-Data mappings: 380.
+- Football-Data odds: 34280.
+- Duplicatas por grain: 0.
+- Orfaos: 0.
+- Odds invalidas: 0.
+- Idempotencia: reexecucao com 0 inserts, 34280 updates e contagem final estavel.
+- `Max`, `MaxC`, `Avg` e `AvgC` preservados como agregadores distintos.
+- Recomendacao: APTO PARA PROXIMA ETAPA DE DATA ENGINEER / QUANT RESEARCH.
 
 ---
 
@@ -117,9 +125,9 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
 - Nao usar features fora de whitelist aprovada.
 - Nao usar eventos apos cutoff como features.
-- Nao executar carga completa Football-Data sem aprovacao CTO.
-- Nao criar features Football-Data.
-- Nao criar dataset Football-Data.
+- Nao criar features Football-Data sem aprovacao.
+- Nao criar dataset Football-Data sem aprovacao.
+- Nao tratar `opening_like` como opening odds oficial sem auditoria metodologica.
 
 ---
 
@@ -127,12 +135,12 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 - [ ] Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 - [ ] PM decidir se H8 deve ser refinado, combinado com outras familias ou pausado nesta formulacao.
-- [ ] CTO revisar `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`.
-- [ ] CTO decidir se autoriza carga completa Football-Data das 380 partidas.
+- [ ] Data Engineer / Quant Research revisar `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`.
+- [ ] Definir contrato de consumo das odds antes de criar dataset ou features.
 - [ ] Manter backtesting e producao bloqueados.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 1 IMPLEMENTADA E VALIDADA EM AMOSTRA CONTROLADA DE 5 LINHAS. CARGA COMPLETA, DATASETS, FEATURES, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE APROVACAO CTO.
+EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 EXECUTADA LOCALMENTE COM 380 PARTIDAS E 34280 ODDS. FEATURES, DATASETS, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE NOVA AUTORIZACAO.
