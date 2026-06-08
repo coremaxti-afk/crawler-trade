@@ -11,14 +11,15 @@
 - `match_graph`: 34861 pontos em 379 partidas.
 - `match_shotmap`: 9883 finalizacoes em 380 partidas.
 - `match_source_status`: 760 registros.
-- Football-Data Phase 1: migration aplicada localmente e amostra controlada de 5 linhas importada para validacao.
+- Football-Data: 380 staging rows, 380 mappings e 34280 odds importadas localmente.
 
 Ressalvas:
 
 - `big_chances_home` possui 7 nulos.
 - `big_chances_away` possui 7 nulos.
 - `12437015` segue como `known_missing` para `graph.json`, HTTP 404 confirmado.
-- Carga completa Football-Data das 380 partidas ainda nao autorizada.
+- Football-Data `opening_like` nao deve ser tratado automaticamente como opening odds oficial.
+- Football-Data nao contem odds live/in-game.
 
 ---
 
@@ -48,6 +49,7 @@ Ressalvas:
 - Especificacao Football-Data Storage/Import criada e revisada pela area Data Engineer / Database.
 - Specs documentais Football-Data Schema, Migration e Importer consolidadas em `docs/08_DATABASE/`.
 - Football-Data Fase 1 implementada: migration, importer, dry-run, validacao e teste controlado em 5 linhas.
+- Football-Data Fase 2 executada: importacao completa local das 380 partidas e validacao idempotente.
 
 ---
 
@@ -79,6 +81,7 @@ Documentos:
 - `docs/08_DATABASE/FOOTBALL_DATA_MIGRATION_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_IMPORTER_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`
+- `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`
 
 Artefatos:
 
@@ -89,17 +92,19 @@ Estado:
 
 - Fonte avaliada: Football-Data.co.uk EPL 2024/25.
 - CSV publico baixado e analisado: 380 partidas.
-- Mercados encontrados: 1X2, Over/Under 2.5 e Asian Handicap.
+- Mercados importados: 1X2, Over/Under 2.5 e Asian Handicap.
 - Odds closing presentes.
 - Odds opening-like/pre-close preservadas como `opening_like`, sem assumir opening odds oficiais.
 - Odds live ausentes.
-- Match mapping exploratorio com SofaScore: 380/380 partidas importaveis pareadas.
+- Match mapping com SofaScore: 380/380 partidas importaveis pareadas.
 - Migration Football-Data aplicada localmente.
-- Dry-run executado com 5 linhas: 5 mapped, 470 odds estimadas, 0 escritas.
-- Teste controlado importado com 5 linhas: 5 staging, 5 mapping, 470 odds, 0 duplicatas, 0 orfaos.
-- Idempotencia validada: reexecucao gerou 0 inserts e 470 updates, mantendo 470 odds totais.
-- Recomendacao atual: APTO PARA REVISAO CTO DA CARGA COMPLETA.
-- Carga completa das 380 partidas segue bloqueada ate aprovacao CTO.
+- Carga completa executada: 380 staging, 380 mappings, 34280 odds.
+- Idempotencia validada: reexecucao com 0 inserts, 34280 updates e contagem final estavel.
+- Duplicatas por grain: 0.
+- Orfaos: 0.
+- Odds invalidas: 0.
+- `Max`, `MaxC`, `Avg` e `AvgC` preservados como agregadores distintos.
+- Recomendacao atual: APTO PARA PROXIMA ETAPA DE DATA ENGINEER / QUANT RESEARCH.
 
 ---
 
@@ -121,14 +126,14 @@ Estado:
 
 1. Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 2. PM decidir se H8 deve ser refinado, combinado com outras familias ou encerrado nesta formulacao.
-3. CTO revisar `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`.
-4. CTO decidir se autoriza carga completa Football-Data das 380 partidas.
+3. Data Engineer / Quant Research revisar `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`.
+4. Definir contrato de consumo das odds antes de criar dataset ou features.
 5. Nao iniciar backtesting financeiro.
 6. Nao iniciar producao.
-7. Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
+7. Nao tratar `opening_like` como opening odds oficial sem auditoria metodologica.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 1 FOI IMPLEMENTADA E VALIDADA EM AMOSTRA CONTROLADA DE 5 LINHAS. CARGA COMPLETA DAS 380 PARTIDAS, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE APROVACAO CTO.
+EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 FOI EXECUTADA LOCALMENTE COM 380 PARTIDAS, 34280 ODDS, 0 DUPLICATAS, 0 ORFAOS E 0 ODDS INVALIDAS. FEATURES, DATASETS, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE NOVA AUTORIZACAO.
