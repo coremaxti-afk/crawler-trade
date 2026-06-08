@@ -1,0 +1,107 @@
+{
+  "dataset_name": "odds_features_v1",
+  "dataset_version": "v1",
+  "generated_at_utc": "2026-06-08T17:04:50.577672+00:00",
+  "grain": "one row per match_id",
+  "source_tables": [
+    "matches_master",
+    "football_data_odds"
+  ],
+  "source_files": [],
+  "markets_included": [
+    "over_under_2_5",
+    "match_odds_1x2"
+  ],
+  "markets_blocked": [
+    "asian_handicap"
+  ],
+  "odds_types_included": [
+    "closing"
+  ],
+  "row_count": 380,
+  "unique_matches": 380,
+  "favorite_side_threshold": 0.03,
+  "feature_columns": [
+    "odds_over25_close",
+    "odds_under25_close",
+    "implied_prob_over25_raw",
+    "implied_prob_under25_raw",
+    "implied_prob_over25_norm",
+    "implied_prob_under25_norm",
+    "over25_closing_strength",
+    "over25_market_balance",
+    "odds_home_close",
+    "odds_draw_close",
+    "odds_away_close",
+    "implied_prob_home_raw",
+    "implied_prob_draw_raw",
+    "implied_prob_away_raw",
+    "implied_prob_home_norm",
+    "implied_prob_draw_norm",
+    "implied_prob_away_norm",
+    "favorite_side",
+    "favorite_strength",
+    "match_balance"
+  ],
+  "audit_columns": [
+    "ou25_closing_bookmakers_count",
+    "match_odds_closing_bookmakers_count",
+    "ou25_source_columns",
+    "match_odds_source_columns"
+  ],
+  "blocked_features": [
+    "handicap_line",
+    "favorite_handicap",
+    "handicap_implied_strength",
+    "handicap_market_confidence",
+    "opening_vs_closing_movement",
+    "live_odds",
+    "inplay_odds"
+  ],
+  "output_columns": [
+    "match_id",
+    "sofascore_event_id",
+    "league",
+    "season",
+    "match_date",
+    "home_team",
+    "away_team",
+    "ou25_closing_bookmakers_count",
+    "match_odds_closing_bookmakers_count",
+    "ou25_source_columns",
+    "match_odds_source_columns",
+    "odds_over25_close",
+    "odds_under25_close",
+    "implied_prob_over25_raw",
+    "implied_prob_under25_raw",
+    "implied_prob_over25_norm",
+    "implied_prob_under25_norm",
+    "over25_closing_strength",
+    "over25_market_balance",
+    "odds_home_close",
+    "odds_draw_close",
+    "odds_away_close",
+    "implied_prob_home_raw",
+    "implied_prob_draw_raw",
+    "implied_prob_away_raw",
+    "implied_prob_home_norm",
+    "implied_prob_draw_norm",
+    "implied_prob_away_norm",
+    "favorite_side",
+    "favorite_strength",
+    "match_balance"
+  ],
+  "anti_leakage_rules": [
+    "Only football_data_odds rows with odds_type='closing' and is_closing=true are used.",
+    "Average and maximum aggregators are excluded from primary V1 features.",
+    "No live, in-play, target, final-score, full-match-statistics or Asian Handicap columns are included.",
+    "The builder reads PostgreSQL only and does not write to the database."
+  ],
+  "known_limitations": [
+    "Football-Data closing odds do not provide individual timestamps; they are treated as pre-match closing by source semantics.",
+    "Feature values are averages across available closing bookmakers, not a single bookmaker line.",
+    "Average/max odds are available in storage but intentionally not used as primary V1 features.",
+    "No target is included by default; downstream validation must join target explicitly."
+  ],
+  "status": "APTO"
+}
