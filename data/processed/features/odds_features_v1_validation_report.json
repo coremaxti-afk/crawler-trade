@@ -1,0 +1,106 @@
+{
+  "feature_set_name": "odds_features_v1",
+  "feature_set_version": "v1",
+  "generated_at_utc": "2026-06-08T17:04:50.571444+00:00",
+  "status": "APTO",
+  "row_count": 380,
+  "expected_matches": 380,
+  "unique_matches": 380,
+  "duplicate_match_id_rows": 0,
+  "coverage_1x2_count": 380,
+  "coverage_ou25_count": 380,
+  "coverage_both_count": 380,
+  "coverage_1x2_percent": 100.0,
+  "coverage_ou25_percent": 100.0,
+  "coverage_both_percent": 100.0,
+  "invalid_odds_count": 0,
+  "invalid_probability_count": 0,
+  "probability_sum_1x2_max_abs_error": 2.220446049250313e-16,
+  "probability_sum_ou25_max_abs_error": 2.220446049250313e-16,
+  "favorite_side_mismatches": 0,
+  "target_columns_present": [],
+  "full_match_columns_present": [],
+  "asian_handicap_columns_present": [],
+  "inplay_odds_detected": false,
+  "leakage_warnings": [],
+  "nulls_by_feature": {
+    "odds_over25_close": 0,
+    "odds_under25_close": 0,
+    "implied_prob_over25_raw": 0,
+    "implied_prob_under25_raw": 0,
+    "implied_prob_over25_norm": 0,
+    "implied_prob_under25_norm": 0,
+    "over25_closing_strength": 0,
+    "over25_market_balance": 0,
+    "odds_home_close": 0,
+    "odds_draw_close": 0,
+    "odds_away_close": 0,
+    "implied_prob_home_raw": 0,
+    "implied_prob_draw_raw": 0,
+    "implied_prob_away_raw": 0,
+    "implied_prob_home_norm": 0,
+    "implied_prob_draw_norm": 0,
+    "implied_prob_away_norm": 0,
+    "favorite_side": 0,
+    "favorite_strength": 0,
+    "match_balance": 0
+  },
+  "ranges": {
+    "implied_prob_over25_norm": {
+      "min": 0.37149719775820655,
+      "max": 0.8152173913043479,
+      "mean": 0.5875977479139551
+    },
+    "implied_prob_home_norm": {
+      "min": 0.06596666755033341,
+      "max": 0.8919718270815697,
+      "mean": 0.44751157569060734
+    },
+    "implied_prob_draw_norm": {
+      "min": 0.07215951859536296,
+      "max": 0.32296040151863464,
+      "mean": 0.2332771404666009
+    },
+    "implied_prob_away_norm": {
+      "min": 0.035868654323067385,
+      "max": 0.8077325624672316,
+      "mean": 0.3192112838427918
+    },
+    "favorite_strength": {
+      "min": 0.00022920863511660672,
+      "max": 0.8561031727585023,
+      "mean": 0.3264662392581709
+    },
+    "match_balance": {
+      "min": 0.14389682724149766,
+      "max": 0.9839464127900095,
+      "mean": 0.6579482193103142
+    },
+    "over25_closing_strength": {
+      "min": -0.2570056044835868,
+      "max": 0.6304347826086957,
+      "mean": 0.17519549582791022
+    }
+  },
+  "favorite_side_distribution": {
+    "away": 127,
+    "home": 229,
+    "none_clear": 24
+  },
+  "closing_bookmaker_count_summary": {
+    "ou25_min": 2,
+    "ou25_max": 3,
+    "match_odds_min": 5,
+    "match_odds_max": 7
+  },
+  "anti_leakage_checks": {
+    "uses_only_closing_pre_match_odds": true,
+    "excludes_live_inplay_odds": true,
+    "excludes_asian_handicap": true,
+    "excludes_target_columns": true,
+    "excludes_full_match_columns": true,
+    "does_not_join_target": true
+  },
+  "validation_errors": [],
+  "validation_warnings": []
+}
