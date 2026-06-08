@@ -43,6 +43,24 @@ football_data_row
 -> match_id
 ```
 
+### 1.0 Grain Conceitual das Estruturas Futuras
+
+Esta especificacao define apenas grain conceitual, sem criar schema fisico.
+
+Grain futuro recomendado:
+
+- staging: `source_hash + row_number`;
+- mapping: `source_hash + row_number -> sofascore_event_id`;
+- odds final: `sofascore_event_id + market + selection + odds_type + bookmaker_or_aggregator + source_hash`.
+
+Objetivo do grain conceitual:
+
+- impedir duplicidade logica;
+- preservar rastreabilidade ate a linha original;
+- permitir reprocessamento por versao do CSV;
+- separar pareamento de armazenamento definitivo;
+- manter cada valor de odd associado ao mercado, selecao, tipo, bookmaker/agregador e versao da fonte.
+
 ### 1.1 football_data_row
 
 Representa a linha original do CSV bruto Football-Data, sem transformacao destrutiva.
@@ -190,7 +208,11 @@ O armazenamento futuro deve representar odds de Asian Handicap quando presentes:
 - `home_handicap`;
 - `away_handicap`.
 
-A linha de handicap deve ser preservada exatamente conforme a fonte, com validacao posterior para formatos decimais, quartos de linha ou convencoes especificas da casa/bookmaker.
+A linha de handicap deve fazer parte do grain conceitual futuro do mercado Asian Handicap.
+
+A linha deve ser preservada exatamente conforme fornecida pela fonte, com validacao posterior para formatos decimais, quartos de linha ou convencoes especificas da casa/bookmaker.
+
+Deve-se evitar normalizacao prematura da linha de handicap na etapa de ingestao. Qualquer normalizacao futura deve ser documentada, auditavel e aprovada antes de uso analitico.
 
 ### 3.4 Odds
 
@@ -436,7 +458,34 @@ Algumas partidas, mercados ou bookmakers podem ter odds ausentes.
 
 Ausencia deve ser registrada como dado faltante, nao inferida.
 
-### 7.6 Diferencas entre Football-Data e SofaScore
+### 7.6 Colunas sem `C` e Risco de Semantica de Opening Odds
+
+Nao se deve assumir automaticamente que colunas sem `C` representam opening odds.
+
+Colunas sem `C` devem preservar a semantica original declarada pela Football-Data. A classificacao como `opening_like_odds` so deve ocorrer quando houver documentacao suficiente da fonte ou validacao metodologica explicita.
+
+Regras:
+
+- manter o nome e significado original da coluna Football-Data em staging;
+- nao converter automaticamente colunas sem `C` em opening odds;
+- usar `opening_like_odds` apenas como classificacao documentada;
+- registrar incerteza semantica quando a documentacao da fonte for ambigua;
+- nao usar essas colunas como premissa metodologica forte sem revisao Quant/CTO.
+
+### 7.7 Ausencia de Live Odds
+
+Football-Data nao deve ser tratada como fonte live/in-game.
+
+As odds Football-Data devem ser consideradas pre-jogo, closing ou agregadas conforme a coluna e a documentacao da fonte.
+
+Riscos:
+
+- nao ha evidencia de odds live minuto a minuto no CSV avaliado;
+- nao ha timestamp granular de movimentacao intrajogo;
+- odds closing podem refletir informacao acumulada ate proximo do kickoff;
+- qualquer uso pre-jogo deve documentar o momento de disponibilidade da coluna.
+
+### 7.8 Diferencas entre Football-Data e SofaScore
 
 As fontes podem divergir em:
 
@@ -450,7 +499,7 @@ As fontes podem divergir em:
 
 Essas diferencas devem ser tratadas no mapping e na validacao, antes de qualquer uso analitico.
 
-### 7.7 Necessidade de Match Mapping Confiavel
+### 7.9 Necessidade de Match Mapping Confiavel
 
 Football-Data so deve avancar para ingestao definitiva quando o mapping com SofaScore for confiavel.
 
@@ -467,7 +516,7 @@ O criterio exploratorio atual indica alto potencial quando:
 
 Status:
 
-**PRONTA PARA REVISAO CTO**
+**APROVADA COM AJUSTES DATA ENGINEER — PRONTA PARA REVISAO CTO FINAL DE SCHEMA**
 
 Criterios de aceite:
 
