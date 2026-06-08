@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem iniciar producao, automacao operacional ou backtesting financeiro. Registrar e validar fontes auxiliares de odds historicas de forma controlada, sem promover features, datasets ou producao sem aprovacao.
+Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem iniciar producao, automacao operacional ou backtesting financeiro. Registrar e validar fontes auxiliares de odds historicas de forma controlada, sem promover datasets, producao ou modelagem sem aprovacao.
 
 ---
 
@@ -43,6 +43,8 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - [x] Reexecutar importacao completa para validar idempotencia.
 - [x] Validar contagens finais, orfaos, duplicatas, odds invalidas e agregadores.
 - [x] Documentar resultado em `FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`.
+- [x] Implementar e executar Odds Feature Builder V1.
+- [x] Gerar features odds V1, metadata e validation report com status APTO.
 
 ---
 
@@ -72,6 +74,7 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - `docs/08_DATABASE/FOOTBALL_DATA_IMPORTER_SPEC.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`
+- `docs/04_RESEARCH/ODDS_DATASET_SPEC_V1.md`
 
 ---
 
@@ -79,6 +82,11 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 - `database/migrations/20260608_create_football_data_storage_tables.sql`
 - `Importer/FootballData/football_data_importer.py`
+- `Analytics/FeatureBuilder/odds_feature_builder_v1.py`
+- `data/processed/features/odds_features_v1.csv`
+- `data/processed/features/odds_features_v1.parquet`
+- `data/processed/features/odds_features_v1_metadata.json`
+- `data/processed/features/odds_features_v1_validation_report.json`
 
 ---
 
@@ -113,7 +121,11 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Odds invalidas: 0.
 - Idempotencia: reexecucao com 0 inserts, 34280 updates e contagem final estavel.
 - `Max`, `MaxC`, `Avg` e `AvgC` preservados como agregadores distintos.
-- Recomendacao: APTO PARA PROXIMA ETAPA DE DATA ENGINEER / QUANT RESEARCH.
+- Odds Features V1: 380 linhas, 380 partidas unicas, 1 linha por `match_id`.
+- Cobertura Odds Features V1: 100% para 1X2 e Over/Under 2.5.
+- Validation report Odds Features V1: APTO.
+- Nenhum target, placar final, odds live/in-play ou Asian Handicap incluido nas features V1.
+- Recomendacao: APTO PARA REVISAO QUANT RESEARCH E AUTORIZACAO DA VALIDACAO ESTATISTICA INICIAL DE ODDS.
 
 ---
 
@@ -125,7 +137,7 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 - Nao combinar H8 com H3/H4/H6/H9 sem aprovacao explicita.
 - Nao usar features fora de whitelist aprovada.
 - Nao usar eventos apos cutoff como features.
-- Nao criar features Football-Data sem aprovacao.
+- Nao criar novas features Football-Data fora do Odds Feature Builder V1 sem aprovacao.
 - Nao criar dataset Football-Data sem aprovacao.
 - Nao tratar `opening_like` como opening odds oficial sem auditoria metodologica.
 
@@ -133,14 +145,14 @@ Consolidar H8 de coleta/importacao ate Dataset e Baseline controlado, sem inicia
 
 ## Proximos Passos
 
+- [ ] Quant Research revisar `data/processed/features/odds_features_v1_validation_report.json`.
+- [ ] Quant Research autorizar ou bloquear validacao estatistica inicial das Odds Features V1.
 - [ ] Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
 - [ ] PM decidir se H8 deve ser refinado, combinado com outras familias ou pausado nesta formulacao.
-- [ ] Data Engineer / Quant Research revisar `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`.
-- [ ] Definir contrato de consumo das odds antes de criar dataset ou features.
 - [ ] Manter backtesting e producao bloqueados.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 EXECUTADA LOCALMENTE COM 380 PARTIDAS E 34280 ODDS. FEATURES, DATASETS, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE NOVA AUTORIZACAO.
+EM EXECUCAO - H8 COMPLETO ATE BASELINE CONTROLADO. BASELINE H8 V1 NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 EXECUTADA LOCALMENTE COM 380 PARTIDAS E 34280 ODDS. ODDS FEATURE BUILDER V1 IMPLEMENTADO E EXECUTADO COM 380 LINHAS, COBERTURA 100% EM 1X2 E OVER/UNDER 2.5, STATUS APTO. DATASET DE ODDS, MODELAGEM, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE NOVA AUTORIZACAO.
