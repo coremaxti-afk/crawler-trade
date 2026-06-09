@@ -201,6 +201,51 @@ Subida media por minuto: +0.0400
 
 ---
 
+### MATCH_ODDS_SAMPLE_005 — Armenia x Hungary
+
+```text
+Jogo: Armenia x Hungary
+Placar final informado: 1 x 0 para algum time
+Mercado observado: Back Under 1.5
+Periodo observado: 65' ate 85'
+Gol observado no periodo: nao informado
+```
+
+#### Odds Back Under 1.5
+
+| Minuto | Back Under |
+| ---: | ---: |
+| 65 | 2.40 |
+| 70 | 1.96 |
+| 75 | 1.80 |
+| 80 | 1.52 |
+| 85 | 1.34 |
+
+#### Back Over equivalente
+
+| Minuto | Back Under | Back Over eq. |
+| ---: | ---: | ---: |
+| 65 | 2.40 | 1.71 |
+| 70 | 1.96 | 2.04 |
+| 75 | 1.80 | 2.25 |
+| 80 | 1.52 | 2.92 |
+| 85 | 1.34 | 3.94 |
+
+#### Variacao
+
+```text
+Back Under 65->85: 2.40 para 1.34
+Queda total: -1.06
+Queda percentual: -44.17%
+Queda media por minuto: -0.0530
+
+Back Over eq. 65->85: 1.71 para 3.94
+Subida total: +2.23
+Subida media por minuto: +0.1115
+```
+
+---
+
 ## Comparacao geral — variacao por amostra
 
 | Amostra | Jogo | Mercado | Periodo | Under inicial | Under final | Queda Under/min | Over eq. inicial | Over eq. final | Subida Over/min |
@@ -209,15 +254,16 @@ Subida media por minuto: +0.0400
 | 002 | Crystal Palace x Rayo Vallecano | Proximo gol/pos-gol | 60-85 | 2.78 | 1.38 | -0.0560 | 1.56 | 3.63 | +0.0828 |
 | 003 | Brasil x Tunisia | Under/Over 2.5 | 60-85 | 3.50 | 1.42 | -0.0832 | 1.40 | 3.38 | +0.0792 |
 | 004 | Montenegro x Croacia | Under/Over 3.5 | 65-70 | 3.20 | 2.54 | -0.1320 | 1.45 | 1.65 | +0.0400 |
+| 005 | Armenia x Hungary | Under/Over 1.5 | 65-85 | 2.40 | 1.34 | -0.0530 | 1.71 | 3.94 | +0.1115 |
 
 ## Media geral atual
 
 ```text
 Media simples da queda Back Under por minuto:
-(-0.1024 -0.0560 -0.0832 -0.1320) / 4 = -0.0934 por minuto
+(-0.1024 -0.0560 -0.0832 -0.1320 -0.0530) / 5 = -0.0853 por minuto
 
 Media simples da subida Back Over equivalente por minuto:
-(0.0196 +0.0828 +0.0792 +0.0400) / 4 = +0.0554 por minuto
+(0.0196 +0.0828 +0.0792 +0.0400 +0.1115) / 5 = +0.0666 por minuto
 ```
 
 ## Media Back Over equivalente por minuto observado
@@ -228,29 +274,28 @@ Media simples da subida Back Over equivalente por minuto:
 | ---: | ---: | ---: |
 | 50 | 1 | 1.26 |
 | 60 | 3 | 1.46 |
-| 65 | 4 | 1.56 |
-| 70 | 4 | 1.75 |
-| 75 | 3 | 1.94 |
-| 80 | 2 | 2.44 |
-| 85 | 2 | 3.51 |
+| 65 | 5 | 1.59 |
+| 70 | 5 | 1.81 |
+| 75 | 4 | 2.02 |
+| 80 | 3 | 2.60 |
+| 85 | 3 | 3.65 |
 
-### Media 60-85 usando apenas amostras completas nesse periodo
+### Media 65-85 usando amostras com dados completos nesse periodo
 
-Amostras usadas: MATCH_ODDS_SAMPLE_002 e MATCH_ODDS_SAMPLE_003.
+Amostras usadas: MATCH_ODDS_SAMPLE_002, MATCH_ODDS_SAMPLE_003 e MATCH_ODDS_SAMPLE_005.
 
 | Minuto | Media Back Over eq. |
 | ---: | ---: |
-| 60 | 1.48 |
-| 65 | 1.62 |
-| 70 | 1.80 |
-| 75 | 2.03 |
-| 80 | 2.44 |
-| 85 | 3.51 |
+| 65 | 1.65 |
+| 70 | 1.88 |
+| 75 | 2.10 |
+| 80 | 2.60 |
+| 85 | 3.65 |
 
 ```text
-Back Over medio 60->85: 1.48 para 3.51
-Subida total media: +2.03
-Subida media por minuto: +0.0812
+Back Over medio 65->85: 1.65 para 3.65
+Subida total media: +2.00
+Subida media por minuto: +0.1000
 ```
 
 ---
@@ -259,10 +304,11 @@ Subida media por minuto: +0.0812
 
 - A curva de Back Under cai com forca quando nao sai gol, como esperado.
 - Convertendo para Back Over equivalente, a odd tende a subir contra uma entrada Back Over sem gol.
-- Nas amostras completas de 60 a 85, o Back Over equivalente saiu em media de 1.48 para 3.51.
-- A amostra ainda e muito pequena e mistura mercados diferentes: proximo gol, Under 2.5 e Under 3.5.
+- Nas amostras completas de 65 a 85, o Back Over equivalente saiu em media de 1.65 para 3.65.
+- A amostra ainda e muito pequena e mistura mercados diferentes: proximo gol, Under 1.5, Under 2.5 e Under 3.5.
 - O ideal e separar as medias por mercado:
   - proximo gol;
+  - Under/Over 1.5;
   - Under/Over 2.5;
   - Under/Over 3.5;
   - apos gol;
