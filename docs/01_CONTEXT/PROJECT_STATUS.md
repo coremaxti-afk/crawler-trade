@@ -14,6 +14,7 @@
 - Football-Data: 380 staging rows, 380 mappings e 34280 odds importadas localmente.
 - Odds Features V1: 380 linhas, 380 partidas unicas, status APTO.
 - Dataset Odds V1: 380 linhas, 380 partidas unicas, target unido explicitamente, status APTO COM RESSALVAS.
+- H8 Composite Pressure Score V1: 1520 linhas match_id + cutoff, 5040 resultados disponiveis, status exploratorio concluido.
 
 Ressalvas:
 
@@ -24,6 +25,8 @@ Ressalvas:
 - Football-Data nao contem odds live/in-game.
 - Odds Features V1 usa closing odds sem timestamp individual; tratado como pre-match closing pela semantica da fonte.
 - Dataset Odds V1 contem target para validacao supervisionada; X deve usar apenas `feature_columns_for_x`.
+- H8 Composite Pressure Score V1 usa graph/momentum agregado da partida, nao pressao por equipe.
+- H8 Composite Pressure Score V1 e exploratorio: nao autoriza baseline, modelo, backtesting financeiro real, producao ou trade.
 
 ---
 
@@ -56,6 +59,11 @@ Ressalvas:
 - Football-Data Fase 2 executada: importacao completa local das 380 partidas e validacao idempotente.
 - Odds Feature Builder V1 implementado e executado localmente com status APTO.
 - Dataset Odds V1 criado com join explicito do `target_late_goal_75` e validation report APTO COM RESSALVAS.
+- Odds Initial Statistical Validation concluida: odds pre-jogo isoladas nao apresentaram sinal forte para `target_late_goal_75`.
+- Odds Interaction Validation V1 concluida: MANTER 0, OBSERVAR 1, DESCARTAR 11; odds encerradas como frente principal por enquanto.
+- Match State + Odds + H8 Variation V1 concluida como exploratoria, com necessidade de verificar/corrigir JSONs vazios no GitHub.
+- H8 Composite Pressure Score Results V1 concluido como exploratorio: 5040 resultados disponiveis; MANTER robusto 0; muitos sinais locais/micro-amostra, sem autorizacao para baseline/modelo/backtesting/producao.
+- Issue #1 criada para `MARKET_PRICE_CASHOUT_SENSITIVITY_V1` e roadmap de correcao de artefatos/analise financeira exploratoria.
 
 ---
 
@@ -73,6 +81,18 @@ Documentos:
 - `docs/04_RESEARCH/H8_FEATURE_BUILDER_SPEC.md`
 - `docs/04_RESEARCH/H8_DATASET_BASELINE_RECOMMENDATION.md`
 - `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`
+- `docs/04_RESEARCH/H8_COMPOSITE_PRESSURE_SCORE_RESULTS_V1.md`
+
+Estado:
+
+- Feature Builder H8 V1 executado.
+- Dataset H8 V1 criado.
+- Baseline H8 V1 executado e nao aprovado quantitativamente.
+- Composite Pressure Score V1 executado conforme plano exploratorio.
+- Scores compostos usam shotmap/xG + graph momentum agregado, com pesos fixos nao ajustados por target.
+- Classes Composite Pressure V1: DESCARTAR_ESTATISTICO_LOCAL 3837, OBSERVAR 813, MICRO_AMOSTRA_REPLICAR 304, NAO_DISPONIVEL_V1 210, PROMISSOR_LOCAL 86.
+- Melhor ranking @70 reportado tem N=2, logo deve ser tratado como micro-amostra/replicacao, nao como padrao robusto.
+- Producao, trade, baseline novo, modelo e backtesting seguem bloqueados.
 
 ---
 
@@ -89,6 +109,8 @@ Documentos:
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE1_IMPLEMENTATION_REPORT.md`
 - `docs/08_DATABASE/FOOTBALL_DATA_PHASE2_FULL_IMPORT_REPORT.md`
 - `docs/04_RESEARCH/ODDS_DATASET_SPEC_V1.md`
+- `docs/04_RESEARCH/ODDS_INITIAL_STATISTICAL_VALIDATION_RESULTS.md`
+- `docs/04_RESEARCH/ODDS_INTERACTION_VALIDATION_RESULTS_V1.md`
 
 Artefatos:
 
@@ -127,7 +149,8 @@ Estado:
 - Dataset Odds V1 gerado com 380 linhas e 1 linha por `match_id`.
 - Target `target_late_goal_75` unido explicitamente: 191 negativos e 189 positivos.
 - Validation report Dataset Odds V1: APTO COM RESSALVAS, 0 duplicatas, 0 target mismatches, 0 odds invalidas, 0 probabilidades invalidas, 0 Asian Handicap, 0 live/in-play e 0 full-match columns.
-- Recomendacao atual: APTO PARA REVISAO QUANT RESEARCH E AUTORIZACAO DA VALIDACAO ESTATISTICA INICIAL DE ODDS.
+- Validacao estatistica inicial de odds isoladas: MANTER 0; OBSERVAR favorite_strength, match_balance e favorite_side=none_clear; DESCARTAR isolado implied_prob_over25_norm e over25_closing_strength.
+- Odds Interaction Validation V1: unico sinal OBSERVAR foi `match_balance_high + shots_last_10m_high @60`, fraco e instavel; odds encerradas como frente principal por enquanto.
 
 ---
 
@@ -140,24 +163,25 @@ Estado:
 - H5 - NAO VALIDADA.
 - H6 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
 - H7 - NAO VALIDADA COMO HIPOTESE INDEPENDENTE.
-- H8 - BASELINE V1 EXECUTADO E NAO APROVADO quantitativamente.
+- H8 - FRENTE EXPLORATORIA ATIVA; baseline V1 nao aprovado, Composite Pressure Score V1 gerou sinais locais/micro-amostra para replicacao, mas nenhum sinal robusto autorizado.
 - H9 - VALIDADA INICIALMENTE, mas Baseline In-Game V1 sem graph nao aprovou quantitativamente.
-- Odds Historicas - DATASET V1 GERADO, aguardando validacao estatistica inicial isolada.
+- Odds Historicas - DATASET V1 E VALIDACOES CONCLUIDAS; odds isoladas e odds+H8 nao sustentam frente principal no momento.
 
 ---
 
 ## Proximas Etapas
 
-1. Quant Research revisar `data/processed/datasets/late_goal_dataset_odds_v1_validation_report.json`.
-2. Quant Research autorizar ou bloquear validacao estatistica inicial das Odds Features/Dataset V1.
-3. Quant Research revisar `docs/04_RESEARCH/BASELINE_H8_V1_RESULTS.md`.
-4. PM decidir se H8 deve ser refinado, combinado com outras familias ou encerrado nesta formulacao.
-5. Nao iniciar backtesting financeiro.
+1. Codex verificar/corrigir JSONs vazios de `MATCH_STATE_ODDS_H8_VARIATION_V1`.
+2. Quant Research especificar `MARKET_PRICE_CASHOUT_SENSITIVITY_V1` com EV hold-to-loss, EV com cashout, ROI e break-even por janela.
+3. Quant Research revisar `H8_COMPOSITE_PRESSURE_SCORE_RESULTS_V1.md` e selecionar quais sinais entram em replicacao multi-liga.
+4. Data Science / Data Engineering especificar `H8_TEAM_SIDE_FEATURES_V1` para separar pressao por equipe.
+5. Nao iniciar backtesting financeiro real.
 6. Nao iniciar producao.
-7. Nao tratar `opening_like` como opening odds oficial sem auditoria metodologica.
+7. Nao usar odds live nao timestampadas.
+8. Nao tratar sinais `PROMISSOR_LOCAL` ou `MICRO_AMOSTRA_REPLICAR` como estrategia operacional.
 
 ---
 
 ## Status
 
-EM EXECUCAO - H8 TEM DATASET E BASELINE CONTROLADO EXECUTADOS, MAS BASELINE H8 V1 FOI NAO APROVADO QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 FOI EXECUTADA LOCALMENTE COM 380 PARTIDAS, 34280 ODDS, 0 DUPLICATAS, 0 ORFAOS E 0 ODDS INVALIDAS. ODDS FEATURE BUILDER V1 FOI IMPLEMENTADO E EXECUTADO COM 380 LINHAS, COBERTURA 100% EM 1X2 E OVER/UNDER 2.5, STATUS APTO. DATASET ODDS V1 FOI GERADO COM 380 LINHAS, TARGET UNIDO EXPLICITAMENTE E STATUS APTO COM RESSALVAS. MODELAGEM, PRODUCAO E BACKTESTING SEGUEM BLOQUEADOS ATE NOVA AUTORIZACAO.
+EM EXECUCAO - H8 E ODDS EVOLUIRAM PARA PESQUISA EXPLORATORIA DE PADROES, MERCADO E CASHOUT. BASELINES H3/H4, H6/H9 E H8 V1 NAO FORAM APROVADOS QUANTITATIVAMENTE. FOOTBALL-DATA FASE 2 E ODDS DATASET V1 FORAM CONCLUIDOS, MAS ODDS ISOLADAS E ODDS+H8 NAO SUSTENTARAM FRENTE PRINCIPAL. H8 COMPOSITE PRESSURE SCORE V1 GEROU SINAIS LOCAIS/MICRO-AMOSTRA, SEM AUTORIZACAO PARA MODELO, BASELINE, BACKTESTING, PRODUCAO OU TRADE REAL. PROXIMAS PRIORIDADES: CORRIGIR JSONS VAZIOS, ESPECIFICAR MARKET_PRICE_CASHOUT_SENSITIVITY_V1, REVISAR SINAIS PARA REPLICACAO MULTI-LIGA E CRIAR H8_TEAM_SIDE_FEATURES_V1.
