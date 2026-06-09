@@ -250,6 +250,9 @@ Subida media por minuto: +0.1115
 
 ```text
 Jogo: Gremio x Fluminense
+Identificacao confirmada pelo usuario: Gremio 1 x 2 Fluminense
+Data: 02/12/2025
+Competicao: Campeonato Brasileiro
 Mercado observado: Back Under 3.5
 Periodo observado: 60' ate 85'
 Gols informados: Fluminense aos 51' e Gremio aos 53'
@@ -293,6 +296,56 @@ Subida media por minuto: +0.0796
 
 ---
 
+### MATCH_ODDS_SAMPLE_007 — Hammarby x Halmstads
+
+```text
+Jogo: Hammarby x Halmstads
+Data: nao identificada ainda
+Competicao: nao identificada ainda
+Mercado observado: Back Under 2.5
+Periodo observado: 60' ate 85'
+Gol informado: entre 57' e 59'
+Contexto: coleta pos-gol; depois nao saiu mais gol segundo o usuario.
+Status de identificacao: pendente; busca inicial nao encontrou correspondencia confiavel pelo minuto do gol.
+```
+
+#### Odds Back Under 2.5
+
+| Minuto | Back Under |
+| ---: | ---: |
+| 60 | 3.30 |
+| 65 | 3.00 |
+| 70 | 2.60 |
+| 75 | 2.14 |
+| 80 | 1.83 |
+| 85 | 1.49 |
+
+#### Back Over equivalente
+
+| Minuto | Back Under | Back Over eq. |
+| ---: | ---: | ---: |
+| 60 | 3.30 | 1.43 |
+| 65 | 3.00 | 1.50 |
+| 70 | 2.60 | 1.63 |
+| 75 | 2.14 | 1.88 |
+| 80 | 1.83 | 2.20 |
+| 85 | 1.49 | 3.04 |
+
+#### Variacao
+
+```text
+Back Under 60->85: 3.30 para 1.49
+Queda total: -1.81
+Queda percentual: -54.85%
+Queda media por minuto: -0.0724
+
+Back Over eq. 60->85: 1.43 para 3.04
+Subida total: +1.61
+Subida media por minuto: +0.0644
+```
+
+---
+
 ## Comparacao geral — variacao por amostra
 
 | Amostra | Jogo | Mercado | Periodo | Under inicial | Under final | Queda Under/min | Over eq. inicial | Over eq. final | Subida Over/min |
@@ -303,15 +356,16 @@ Subida media por minuto: +0.0796
 | 004 | Montenegro x Croacia | Under/Over 3.5 | 65-70 | 3.20 | 2.54 | -0.1320 | 1.45 | 1.65 | +0.0400 |
 | 005 | Armenia x Hungary | Under/Over 1.5 | 65-85 | 2.40 | 1.34 | -0.0530 | 1.71 | 3.94 | +0.1115 |
 | 006 | Gremio x Fluminense | Under/Over 3.5 pos-gols | 60-85 | 2.56 | 1.38 | -0.0472 | 1.64 | 3.63 | +0.0796 |
+| 007 | Hammarby x Halmstads | Under/Over 2.5 pos-gol | 60-85 | 3.30 | 1.49 | -0.0724 | 1.43 | 3.04 | +0.0644 |
 
 ## Media geral atual
 
 ```text
 Media simples da queda Back Under por minuto:
-(-0.1024 -0.0560 -0.0832 -0.1320 -0.0530 -0.0472) / 6 = -0.0790 por minuto
+(-0.1024 -0.0560 -0.0832 -0.1320 -0.0530 -0.0472 -0.0724) / 7 = -0.0780 por minuto
 
 Media simples da subida Back Over equivalente por minuto:
-(0.0196 +0.0828 +0.0792 +0.0400 +0.1115 +0.0796) / 6 = +0.0688 por minuto
+(0.0196 +0.0828 +0.0792 +0.0400 +0.1115 +0.0796 +0.0644) / 7 = +0.0653 por minuto
 ```
 
 ## Media Back Over equivalente por minuto observado
@@ -321,29 +375,29 @@ Media simples da subida Back Over equivalente por minuto:
 | Minuto | Amostras usadas | Media Back Over eq. |
 | ---: | ---: | ---: |
 | 50 | 1 | 1.26 |
-| 60 | 4 | 1.50 |
-| 65 | 6 | 1.62 |
-| 70 | 6 | 1.84 |
-| 75 | 5 | 2.08 |
-| 80 | 4 | 2.63 |
-| 85 | 4 | 3.64 |
+| 60 | 5 | 1.49 |
+| 65 | 7 | 1.60 |
+| 70 | 7 | 1.81 |
+| 75 | 6 | 2.05 |
+| 80 | 5 | 2.54 |
+| 85 | 5 | 3.52 |
 
 ### Media 65-85 usando amostras com dados completos nesse periodo
 
-Amostras usadas: MATCH_ODDS_SAMPLE_002, MATCH_ODDS_SAMPLE_003, MATCH_ODDS_SAMPLE_005 e MATCH_ODDS_SAMPLE_006.
+Amostras usadas: MATCH_ODDS_SAMPLE_002, MATCH_ODDS_SAMPLE_003, MATCH_ODDS_SAMPLE_005, MATCH_ODDS_SAMPLE_006 e MATCH_ODDS_SAMPLE_007.
 
 | Minuto | Media Back Over eq. |
 | ---: | ---: |
-| 65 | 1.68 |
-| 70 | 1.91 |
-| 75 | 2.17 |
-| 80 | 2.63 |
-| 85 | 3.64 |
+| 65 | 1.64 |
+| 70 | 1.85 |
+| 75 | 2.11 |
+| 80 | 2.54 |
+| 85 | 3.52 |
 
 ```text
-Back Over medio 65->85: 1.68 para 3.64
-Subida total media: +1.96
-Subida media por minuto: +0.0980
+Back Over medio 65->85: 1.64 para 3.52
+Subida total media: +1.88
+Subida media por minuto: +0.0940
 ```
 
 ---
@@ -352,7 +406,7 @@ Subida media por minuto: +0.0980
 
 - A curva de Back Under cai com forca quando nao sai gol, como esperado.
 - Convertendo para Back Over equivalente, a odd tende a subir contra uma entrada Back Over sem gol.
-- Nas amostras completas de 65 a 85, o Back Over equivalente saiu em media de 1.68 para 3.64.
+- Nas amostras completas de 65 a 85, o Back Over equivalente saiu em media de 1.64 para 3.52.
 - A amostra ainda e pequena e mistura mercados diferentes: proximo gol, Under 1.5, Under 2.5 e Under 3.5.
 - O ideal e separar as medias por mercado:
   - proximo gol;
