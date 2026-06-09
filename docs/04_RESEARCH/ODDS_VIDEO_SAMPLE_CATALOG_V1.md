@@ -18,6 +18,7 @@ Back Over equivalente = Back Under / (Back Under - 1)
 
 - As odds reais de mercado podem ter margem, spread, delay, suspensao e liquidez diferente.
 - O objetivo aqui e medir comportamento medio aproximado da curva de odds sem gol.
+- Amostras com mudanca de linha durante a coleta ficam catalogadas como `linha variavel` e nao devem ser misturadas diretamente com medias de linha fixa.
 
 ---
 
@@ -346,7 +347,55 @@ Subida media por minuto: +0.0644
 
 ---
 
-## Comparacao geral — variacao por amostra
+### MATCH_ODDS_SAMPLE_008 — Juventus x Manchester City
+
+```text
+Jogo: Juventus 2 x 5 Manchester City
+Competicao: Mundial de Clubes 2025
+Fase: Grupos — Grupo G
+Mercado observado: Back Under com linha variavel
+Periodo observado: 60' ate 80'
+Gols informados no periodo/recentes: 52', 69', 75' e 84'
+Observacao: a linha mudou de Under 4.5 para Under 5.5 e depois Under 6.5; nao misturar diretamente com curvas de linha fixa.
+```
+
+#### Odds Back Under — linha variavel
+
+| Minuto | Mercado | Back Under |
+| ---: | --- | ---: |
+| 60 | Under 4.5 | 3.95 |
+| 65 | Under 4.5 | 3.15 |
+| 70 | Under 5.5 | 2.64 |
+| 75 | Under 5.5 | 2.18 |
+| 80 | Under 6.5 | 1.99 |
+
+#### Back Over equivalente
+
+| Minuto | Mercado | Back Under | Back Over eq. |
+| ---: | --- | ---: | ---: |
+| 60 | Over 4.5 eq. | 3.95 | 1.34 |
+| 65 | Over 4.5 eq. | 3.15 | 1.47 |
+| 70 | Over 5.5 eq. | 2.64 | 1.61 |
+| 75 | Over 5.5 eq. | 2.18 | 1.85 |
+| 80 | Over 6.5 eq. | 1.99 | 2.01 |
+
+#### Variacao observada na linha variavel
+
+```text
+Back Under 60->80: 3.95 para 1.99
+Queda total: -1.96
+Queda media por minuto: -0.0980
+
+Back Over eq. 60->80: 1.34 para 2.01
+Subida total: +0.67
+Subida media por minuto: +0.0335
+
+Amostra marcada como linha variavel, pois a linha mudou de 4.5 para 5.5 e 6.5 apos gols.
+```
+
+---
+
+## Comparacao geral — variacao por amostra de linha fixa
 
 | Amostra | Jogo | Mercado | Periodo | Under inicial | Under final | Queda Under/min | Over eq. inicial | Over eq. final | Subida Over/min |
 | --- | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -358,7 +407,13 @@ Subida media por minuto: +0.0644
 | 006 | Gremio x Fluminense | Under/Over 3.5 pos-gols | 60-85 | 2.56 | 1.38 | -0.0472 | 1.64 | 3.63 | +0.0796 |
 | 007 | Hammarby x Halmstads | Under/Over 2.5 pos-gol | 60-85 | 3.30 | 1.49 | -0.0724 | 1.43 | 3.04 | +0.0644 |
 
-## Media geral atual
+## Amostras de linha variavel — nao inclusas na media geral de linha fixa
+
+| Amostra | Jogo | Mercados | Periodo | Under inicial | Under final | Over eq. inicial | Over eq. final | Observacao |
+| --- | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| 008 | Juventus x Manchester City | U4.5/U5.5/U6.5 | 60-80 | 3.95 | 1.99 | 1.34 | 2.01 | gols aos 69, 75 e 84; linha mudou |
+
+## Media geral atual — linha fixa
 
 ```text
 Media simples da queda Back Under por minuto:
@@ -368,7 +423,7 @@ Media simples da subida Back Over equivalente por minuto:
 (0.0196 +0.0828 +0.0792 +0.0400 +0.1115 +0.0796 +0.0644) / 7 = +0.0653 por minuto
 ```
 
-## Media Back Over equivalente por minuto observado
+## Media Back Over equivalente por minuto observado — linha fixa
 
 ### Media nos pontos com dados disponiveis
 
@@ -408,11 +463,13 @@ Subida media por minuto: +0.0940
 - Convertendo para Back Over equivalente, a odd tende a subir contra uma entrada Back Over sem gol.
 - Nas amostras completas de 65 a 85, o Back Over equivalente saiu em media de 1.64 para 3.52.
 - A amostra ainda e pequena e mistura mercados diferentes: proximo gol, Under 1.5, Under 2.5 e Under 3.5.
+- A amostra Juventus x Manchester City foi separada por ser linha variavel, com gols que alteraram a linha de mercado.
 - O ideal e separar as medias por mercado:
   - proximo gol;
   - Under/Over 1.5;
   - Under/Over 2.5;
   - Under/Over 3.5;
+  - linha variavel;
   - apos gol;
   - antes de gol.
 
