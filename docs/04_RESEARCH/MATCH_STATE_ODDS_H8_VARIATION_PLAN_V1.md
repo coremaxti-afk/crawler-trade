@@ -24,8 +24,7 @@ Explorar ao maximo os cenarios em que uma equipe esta vencendo por 1 gol, combin
 
 - estado do placar;
 - cutoff do jogo;
-- favorito pre-jogo via odds 1X2;
-- faixa simples de favoritismo;
+- favorito pre-jogo via odds 1X2 ja catalogado no dataset (`favorite_side`, `favorite_strength`, `match_balance`);
 - pressao recente H8/graph/shotmap;
 - total de gols ate o cutoff;
 - estrategias teoricas de Back Over +1 gol e Lay Over +1 gol.
@@ -59,43 +58,63 @@ O mercado pode pagar melhor aos 70/75 minutos, entao um padrao com menor taxa po
 
 ---
 
-## 3. Catalogo de Faixas Simples de Favoritismo 1X2
+## 3. Uso das Odds Pre-Jogo Ja Existentes
 
-Usar odds pre-jogo 1X2 closing.
-
-Definicao do favorito:
+Usar as features ja criadas em `odds_features_v1`:
 
 ```text
-favorite_side = menor odd entre home, draw, away
+favorite_side
+favorite_strength
+match_balance
 ```
 
-Na pratica, para lado mandante/visitante:
+Nao criar nova catalogacao por faixa simples de favorito nesta V1.
+
+Nao criar:
 
 ```text
-home_favorite = odd_home_close < odd_away_close AND odd_home_close < odd_draw_close
-away_favorite = odd_away_close < odd_home_close AND odd_away_close < odd_draw_close
-```
-
-Faixas simples:
-
-| Faixa | Regra pela odd do favorito | Interpretacao |
-|---|---:|---|
-| `favorite_strong` | `odd_favorite <= 1.60` | Favorito forte |
-| `favorite_medium` | `1.61 <= odd_favorite <= 1.90` | Favorito medio |
-| `favorite_light` | `1.91 <= odd_favorite <= 2.20` | Favorito leve |
-| `balanced_game` | `odd_favorite > 2.20` | Jogo equilibrado / sem favorito claro |
-
-Flags derivadas:
-
-```text
+favorite_strong
+favorite_medium
+favorite_light
+balanced_game por faixa fixa de odd
 home_strong_favorite
 home_medium_favorite
 home_light_favorite
 away_strong_favorite
 away_medium_favorite
 away_light_favorite
-balanced_game
 ```
+
+Motivo:
+
+```text
+O projeto ja possui classificacao de favorito e medidas de forca/equilibrio via odds_features_v1.
+Nesta V1, o foco e explorar as combinacoes de placar + H8 + favorite_side/favorite_strength/match_balance, sem adicionar nova taxonomia de faixa de odd pre-jogo.
+```
+
+Flags derivadas permitidas a partir de `favorite_side`:
+
+```text
+home_favorite
+away_favorite
+home_underdog
+away_underdog
+favorite_losing_by_1
+favorite_winning_by_1
+underdog_winning_by_1
+underdog_losing_by_1
+```
+
+Quando usar forca do favorito, utilizar somente:
+
+```text
+favorite_strength_high
+favorite_strength_low
+match_balance_high
+match_balance_low
+```
+
+seguindo a definicao ja usada nos estudos anteriores, sem criar buckets novos por odd fixa.
 
 ---
 
@@ -202,9 +221,9 @@ break_even_sem_gol = responsabilidade / (100 + responsabilidade)
 
 ---
 
-## 7. Faixas de Odds para Sensibilidade
+## 7. Faixas de Odds para Sensibilidade do Trade
 
-Para cada padrao, calcular EV teorico em faixas:
+Para cada padrao, calcular EV teorico em odds de entrada simuladas:
 
 ```text
 1.30
@@ -217,6 +236,8 @@ Para cada padrao, calcular EV teorico em faixas:
 2.00
 2.20
 ```
+
+Estas odds sao da estrategia de trade `Over +1 gol`, nao faixas de favorito pre-jogo 1X2.
 
 Separar:
 
@@ -249,21 +270,18 @@ no_goal_after_cutoff
 
 ---
 
-## 9. Visitante vencendo por 1 + favoritismo pre-jogo
+## 9. Visitante vencendo por 1 + favorito/underdog pre-jogo
 
 Testar:
 
 ```text
 away_winning_by_1 + away_favorite
-away_winning_by_1 + away_strong_favorite
-away_winning_by_1 + away_medium_favorite
-away_winning_by_1 + away_light_favorite
 away_winning_by_1 + away_underdog
 away_winning_by_1 + home_favorite
-away_winning_by_1 + home_strong_favorite
-away_winning_by_1 + home_medium_favorite
-away_winning_by_1 + home_light_favorite
-away_winning_by_1 + balanced_game
+away_winning_by_1 + home_underdog
+away_winning_by_1 + favorite_losing_by_1
+away_winning_by_1 + favorite_winning_by_1
+away_winning_by_1 + underdog_winning_by_1
 ```
 
 Interpretacoes esperadas:
@@ -271,7 +289,7 @@ Interpretacoes esperadas:
 - visitante favorito vencendo por 1 pode indicar superioridade confirmada;
 - visitante underdog vencendo por 1 pode gerar pressao do mandante;
 - mandante favorito perdendo por 1 pode gerar aceleracao ofensiva;
-- jogo equilibrado com visitante vencendo por 1 pode manter jogo aberto.
+- underdog vencendo por 1 pode indicar jogo com pressao do favorito.
 
 ---
 
@@ -330,7 +348,7 @@ Exemplos:
 
 ---
 
-## 13. Visitante vencendo por 1 + odds balance
+## 13. Visitante vencendo por 1 + odds balance/strength existentes
 
 Testar:
 
@@ -362,21 +380,18 @@ no_goal_after_cutoff
 
 ---
 
-## 15. Mandante vencendo por 1 + favoritismo pre-jogo
+## 15. Mandante vencendo por 1 + favorito/underdog pre-jogo
 
 Testar:
 
 ```text
 home_winning_by_1 + home_favorite
-home_winning_by_1 + home_strong_favorite
-home_winning_by_1 + home_medium_favorite
-home_winning_by_1 + home_light_favorite
 home_winning_by_1 + home_underdog
 home_winning_by_1 + away_favorite
-home_winning_by_1 + away_strong_favorite
-home_winning_by_1 + away_medium_favorite
-home_winning_by_1 + away_light_favorite
-home_winning_by_1 + balanced_game
+home_winning_by_1 + away_underdog
+home_winning_by_1 + favorite_losing_by_1
+home_winning_by_1 + favorite_winning_by_1
+home_winning_by_1 + underdog_winning_by_1
 ```
 
 Interpretacoes esperadas:
@@ -384,7 +399,7 @@ Interpretacoes esperadas:
 - mandante favorito vencendo por 1 pode controlar o jogo;
 - mandante underdog vencendo por 1 pode sofrer pressao;
 - visitante favorito perdendo por 1 pode gerar aceleracao ofensiva;
-- jogo equilibrado pode manter troca ofensiva.
+- underdog vencendo por 1 pode indicar pressao futura do favorito.
 
 ---
 
@@ -437,7 +452,7 @@ home_winning_by_1 + total_goals_3plus
 
 ---
 
-## 19. Mandante vencendo por 1 + odds balance
+## 19. Mandante vencendo por 1 + odds balance/strength existentes
 
 Testar:
 
@@ -477,14 +492,13 @@ Testar:
 
 ```text
 favorite_losing_by_1
-favorite_losing_by_1 + favorite_strong
-favorite_losing_by_1 + favorite_medium
-favorite_losing_by_1 + favorite_light
 favorite_losing_by_1 + shots_last_10m_high
 favorite_losing_by_1 + xg_last_10m_high
 favorite_losing_by_1 + momentum_trend_positive
 favorite_losing_by_1 + total_goals_1
 favorite_losing_by_1 + total_goals_3plus
+favorite_losing_by_1 + favorite_strength_high
+favorite_losing_by_1 + favorite_strength_low
 ```
 
 ---
@@ -495,8 +509,8 @@ Testar:
 
 ```text
 underdog_winning_by_1
-underdog_winning_by_1 + favorite_strong
-underdog_winning_by_1 + favorite_medium
+underdog_winning_by_1 + favorite_strength_high
+underdog_winning_by_1 + favorite_strength_low
 underdog_winning_by_1 + favorite_pressure_high
 underdog_winning_by_1 + shots_last_10m_high
 underdog_winning_by_1 + total_goals_3plus
@@ -514,6 +528,8 @@ Executar primeiro:
 away_winning_by_1 @70 + away_favorite
 away_winning_by_1 @70 + away_underdog
 away_winning_by_1 @70 + home_favorite
+away_winning_by_1 @70 + favorite_losing_by_1
+away_winning_by_1 @70 + underdog_winning_by_1
 away_winning_by_1 @70 + shots_last_10m_high
 away_winning_by_1 @70 + momentum_trend_positive
 away_winning_by_1 @70 + total_goals_3
@@ -522,6 +538,8 @@ away_winning_by_1 @70 + match_balance_high
 home_winning_by_1 @70 + home_favorite
 home_winning_by_1 @70 + home_underdog
 home_winning_by_1 @70 + away_favorite
+home_winning_by_1 @70 + favorite_losing_by_1
+home_winning_by_1 @70 + underdog_winning_by_1
 home_winning_by_1 @70 + shots_last_10m_high
 home_winning_by_1 @70 + momentum_trend_positive
 home_winning_by_1 @70 + total_goals_3
@@ -589,7 +607,8 @@ Para cada variacao:
 | `odds_ratio` | OR vs resto |
 | `ci95` | Intervalo de confianca |
 | `p_value` | Fisher exact test |
-| `class` | PROMISSOR / OBSERVAR / DESCARTAR |
+| `class` | classificacao estatistica local |
+| `multi_league_class` | MICRO_AMOSTRA_REPLICAR / REPLICACAO_MULTI_LIGA / PROMISSOR_LOCAL / OBSERVAR / DESCARTAR_ESTATISTICO_LOCAL |
 | `market_note` | Back Over / Lay Over / cuidado |
 
 ---
@@ -618,34 +637,27 @@ Para cada variacao e cada odd simulada:
 
 # PARTE F — CRITERIOS DE CLASSIFICACAO
 
-## 28. Classificacao estatistica
+## 28. Classificacao estatistica local
 
-### PROMISSOR
-
-```text
-N >= 40
-diff >= +8 p.p.
-OR > 1.50
-p-value < 0.10
-sem concentracao extrema
-```
-
-### OBSERVAR
+Usar a metodologia de:
 
 ```text
-N >= 25
-diff >= +4 p.p. ou edge operacional forte
-OR > 1.20 ou EV teorico positivo em odds plausiveis
+docs/04_RESEARCH/MULTI_LEAGUE_REPLICATION_CLASSIFICATION_V1.md
 ```
 
-### DESCARTAR
+Classes permitidas:
 
 ```text
-N pequeno demais
-diff fraca
-p-value fraco
-sem EV teorico em odds plausiveis
+MICRO_AMOSTRA_REPLICAR
+REPLICACAO_MULTI_LIGA
+PROMISSOR_LOCAL
+PROMISSOR_ROBUSTO_MULTI_LIGA
+OBSERVAR
+DESCARTAR_ESTATISTICO_LOCAL
+DESCARTAR_FINAL
 ```
+
+Nao descartar automaticamente padroes fortes apenas por N pequeno.
 
 ---
 
@@ -688,21 +700,20 @@ Escopo:
 Entradas esperadas:
 - dataset in-game com score ate cutoffs 60/65/70/75;
 - dataset H8 com features por cutoff;
-- odds_features_v1 com odds 1X2 closing e favorite_side/favorite_strength/match_balance;
+- odds_features_v1 com favorite_side/favorite_strength/match_balance ja existentes;
 - targets goal_after_cutoff/no_goal_after_cutoff derivados sem leakage.
 
 Implementar:
-1. Catalogar faixa simples de favorito:
-   - favorite_strong: odd_favorite <= 1.60
-   - favorite_medium: 1.61 <= odd_favorite <= 1.90
-   - favorite_light: 1.91 <= odd_favorite <= 2.20
-   - balanced_game: odd_favorite > 2.20
-2. Criar flags home_favorite, away_favorite, home/away strong/medium/light favorite.
-3. Criar flags home_winning_by_1, away_winning_by_1, team_winning_by_1, favorite_losing_by_1, underdog_winning_by_1.
-4. Criar variacoes listadas no plano, priorizando cutoff 70 e depois 60/75.
-5. Para cada variacao calcular N, pos, neg, taxa, baseline cutoff, diff, OR, IC95, p-value e classificacao.
-6. Calcular EV teorico para Back Over e Lay Over por R$100 nas odds: 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00, 2.20.
-7. Gerar reports:
+1. NAO criar catalogacao por faixa simples de favorito.
+2. NAO criar favorite_strong/favorite_medium/favorite_light/balanced_game por odd fixa.
+3. Usar somente favorite_side, favorite_strength e match_balance ja existentes em odds_features_v1.
+4. Criar flags derivadas permitidas: home_favorite, away_favorite, home_underdog, away_underdog, favorite_losing_by_1, favorite_winning_by_1, underdog_winning_by_1, underdog_losing_by_1.
+5. Criar flags home_winning_by_1, away_winning_by_1 e team_winning_by_1 nos cutoffs 60/65/70/75.
+6. Criar variacoes listadas no plano, priorizando cutoff 70 e depois 60/75.
+7. Para cada variacao calcular N, pos, neg, taxa, baseline cutoff, diff, OR, IC95, p-value e classificacao.
+8. Aplicar a classificacao MULTI_LEAGUE_REPLICATION_CLASSIFICATION_V1; nao descartar automaticamente padroes fortes apenas por N pequeno.
+9. Calcular EV teorico para Back Over e Lay Over por R$100 nas odds: 1.30, 1.40, 1.50, 1.60, 1.70, 1.80, 1.90, 2.00, 2.20.
+10. Gerar reports:
    - data/processed/reports/match_state_odds_h8_variation_v1_report.json
    - data/processed/reports/match_state_odds_h8_variation_v1_metrics.json
    - docs/04_RESEARCH/MATCH_STATE_ODDS_H8_VARIATION_RESULTS_V1.md
