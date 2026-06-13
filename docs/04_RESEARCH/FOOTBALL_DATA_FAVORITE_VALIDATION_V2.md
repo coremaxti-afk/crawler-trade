@@ -8,43 +8,41 @@ Status:
 APROVADO COM RESSALVAS PARA PESQUISA OPERACIONAL
 ```
 
-Esta revisao corrige a leitura anterior que usava `favorite_odd <= 1.70` na temporada 2025/26. Para manter compatibilidade com o estudo historico SofaScore, a definicao operacional usada passa a ser:
+Esta revisão corrige duas leituras metodológicas:
+
+1. Para manter compatibilidade com o estudo histórico SofaScore, a definição operacional usada passa a ser:
 
 ```text
-favorite_side = menor odd pre-jogo 1X2, sem cutoff rigido de odd.
+favorite_side = menor odd pré-jogo 1X2, sem cutoff rígido de odd.
 ```
 
-Com essa regra, a amostra correta para 2025/26 volta a usar:
+2. Para cálculo operacional com cashout aos 75 minutos, não se deve usar lucro cheio de +100 por acerto. A simulação correta com a curva média é:
 
 ```text
-h8_cold_combo_10m_2of3: N=69, sem gol 60-75 = 69.6%
-h8_pressure_score_10m_bottom25: N=42, sem gol 60-75 = 71.4%
+Lay Over 60' @1.50
+Cashout/Back Over 75' @2.00
+Stake lay = 100
+Lucro se não sair gol até 75' = +25
+Prejuízo se sair gol antes de 75' = -50
 ```
 
-A media consolidada entre EPL 2024/25 e EPL 2025/26 fica:
+## Definição Oficial Nesta Revisão
 
 ```text
-h8_cold_combo_10m_2of3: 88/123 = 71.5%
-h8_pressure_score_10m_bottom25: 59/80 = 73.8%
-```
-
-## Definicao Oficial Nesta Revisao
-
-```text
-Favorito = menor odd pre-jogo 1X2.
+Favorito = menor odd pré-jogo 1X2.
 ```
 
 Regras:
 
 - Home pode ser favorito.
 - Away pode ser favorito.
-- Draw nao pode ser favorite_side operacional.
-- Nao aplicar cutoff `<= 1.70` nesta versao.
-- O cutoff `<= 1.70` deve ser tratado apenas como segmentacao conservadora opcional, nao como regra principal.
+- Draw não pode ser favorite_side operacional.
+- Não aplicar cutoff `<= 1.70` nesta versão.
+- O cutoff `<= 1.70` deve ser tratado apenas como segmentação conservadora opcional, não como regra principal.
 
 ## Resultados por Temporada
 
-| Estrategia | Temporada | Acertos | Entradas | Taxa sem gol 60-75 | Taxa gol 60-75 |
+| Estratégia | Temporada | Acertos | Entradas | Taxa sem gol 60-75 | Taxa gol 60-75 |
 |---|---|---:|---:|---:|---:|
 | `favorite_winning_by_1 + h8_cold_combo_10m_2of3` | 2024/25 | 40 | 54 | 74.1% | 25.9% |
 | `favorite_winning_by_1 + h8_cold_combo_10m_2of3` | 2025/26 | 48 | 69 | 69.6% | 30.4% |
@@ -53,7 +51,7 @@ Regras:
 | `favorite_winning_by_1 + h8_pressure_score_10m_bottom25` | 2025/26 | 30 | 42 | 71.4% | 28.6% |
 | `favorite_winning_by_1 + h8_pressure_score_10m_bottom25` | Consolidado | 59 | 80 | 73.8% | 26.2% |
 
-## Correcao Metodologica
+## Correção Metodológica — Cutoff 1.70
 
 A leitura anterior com `favorite_odd <= 1.70` produziu na 2025/26:
 
@@ -62,40 +60,68 @@ h8_cold_combo_10m_2of3: N=15
 h8_pressure_score_10m_bottom25: N=8
 ```
 
-Essa queda ocorreu porque o corte `<=1.70` eliminou muitos jogos que a metodologia historica considerava favoritos pela menor odd.
+Essa queda ocorreu porque o corte `<=1.70` eliminou muitos jogos que a metodologia histórica considerava favoritos pela menor odd.
 
-Portanto, para comparabilidade com o SofaScore 2024/25, a media correta deve usar:
+Portanto, para comparabilidade com o SofaScore 2024/25, a média correta deve usar:
 
 ```text
 2025/26 N=69 e N=42
 ```
 
-E nao:
+E não:
 
 ```text
 2025/26 N=15 e N=8
 ```
 
-## Estimativa Operacional com Odd Media Proximo Gol
+## Estimativa Operacional Corrigida — Cashout aos 75
 
-Para Lay Over usando odd media 1.50:
+Para Lay Over usando a curva média:
 
 ```text
-Lucro se sem gol: +100
-Perda se gol: -50
+Entrada: Lay Over Próximo Gol 60' @1.50
+Saída/cashout: Back Over Próximo Gol 75' @2.00
+Stake lay: 100
 ```
 
-| Estrategia | N consolidado | Acertos | Erros | Lucro estimado | ROI estimado |
-|---|---:|---:|---:|---:|---:|
-| `favorite_winning_by_1 + h8_cold_combo_10m_2of3` | 123 | 88 | 35 | +7050 | +57.3% |
-| `favorite_winning_by_1 + h8_pressure_score_10m_bottom25` | 80 | 59 | 21 | +4850 | +60.6% |
-
-Calculo:
+Resultado aproximado:
 
 ```text
-Lucro = acertos * 100 - erros * 50
+Acerto: sem gol até 75' = +25
+Erro: gol antes de 75' = -50
+```
+
+| Estratégia | N consolidado | Acertos | Erros | Lucro estimado | ROI estimado |
+|---|---:|---:|---:|---:|---:|
+| `favorite_winning_by_1 + h8_cold_combo_10m_2of3` | 123 | 88 | 35 | +450 | +3.7% |
+| `favorite_winning_by_1 + h8_pressure_score_10m_bottom25` | 80 | 59 | 21 | +425 | +5.3% |
+
+Cálculo:
+
+```text
+Lucro = acertos * 25 - erros * 50
 ROI = lucro / (N * 100)
 ```
+
+## Comparação com Simulação Hold Antiga
+
+A conta antiga usava:
+
+```text
+Acerto = +100
+Erro = -50
+```
+
+Essa conta representa segurar a posição até a liquidação completa do mercado, ou uma simplificação de vitória cheia, não o cashout fixo aos 75 minutos.
+
+Para o protocolo real discutido:
+
+```text
+Entrada 60'
+Cashout 75'
+```
+
+a simulação correta é mais conservadora e fica entre +3.7% e +5.3% de ROI estimado.
 
 ## Leitura
 
@@ -103,40 +129,42 @@ ROI = lucro / (N * 100)
 
 - Maior amostra consolidada: N=123.
 - Taxa consolidada: 71.5%.
-- Estrategia mais robusta por volume.
-- Caiu de 74.1% em 2024/25 para 69.6% em 2025/26, mas permaneceu acima de 69%.
+- ROI estimado com cashout 60→75: +3.7%.
+- Estratégia mais robusta por volume, mas margem operacional real é estreita.
 
 ### favorite_winning_by_1 + h8_pressure_score_10m_bottom25
 
 - Menor amostra consolidada: N=80.
 - Melhor taxa consolidada: 73.8%.
-- Manteve consistencia entre 76.3% e 71.4%.
-- Melhor ROI estimado no consolidado com odd media.
+- ROI estimado com cashout 60→75: +5.3%.
+- Melhor margem estimada entre as duas.
 
-## Decisao
+## Decisão
 
 ```text
 APROVADO COM RESSALVAS PARA PESQUISA OPERACIONAL
 ```
 
-As duas estrategias mostram consistencia exploratoria na Premier League quando o favorito e definido pela menor odd pre-jogo.
+As duas estratégias mostram consistência exploratória na Premier League quando o favorito é definido pela menor odd pré-jogo.
 
-Ainda nao autoriza:
+Ainda não autoriza:
 
-- robo;
-- producao;
+- robô;
+- produção;
 - trade real;
 - backtesting financeiro real;
-- automacao operacional.
+- automação operacional.
 
-## Limitacoes
+## Limitações
 
-- Odds de entrada no mercado Proximo Gol ainda sao medias observadas/manualizadas, nao odds live historicas por timestamp.
-- A validacao e Premier League apenas.
-- Precisa replicacao multi-liga para robustez maior.
-- A definicao `menor odd = favorito` deve ser mantida para comparabilidade historica; cortes como `<=1.70` devem ser usados apenas como segmentacao secundaria.
+- Odds de entrada e saída no mercado Próximo Gol ainda são médias observadas/manualizadas.
+- Não há odds live históricas por timestamp.
+- A validação é Premier League apenas.
+- A margem com cashout fixo é sensível à curva de odds usada.
+- Comissão, slippage, suspensão de mercado e liquidez ainda não foram considerados.
+- Precisa replicação multi-liga para robustez maior.
 
-## Proxima Frente Recomendada
+## Próxima Frente Recomendada
 
 ```text
 SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1
@@ -148,7 +176,7 @@ Testar novos combos por time usando SportMonks `trends`:
 
 - time perdendo pressionando;
 - favorito perdendo pressionando;
-- favorito vencendo e adversario pressionando;
+- favorito vencendo e adversário pressionando;
 - mandante vencendo por 1 e visitante pressionando;
 - dangerous attacks subindo;
 - key passes subindo;
