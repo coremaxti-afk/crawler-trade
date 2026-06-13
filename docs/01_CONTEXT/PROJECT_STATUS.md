@@ -121,12 +121,10 @@ Estado:
 Documento principal:
 
 - `docs/04_RESEARCH/OPERACIONAL_TRADE_TOP_STRATEGIES_V1.md`
-  - Commit: `4715562bb6abb0d6bf0a1817b6ecc69cae34ca18`
 
 Documento de validacao de favorito:
 
 - `docs/04_RESEARCH/FOOTBALL_DATA_FAVORITE_VALIDATION_V2.md`
-  - Commit: `3323a30bd228c7512f8e1eaf9b3c7bd9ccdb2094`
 
 ### Decisao da frente favorite_winning_by_1 + jogo frio
 
@@ -155,77 +153,66 @@ O corte `<= 1.70` reduziu excessivamente a amostra da EPL 2025/26:
 - `h8_cold_combo_10m_2of3`: N=15.
 - `h8_pressure_score_10m_bottom25`: N=8.
 
+### Correcao de ROI operacional
+
+Erro identificado:
+
+O lucro anterior foi interpretado como se cada acerto gerasse lucro cheio de stake:
+
+```text
+Acerto = +100
+Erro = -50
+```
+
+Essa leitura corresponde a uma simulacao de HOLD/liquidacao completa, nao a uma operacao com entrada aos 60 e saida/cashout fixo aos 75.
+
+Correcao para janela 60-75:
+
+```text
+Lay Over 60' @1.50
+Back Over fechamento 75' @2.00
+Stake = 100
+```
+
+Resultado aproximado:
+
+```text
+Acerto sem gol ate 75 = +25
+Erro com gol antes de 75 = -50
+```
+
 ### Resultado Consolidado EPL 2024/25 + EPL 2025/26
 
 #### favorite_winning_by_1 + h8_cold_combo_10m_2of3
-
-2024/25:
-
-- 54 entradas.
-- 40 acertos.
-- 14 erros.
-- 74.1% sem gol 60-75.
-
-2025/26:
-
-- 69 entradas.
-- 48 acertos.
-- 21 erros.
-- 69.6% sem gol 60-75.
-
-Consolidado:
 
 - 123 entradas.
 - 88 acertos.
 - 35 erros.
 - 71.5% sem gol 60-75.
-- Erro: 28.5%.
-
-Estimativa operacional com Lay Over @1.50:
-
-- lucro se sem gol: +100.
-- perda se gol: -50.
-- lucro estimado: +7050.
-- ROI estimado: +57.3%.
+- 28.5% com gol 60-75.
+- Lucro corrigido saida fixa 75: +450.
+- ROI corrigido saida fixa 75: +3.7%.
 
 #### favorite_winning_by_1 + h8_pressure_score_10m_bottom25
-
-2024/25:
-
-- 38 entradas.
-- 29 acertos.
-- 9 erros.
-- 76.3% sem gol 60-75.
-
-2025/26:
-
-- 42 entradas.
-- 30 acertos.
-- 12 erros.
-- 71.4% sem gol 60-75.
-
-Consolidado:
 
 - 80 entradas.
 - 59 acertos.
 - 21 erros.
 - 73.8% sem gol 60-75.
-- Erro: 26.2%.
+- 26.2% com gol 60-75.
+- Lucro corrigido saida fixa 75: +425.
+- ROI corrigido saida fixa 75: +5.3%.
 
-Estimativa operacional com Lay Over @1.50:
+Interpretacao PM:
 
-- lucro estimado: +4850.
-- ROI estimado: +60.6%.
-
-Interpretação PM:
-
-- As duas estrategias mostram consistencia exploratoria na Premier League.
-- `h8_cold_combo_10m_2of3` tem maior amostra: N=123, acerto 71.5%.
-- `h8_pressure_score_10m_bottom25` tem melhor taxa: N=80, acerto 73.8%.
+- As estrategias seguem consistentes estatisticamente para prever ausencia de gol entre 60 e 75.
+- O lucro operacional com cashout fixo aos 75 e baixo.
+- Lay Over / Under frio so tende a ter lucro relevante se usado em formato HOLD, segurando mais tempo ou ate liquidacao relevante.
+- Para operacoes de janela curta, a pesquisa deve buscar estrategias Over em que o gol dentro da janela gere lucro cheio.
 
 Ressalvas:
 
-- odds de entrada do mercado Proximo Gol ainda sao medias observadas/manualizadas;
+- odds de entrada/saida ainda sao medias observadas/manualizadas;
 - nao ha odds live reais por timestamp;
 - validacao ainda e Premier League apenas;
 - precisa replicacao multi-liga;
@@ -243,7 +230,7 @@ Nao autoriza:
 
 ## Nova Frente Oficial
 
-Documento criado:
+Documento:
 
 - `docs/04_RESEARCH/SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1.md`
 
@@ -253,30 +240,51 @@ Status:
 ABERTA COMO PLANO METODOLOGICO EXPLORATORIO
 ```
 
+Nova direcao:
+
+A proxima frente SportMonks deve ser dividida em duas familias:
+
+### 1. UNDER_HOLD
+
 Objetivo:
 
-Usar dados SportMonks ja coletados para descobrir novas estrategias e combos por lado/time, explorando tendencias minuto a minuto por `participant_id`.
+Encontrar cenarios com alta probabilidade de nao sair gol ate o fim ou ate janela mais longa.
 
-Motivo:
+Exemplos:
 
-SportMonks permite investigar algo que o SofaScore antigo nao entregava bem:
+- jogo muito frio aos 60;
+- favorito vencendo por 1 e jogo esfriando;
+- baixa finalizacao;
+- baixa pressao;
+- poucos dangerous attacks;
+- ausencia de big chances;
+- ausencia de shots on target.
 
-```text
-pressao por time
-```
+Meta:
 
-Grupos de combos candidatos:
+- buscar taxa de acerto 70%+ para segurar ate 80/90 ou ate liquidacao relevante.
+
+### 2. OVER_JANELA_CURTA
+
+Objetivo:
+
+Encontrar cenarios com alta probabilidade de gol entre 60-75, 65-80 ou 70-85.
+
+Exemplos:
 
 - time perdendo pressionando;
 - favorito perdendo pressionando;
-- favorito vencendo e adversario pressionando;
-- mandante vencendo por 1 e visitante pressionando;
-- time vencendo por 1 mas esfriando;
-- time perdendo por 1 com dangerous attacks subindo;
-- key passes ultimos 10 minutos;
-- big chances ultimos 10 minutos;
-- shots on target ultimos 10 minutos;
-- corners/dangerous attacks em aceleracao.
+- underdog vencendo e favorito pressionando;
+- visitante pressionando mandante que vence por 1;
+- dangerous attacks em aceleracao;
+- shots on target recentes;
+- big chances recentes;
+- key passes recentes;
+- escanteios e pressao territorial aumentando.
+
+Meta:
+
+- encontrar operacoes com retorno relevante em janela curta, onde o gol dentro da janela gere lucro cheio.
 
 Restricoes da nova frente:
 
@@ -312,10 +320,11 @@ Prioridades imediatas:
 1. Validar semanticamente SportMonks `trends`.
 2. Confirmar se `trends` representa acumulado, incremental ou snapshot por minuto.
 3. Definir whitelist V1 de indicadores por time.
-4. Definir pacote oficial minimo H8 SportMonks para escala.
-5. Autorizar, se aprovado, descoberta controlada `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`.
-6. Manter API-Football em discovery complementar.
-7. Manter SofaScore como backup/especialista para graph/shotmap.
+4. Separar candidatos `UNDER_HOLD` e `OVER_JANELA_CURTA`.
+5. Definir pacote oficial minimo H8 SportMonks para escala.
+6. Autorizar, se aprovado, descoberta controlada `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`.
+7. Manter API-Football em discovery complementar.
+8. Manter SofaScore como backup/especialista para graph/shotmap.
 
 Bloqueios:
 
@@ -339,7 +348,7 @@ SportMonks `trends` pode ser usado com seguranca para cutoffs 60/65/70/75 e para
 Se SIM:
 
 - SportMonks passa a ser fonte primaria candidata para H8 por time.
-- Autorizar discovery controlado `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`.
+- Autorizar discovery controlado `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`, separado em `UNDER_HOLD` e `OVER_JANELA_CURTA`.
 
 Se NAO:
 
