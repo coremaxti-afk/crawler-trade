@@ -22,19 +22,14 @@ APROVADO COM RESSALVAS
 
 Este documento pode ser usado como guia de pesquisa operacional, mas ainda não deve ser tratado como regra final de execução.
 
-Ressalva principal:
+Atualização metodológica importante:
 
 ```text
-As estratégias com favorite_winning_by_1 ainda dependem de validação definitiva do favorito pré-jogo via odds.
+Para manter compatibilidade com o estudo histórico SofaScore, a definição operacional usada para favorito passa a ser:
+favorite_side = menor odd pré-jogo 1X2, sem cutoff rígido de odd.
 ```
 
-Na etapa SportMonks, quando o favorito pré-jogo não estava disponível de forma consolidada, foi usado um proxy operacional:
-
-```text
-time vencendo por 1 gol no cutoff
-```
-
-Portanto, os resultados abaixo preservam o valor prático da leitura de jogo frio/quente, mas as estratégias com `favorite_*` ainda precisam ser reexecutadas com favorito pré-jogo real.
+O corte `odd <= 1.70` foi considerado conservador demais para replicar a lógica histórica e reduziu excessivamente a amostra na temporada 2025/26.
 
 ---
 
@@ -59,21 +54,44 @@ Stake padrão utilizada nas simulações:
 
 ---
 
-# Ranking Operacional
+# Resultado Consolidado Corrigido — EPL 2024/25 + EPL 2025/26
+
+A média correta deve usar a regra histórica:
+
+```text
+Favorito = menor odd pré-jogo, sem cutoff de 1.70
+```
+
+Com isso, os números de 2025/26 considerados para comparação são os perfis SportMonks/proxy por menor odd, não o teste conservador com `odd <= 1.70`.
+
+| Estratégia | Temporada | Acertos | Entradas | Taxa sem gol 60-75 | Taxa gol 60-75 |
+|---|---|---:|---:|---:|---:|
+| `favorite_winning_by_1 + h8_cold_combo_10m_2of3` | 2024/25 | 40 | 54 | 74.1% | 25.9% |
+| `favorite_winning_by_1 + h8_cold_combo_10m_2of3` | 2025/26 | 48 | 69 | 69.6% | 30.4% |
+| `favorite_winning_by_1 + h8_cold_combo_10m_2of3` | Consolidado | 88 | 123 | 71.5% | 28.5% |
+| `favorite_winning_by_1 + h8_pressure_score_10m_bottom25` | 2024/25 | 29 | 38 | 76.3% | 23.7% |
+| `favorite_winning_by_1 + h8_pressure_score_10m_bottom25` | 2025/26 | 30 | 42 | 71.4% | 28.6% |
+| `favorite_winning_by_1 + h8_pressure_score_10m_bottom25` | Consolidado | 59 | 80 | 73.8% | 26.2% |
+
+Leitura:
+
+```text
+As duas estratégias se mantêm acima de 70% no consolidado EPL.
+A estratégia h8_pressure_score_10m_bottom25 tem maior taxa.
+A estratégia h8_cold_combo_10m_2of3 tem maior amostra.
+```
+
+---
+
+# Ranking Operacional Atualizado
 
 Critérios:
 
 ```text
 N > 20
-Estratégias estatisticamente validadas
-Ordenação por retorno esperado
-```
-
-Observação:
-
-```text
-Ranking mantido como referência histórica.
-Entradas favorite_* devem ser lidas com ressalva até validação do favorito pré-jogo.
+Favorito = menor odd pré-jogo 1X2
+Target: sem gol entre 60 e 75
+Ordenação por equilíbrio entre N e taxa
 ```
 
 ---
@@ -88,27 +106,27 @@ JOGO FRIO
 STATUS: APROVADO COM RESSALVAS
 ```
 
-### Ressalva
+### Estatísticas por temporada
+
+| Temporada | Entradas | Acertos | Erros | Taxa acerto | Taxa erro |
+|---|---:|---:|---:|---:|---:|
+| 2024/25 | 54 | 40 | 14 | 74.1% | 25.9% |
+| 2025/26 | 69 | 48 | 21 | 69.6% | 30.4% |
+| Consolidado | 123 | 88 | 35 | 71.5% | 28.5% |
+
+### Entrada
 
 ```text
-A reprodução SportMonks ainda não validou favorito pré-jogo.
-Proxy usado na etapa operacional: time vencendo por 1 no cutoff.
+Minuto 60
+Favorito pré-jogo pela menor odd vencendo por 1 gol
+Jogo frio em 2 de 3 sinais H8
 ```
 
-### Estatísticas históricas originais
-
-| Métrica | Valor |
-|----------|----------:|
-| N | 54 |
-| Sem gol 60-75 | 74.1% |
-| ROI estimado | +61.15% |
-| Lucro estimado | +3302.10 |
-
-### Perfil operacional SportMonks com proxy
+### Perfil operacional SportMonks 2025/26
 
 | Métrica | Valor |
 |---|---:|
-| N proxy | 69 |
+| N | 69 |
 | Sem gol 60-75 | 69.6% |
 | Finalizações totais últimos 10 min média | 1.39 |
 | Finalizações no gol últimos 10 min média | 0.65 |
@@ -116,31 +134,6 @@ Proxy usado na etapa operacional: time vencendo por 1 no cutoff.
 | Key Passes últimos 10 min média | 0.90 |
 | Big Chances Created últimos 10 min média | 0.36 |
 | Corners últimos 10 min média | 0.74 |
-
-### Entrada
-
-```text
-Minuto 60
-Favorito vencendo por 1 gol
-```
-
-Até validar favorito pré-jogo, leitura operacional aproximada:
-
-```text
-Minuto 60
-Time vencendo por 1 gol
-Jogo frio nos últimos 10 minutos
-```
-
-### Interpretação
-
-O jogo apresenta sinais consistentes de esfriamento ofensivo.
-
-Pelo menos 2 dos 3 grupos:
-
-- poucos chutes
-- baixa criação/perigo
-- momentum/pressão fraca
 
 ### Saída
 
@@ -151,10 +144,9 @@ Hold até 75'
 ### Parecer
 
 ```text
-Melhor estratégia encontrada até o momento.
-Maior amostra.
-Maior robustez.
-Ainda precisa validação definitiva do favorito pré-jogo.
+Estratégia mais robusta por amostra.
+Consistente nas duas temporadas da Premier League.
+A queda de 74.1% para 69.6% em 2025/26 exige ressalva, mas o consolidado de 71.5% em 123 entradas segue forte.
 ```
 
 ---
@@ -169,27 +161,27 @@ JOGO FRIO
 STATUS: APROVADO COM RESSALVAS
 ```
 
-### Ressalva
+### Estatísticas por temporada
+
+| Temporada | Entradas | Acertos | Erros | Taxa acerto | Taxa erro |
+|---|---:|---:|---:|---:|---:|
+| 2024/25 | 38 | 29 | 9 | 76.3% | 23.7% |
+| 2025/26 | 42 | 30 | 12 | 71.4% | 28.6% |
+| Consolidado | 80 | 59 | 21 | 73.8% | 26.2% |
+
+### Entrada
 
 ```text
-A reprodução SportMonks ainda não validou favorito pré-jogo.
-Proxy usado na etapa operacional: time vencendo por 1 no cutoff.
+Minuto 60
+Favorito pré-jogo pela menor odd vencendo por 1 gol
+Pressure score dos últimos 10 minutos no bottom25
 ```
 
-### Estatísticas históricas originais
-
-| Métrica | Valor |
-|----------|----------:|
-| N | 36 |
-| Sem gol 60-75 | 75.0% |
-| ROI estimado | +62.50% |
-| Lucro estimado | +2250.00 |
-
-### Perfil operacional SportMonks com proxy
+### Perfil operacional SportMonks 2025/26
 
 | Métrica | Valor |
 |---|---:|
-| N proxy | 42 |
+| N | 42 |
 | Sem gol 60-75 | 71.4% |
 | Finalizações totais últimos 10 min média | 1.05 |
 | Finalizações no gol últimos 10 min média | 0.12 |
@@ -197,33 +189,6 @@ Proxy usado na etapa operacional: time vencendo por 1 no cutoff.
 | Key Passes últimos 10 min média | 0.74 |
 | Big Chances Created últimos 10 min média | 0.05 |
 | Corners últimos 10 min média | 0.64 |
-
-### Entrada
-
-```text
-Minuto 60
-Favorito vencendo por 1 gol
-```
-
-Até validar favorito pré-jogo, leitura operacional aproximada:
-
-```text
-Minuto 60
-Time vencendo por 1 gol
-Pressão ofensiva no quartil inferior
-```
-
-### Interpretação
-
-O score composto de pressão está entre os 25% mais baixos da base.
-
-Componentes:
-
-- chutes
-- criação/perigo
-- dangerous attacks
-- key passes
-- big chances
 
 ### Saída
 
@@ -234,347 +199,77 @@ Hold até 75'
 ### Parecer
 
 ```text
-Melhor ROI por operação na leitura original.
-Menor amostra que a estratégia #1.
-Ainda precisa validação definitiva do favorito pré-jogo.
+Estratégia com melhor taxa consolidada.
+Amostra menor que cold_combo, mas consistente: 76.3% em 2024/25 e 71.4% em 2025/26.
 ```
 
 ---
 
-## 3) favorite_winning_by_1 + h8_cold_combo_10m_2of3 (Dinâmico)
+# Estimativa Operacional com Odd Média Próximo Gol
 
-### Classificação
-
-```text
-LAY OVER
-PROTOCOLO DINÂMICO
-STATUS: APROVADO COM RESSALVAS
-```
-
-### Ressalva
+Para Lay Over usando odd média 1.50:
 
 ```text
-A reprodução SportMonks ainda não validou favorito pré-jogo.
-Proxy usado na etapa operacional: time vencendo por 1 no cutoff.
+Lucro se não sair gol: +100
+Perda se sair gol: -50
 ```
 
-### Estatísticas históricas originais
-
-| Métrica | Valor |
-|----------|----------:|
-| N | 54 |
-| ROI estimado | +22.3% |
-
-### Perfil dinâmico SportMonks com proxy
-
-| Grupo | N | Gol 60-75 | Sem gol 60-75 | Gol 70-75 | Sem gol 70-75 |
+| Estratégia | N consolidado | Acerto | Erro | Lucro estimado | ROI estimado |
 |---|---:|---:|---:|---:|---:|
-| Continuou frio | 26 | 11.5% | 88.5% | 3.8% | 96.2% |
-| Esquentou | 43 | 41.9% | 58.1% | 9.3% | 90.7% |
+| `h8_cold_combo_10m_2of3` | 123 | 88 | 35 | +7050 | +57.3% |
+| `h8_pressure_score_10m_bottom25` | 80 | 59 | 21 | +4850 | +60.6% |
 
-### Entrada
-
-```text
-Minuto 60
-Favorito vencendo por 1
-```
-
-### Reavaliação
+Cálculo:
 
 ```text
-70-75 minutos
-```
-
-### Lógica
-
-Continuar somente se o jogo permanecer frio.
-
-### Parecer
-
-```text
-Inferior ao hold simples na simulação financeira anterior.
-Mas a reavaliação SportMonks mostra forte separação entre continuou frio e esquentou.
-Ainda precisa validação definitiva do favorito pré-jogo.
+Lucro = acertos * 100 - erros * 50
+ROI = lucro / (N * 100)
 ```
 
 ---
 
-## 4) favorite_winning_by_1 + h8_pressure_score_10m_bottom25 (Dinâmico)
+# Conclusão Atualizada
 
-### Classificação
+Podemos dizer que, na Premier League, as duas estratégias mostram consistência estatística exploratória:
 
 ```text
-LAY OVER
-PROTOCOLO DINÂMICO
-STATUS: APROVADO COM RESSALVAS
+favorite_winning_by_1 + h8_cold_combo_10m_2of3
+favorite_winning_by_1 + h8_pressure_score_10m_bottom25
 ```
 
-### Ressalva
+Mas ainda com ressalvas:
+
+- não é produção;
+- não é robô;
+- não é backtesting financeiro real;
+- odds de entrada ainda são médias, não odds live reais por timestamp;
+- precisa replicação multi-liga para robustez maior.
+
+Decisão:
 
 ```text
-A reprodução SportMonks ainda não validou favorito pré-jogo.
-Proxy usado na etapa operacional: time vencendo por 1 no cutoff.
-```
-
-### Estatísticas históricas originais
-
-| Métrica | Valor |
-|----------|----------:|
-| N | 36 |
-| ROI estimado | +21.4% |
-
-### Perfil dinâmico SportMonks com proxy
-
-| Grupo | N | Gol 60-75 | Sem gol 60-75 | Gol 70-75 | Sem gol 70-75 |
-|---|---:|---:|---:|---:|---:|
-| Continuou frio | 14 | 7.1% | 92.9% | 0.0% | 100.0% |
-| Esquentou | 28 | 39.3% | 60.7% | 7.1% | 92.9% |
-
-### Entrada
-
-```text
-Minuto 60
-Favorito vencendo por 1
-```
-
-### Reavaliação
-
-```text
-70-75 minutos
-```
-
-### Parecer
-
-```text
-Inferior ao hold simples na simulação financeira anterior.
-Mas a reavaliação SportMonks mostra que continuar frio é um filtro operacional forte.
-Ainda precisa validação definitiva do favorito pré-jogo.
+APROVADO COM RESSALVAS PARA PESQUISA OPERACIONAL
 ```
 
 ---
 
-## 5) home_winning_by_1 + h8_pressure_score_10m_top25
-
-### Classificação
+# Próxima Etapa Recomendada
 
 ```text
-BACK OVER
-JOGO QUENTE
-STATUS: OBSERVAÇÃO
-```
-
-### Estatísticas históricas originais
-
-| Métrica | Valor |
-|----------|----------:|
-| N | 23 |
-| ROI Dinâmico | +7.6% |
-
-### Perfil operacional SportMonks
-
-| Métrica | Valor |
-|---|---:|
-| N proxy/reprodução | 22 |
-| Gol após cutoff | 36.4% |
-| Finalizações totais últimos 10 min média | 4.09 |
-| Finalizações no gol últimos 10 min média | 1.91 |
-| Dangerous Attacks últimos 10 min média | 10.00 |
-| Key Passes últimos 10 min média | 3.09 |
-| Big Chances Created últimos 10 min média | 1.18 |
-| Corners últimos 10 min média | 1.27 |
-
-### Entrada
-
-```text
-Minuto 65
-Mandante vencendo por 1
-```
-
-### Reavaliação
-
-```text
-75 minutos
-```
-
-### Continuar
-
-Se:
-
-- pressão continua alta
-- chutes continuam aparecendo
-- key passes continuam altos
-- big chances continuam aparecendo
-
-### Cashout
-
-Se:
-
-- jogo esfriar
-- pressão desaparecer
-- ausência de finalizações perigosas
-
-### Parecer
-
-```text
-Melhor Back Over com N > 20 no documento original.
-Na leitura SportMonks recente ficou mais fraco que as estratégias Lay Over.
-Manter em observação.
-```
-
----
-
-## Estratégia Complementar
-
-### home_winning_by_1 + h8_shot_quality_top25
-
-| Métrica | Valor |
-|----------|----------:|
-| N histórico | 20 |
-| ROI Hold histórico | +12.0% |
-| ROI Dinâmico histórico | +16.2% |
-| N SportMonks | 22 |
-| Gol após cutoff SportMonks | 31.8% |
-
-### Perfil operacional SportMonks
-
-| Métrica | Valor |
-|---|---:|
-| Finalizações totais últimos 10 min média | 3.73 |
-| Finalizações no gol últimos 10 min média | 1.91 |
-| Dangerous Attacks últimos 10 min média | 8.91 |
-| Key Passes últimos 10 min média | 2.95 |
-| Big Chances Created últimos 10 min média | 1.36 |
-| Corners últimos 10 min média | 1.00 |
-
-### Observação
-
-```text
-Não entrou no ranking oficial original por possuir exatamente 20 jogos.
-Na leitura SportMonks recente, ficou em observação e não superou as estratégias Lay Over.
-```
-
----
-
-# Conclusões
-
-## Grupo mais forte
-
-```text
-LAY OVER
-```
-
-Estratégias:
-
-- favorite_winning_by_1 + h8_cold_combo_10m_2of3
-- favorite_winning_by_1 + h8_pressure_score_10m_bottom25
-
-Ressalva:
-
-```text
-O termo favorite_winning_by_1 ainda precisa ser validado por odds pré-jogo.
-Até lá, os perfis SportMonks devem ser interpretados como time vencendo por 1 + jogo frio.
-```
-
----
-
-## Melhor Back Over
-
-```text
-home_winning_by_1 + h8_pressure_score_10m_top25
-home_winning_by_1 + h8_shot_quality_top25
-```
-
-Status:
-
-```text
-OBSERVAÇÃO
-```
-
-Motivo:
-
-```text
-Na leitura SportMonks recente, o Back Over ficou mais fraco do que o Lay Over frio.
-```
-
----
-
-# Sugestão Operacional Temporária
-
-Enquanto o favorito pré-jogo não for validado, a regra operacional mais segura é tratar como estudo de proxy:
-
-```text
-Minuto 60
-Time vencendo por 1 gol
-Jogo frio nos últimos 10 minutos
-Lay Over Próximo Gol
-```
-
-Parâmetros aproximados derivados do perfil SportMonks:
-
-```text
-Finalizações totais últimos 10 min <= 1 a 2
-Finalizações no gol últimos 10 min = 0
-Big Chances Created últimos 10 min = 0
-Key Passes últimos 10 min <= 1
-Dangerous Attacks últimos 10 min <= 8 a 9
-Corners últimos 10 min <= 1
-```
-
-Esses parâmetros devem ser recalibrados quando houver favorito pré-jogo real.
-
----
-
-# Pendência Metodológica
-
-As configurações operacionais apresentadas neste documento ainda são aproximações.
-
-A principal pendência atual é:
-
-```text
-Validar favorito pré-jogo via odds.
-```
-
-Documento/estudo complementar recomendado:
-
-```text
-docs/04_RESEARCH/PRE_MATCH_FAVORITE_VALIDATION_V1.md
+SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1
 ```
 
 Objetivo:
 
-```text
-Integrar odds pré-jogo para marcar favorito real antes da partida e reexecutar as estratégias favorite_*.
-```
+Testar novos combos por time usando SportMonks:
 
-Também é necessário manter o estudo:
+- time perdendo pressionando;
+- favorito perdendo pressionando;
+- adversário do favorito pressionando;
+- mandante vencendo por 1 e visitante pressionando;
+- dangerous attacks subindo;
+- key passes subindo;
+- big chances recentes;
+- shots on target recentes.
 
-```text
-docs/04_RESEARCH/TRADE_ENTRY_PROFILE_ANALYSIS_V1.md
-```
-
-Objetivo:
-
-Calcular e revisar os perfis médios reais de entrada de cada estratégia.
-
-Para cada estratégia medir:
-
-- finalizações últimos 10 min
-- finalizações no gol últimos 10 min
-- dangerous attacks últimos 10 min
-- key passes últimos 10 min
-- big chances created últimos 10 min
-- corners últimos 10 min
-- posse snapshot no cutoff
-- estado do placar
-- odds médias observadas
-- favorito pré-jogo validado
-
-Resultado esperado:
-
-Transformar os sinais estatísticos em parâmetros operacionais concretos para configuração de plataforma, com separação clara entre:
-
-```text
-resultado histórico original
-resultado SportMonks com proxy
-resultado definitivo com favorito pré-jogo
-```
+Não avançar para robô ou produção.
