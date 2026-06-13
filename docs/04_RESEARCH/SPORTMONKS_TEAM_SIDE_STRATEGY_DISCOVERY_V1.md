@@ -13,102 +13,97 @@ Nao autoriza robo, producao, trade real ou automacao operacional.
 
 ---
 
-## Contexto
+## Correcao Metodologica Importante
 
-A avaliacao consolidada das estrategias `favorite_winning_by_1 + jogo frio` foi concluida para Premier League 2024/25 + 2025/26.
+A frente `favorite_winning_by_1 + jogo frio` continua estatisticamente consistente para prever ausencia de gol entre 60 e 75.
 
-A definicao operacional aprovada para compatibilidade historica foi:
+Porem, foi identificado erro de interpretacao no calculo de lucro operacional.
 
-```text
-favorite_side = menor odd pre-jogo 1X2
-```
-
-Nao usar, nesta comparacao historica, cutoff rigido de odd como regra principal:
+O calculo anterior interpretava cada acerto como lucro cheio de stake:
 
 ```text
-favorite_odd <= 1.70
+Acerto = +100
+Erro = -50
 ```
 
-Motivo:
+Essa leitura corresponde a uma simulacao de hold/segurar a posicao ate liquidacao completa do mercado, nao a uma operacao com entrada aos 60 e saida/cashout fixo aos 75.
 
-O corte `<= 1.70` reduziu excessivamente a amostra da EPL 2025/26:
-
-- `h8_cold_combo_10m_2of3`: N=15
-- `h8_pressure_score_10m_bottom25`: N=8
-
-Portanto, para comparacao historica, a regra correta e:
+Para operacao real com entrada aos 60 e saida aos 75 usando curva media:
 
 ```text
-menor odd = favorito
+Lay Over 60' @1.50
+Back Over fechamento 75' @2.00
+Stake = 100
 ```
+
+Resultado aproximado:
+
+```text
+Acerto sem gol ate 75 = +25
+Erro com gol antes de 75 = -50
+```
+
+Portanto, o lucro correto para saida fixa aos 75 e muito menor.
 
 ---
 
-## Resultado Consolidado EPL 2024/25 + EPL 2025/26
+## Resultado Estatistico Consolidado EPL 2024/25 + EPL 2025/26
 
 ### 1. favorite_winning_by_1 + h8_cold_combo_10m_2of3
-
-2024/25:
-
-- 54 entradas
-- 40 acertos
-- 14 erros
-- 74.1% sem gol 60-75
-
-2025/26:
-
-- 69 entradas
-- 48 acertos
-- 21 erros
-- 69.6% sem gol 60-75
-
-Consolidado:
 
 - 123 entradas
 - 88 acertos
 - 35 erros
 - 71.5% sem gol 60-75
-- erro: 28.5%
+- 28.5% com gol 60-75
 
-Estimativa operacional com Lay Over @1.50:
+Calculo corrigido com saida fixa aos 75:
 
-- lucro se sem gol: +100
-- perda se gol: -50
-- lucro estimado: +7050
-- ROI estimado: +57.3%
+```text
+88 * 25 - 35 * 50 = +450
+```
+
+Resultado:
+
+- lucro final estimado: +450
+- ROI estimado: +3.7%
 
 ### 2. favorite_winning_by_1 + h8_pressure_score_10m_bottom25
-
-2024/25:
-
-- 38 entradas
-- 29 acertos
-- 9 erros
-- 76.3% sem gol 60-75
-
-2025/26:
-
-- 42 entradas
-- 30 acertos
-- 12 erros
-- 71.4% sem gol 60-75
-
-Consolidado:
 
 - 80 entradas
 - 59 acertos
 - 21 erros
 - 73.8% sem gol 60-75
-- erro: 26.2%
+- 26.2% com gol 60-75
 
-Estimativa operacional com Lay Over @1.50:
+Calculo corrigido com saida fixa aos 75:
 
-- lucro estimado: +4850
-- ROI estimado: +60.6%
+```text
+59 * 25 - 21 * 50 = +425
+```
+
+Resultado:
+
+- lucro final estimado: +425
+- ROI estimado: +5.3%
 
 ---
 
-## Decisao PM
+## Interpretacao PM
+
+As estrategias seguem validas como sinal estatistico de jogo frio/no-goal entre 60 e 75.
+
+Mas a operacao de janela curta 60-75 com cashout fixo aos 75 gera lucro operacional baixo.
+
+Conclusao:
+
+- Lay Over / Under frio pode ser forte em formato HOLD ou janela mais longa.
+- Lay Over / Under frio fica menos atrativo para cashout fixo curto 60-75.
+- Para janela curta, e necessario buscar tambem estrategias Over, onde o gol dentro da janela gere lucro cheio.
+
+---
+
+## Decisao PM Atualizada
 
 A frente `favorite_winning_by_1 + jogo frio` esta:
 
@@ -116,11 +111,12 @@ A frente `favorite_winning_by_1 + jogo frio` esta:
 APROVADA COM RESSALVAS PARA PESQUISA OPERACIONAL
 ```
 
-Interpretacao:
+Mas com a seguinte correcao:
 
-- As duas estrategias mostram consistencia exploratoria na Premier League.
-- `h8_cold_combo_10m_2of3` tem maior amostra: N=123, acerto 71.5%.
-- `h8_pressure_score_10m_bottom25` tem melhor taxa: N=80, acerto 73.8%.
+```text
+ROI alto anterior = simulacao tipo HOLD / liquidacao completa
+ROI corrigido 60-75 com cashout fixo = baixo
+```
 
 Nao autoriza:
 
@@ -132,34 +128,87 @@ Nao autoriza:
 
 Ressalvas:
 
-- odds de entrada do mercado Proximo Gol ainda sao medias observadas/manualizadas;
+- odds de entrada/saida ainda sao medias observadas/manualizadas;
 - nao ha odds live reais por timestamp;
 - validacao ainda e Premier League apenas;
 - precisa replicacao multi-liga;
 - resultado e pesquisa operacional, nao execucao real.
 
-Documentos relacionados:
+---
 
-- `docs/04_RESEARCH/OPERACIONAL_TRADE_TOP_STRATEGIES_V1.md`
-  - Commit: `4715562bb6abb0d6bf0a1817b6ecc69cae34ca18`
-- `docs/04_RESEARCH/FOOTBALL_DATA_FAVORITE_VALIDATION_V2.md`
-  - Commit: `3323a30bd228c7512f8e1eaf9b3c7bd9ccdb2094`
+## Nova Direcao da Frente SportMonks
+
+A proxima frente SportMonks deve ser dividida em duas familias.
 
 ---
 
-## Proxima Frente Oficial
-
-```text
-SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1
-```
+## Familia 1 - Under / Lay Over de HOLD
 
 Objetivo:
+
+Encontrar cenarios com alta probabilidade de nao sair gol ate o fim ou ate janela mais longa.
+
+Exemplos:
+
+- jogo muito frio aos 60;
+- favorito vencendo por 1 e jogo esfriando;
+- baixa finalizacao;
+- baixa pressao;
+- poucos dangerous attacks;
+- ausencia de big chances;
+- ausencia de shots on target;
+- time vencendo por 1 sem sofrer pressao real;
+- adversario sem aceleracao ofensiva.
+
+Meta:
+
+```text
+Buscar taxa de acerto 70%+ para segurar ate 80/90 ou ate liquidacao relevante.
+```
+
+Leitura operacional:
+
+Esta familia so faz sentido se o protocolo permitir capturar mais valor do decaimento da odd do que o cashout curto 60-75.
+
+---
+
+## Familia 2 - Over de Janela Curta
+
+Objetivo:
+
+Encontrar cenarios com alta probabilidade de gol em janelas curtas:
+
+- 60-75;
+- 65-80;
+- 70-85.
+
+Exemplos:
+
+- time perdendo pressionando;
+- favorito perdendo pressionando;
+- underdog vencendo e favorito pressionando;
+- visitante pressionando mandante que vence por 1;
+- dangerous attacks em aceleracao;
+- shots on target recentes;
+- big chances recentes;
+- key passes recentes;
+- escanteios e pressao territorial aumentando.
+
+Meta:
+
+```text
+Encontrar operacoes com retorno relevante em janela curta, onde o gol dentro da janela gere lucro cheio.
+```
+
+---
+
+## Objetivo do Discovery SportMonks
 
 Usar dados SportMonks ja coletados para descobrir novas estrategias e combos por lado/time, explorando tendencias minuto a minuto por `participant_id`.
 
 Motivo:
 
-SportMonks permite algo que o SofaScore antigo nao entregava bem:
+SportMonks permite investigar algo que o SofaScore antigo nao entregava bem:
 
 ```text
 pressao por time
@@ -176,39 +225,7 @@ Isso pode transformar H8 de leitura agregada da partida em leitura direcional:
 
 ---
 
-## Hipoteses e Combos Candidatos
-
-Explorar, de forma controlada e sem p-hacking livre, os seguintes grupos:
-
-### Pressao do time perdendo
-
-- time perdendo pressionando;
-- time perdendo por 1 com dangerous attacks subindo;
-- time perdendo por 1 com key passes subindo;
-- time perdendo por 1 com shots on target recentes.
-
-### Pressao do favorito
-
-- favorito perdendo pressionando;
-- favorito empatando e pressionando;
-- favorito vencendo mas adversario pressionando;
-- favorito vencendo por 1 e esfriando.
-
-### Pressao do underdog
-
-- underdog vencendo por 1 e sendo pressionado;
-- underdog vencendo por 1 e mantendo pressao;
-- underdog perdendo e pressionando.
-
-### Match state + team-side pressure
-
-- mandante vencendo por 1 e visitante pressionando;
-- visitante vencendo por 1 e mandante pressionando;
-- time vencendo por 1 mas esfriando;
-- time vencendo por 1 sofrendo dangerous attacks crescentes;
-- empate com um lado dominando pressao.
-
-### Indicadores SportMonks candidatos
+## Indicadores SportMonks Candidatos
 
 - attacks ultimos 10 minutos;
 - dangerous attacks ultimos 10 minutos;
@@ -241,14 +258,21 @@ Janelas candidatas:
 
 Targets exploratorios:
 
-- sem gol 60-75
-- gol 60-75
+### Under / Lay Over HOLD
+
+- sem gol 60-80
+- sem gol 60-90
 - sem gol 65-80
-- gol 65-80
+- sem gol 65-90
 - sem gol 70-85
+- sem gol 70-90
+
+### Over Janela Curta
+
+- gol 60-75
+- gol 65-80
 - gol 70-85
-- gol apos cutoff
-- no_goal_after_cutoff
+- gol apos cutoff em janela curta definida
 
 Mercados teoricos:
 
@@ -292,6 +316,7 @@ docs/04_RESEARCH/SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_RESULTS_V1.md
 
 O resultado deve reportar, por padrao/estrategia candidata:
 
+- familia: UNDER_HOLD ou OVER_JANELA_CURTA;
 - N;
 - wins;
 - losses;
@@ -359,4 +384,5 @@ Antes de executar discovery amplo:
 1. Validar semantica de SportMonks `trends`.
 2. Confirmar quais tipos de `trends` sao seguros para janelas 5/10/15 minutos.
 3. Definir whitelist V1 de indicadores por time.
-4. Somente depois autorizar Codex a executar descoberta controlada.
+4. Separar explicitamente candidatos UNDER_HOLD e OVER_JANELA_CURTA.
+5. Somente depois autorizar Codex a executar descoberta controlada.
