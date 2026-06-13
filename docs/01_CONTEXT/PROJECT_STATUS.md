@@ -166,6 +166,39 @@ Pendencia antes de feature engineering:
 
 ---
 
+## SportMonks Premium Odds Diagnostic
+
+Documento principal:
+
+- `docs/03_SOURCES/SPORTMONKS/SPORTMONKS_PREMIUM_ODDS_EMPTY_PAYLOAD_DIAGNOSTIC_V1.md`
+
+Matriz:
+
+- `data/processed/reports/sportmonks_premium_odds_empty_payload_diagnostic_v1.csv`
+
+Estado:
+
+- `PRE_MATCH_FAVORITE_VALIDATION_V1` identificou 380 arquivos `premium_odds.json` existentes e validos.
+- 380/380 payloads retornaram `data: []`.
+- Odds 1X2 pre-jogo utilizaveis: 0.
+- Bookmakers identificados: 0.
+- Timestamps identificados: 0.
+
+Diagnostico Data Acquisition:
+
+- Decisao final: `CORRIGIR_ENDPOINT`.
+- Causa mais provavel: rota premium por fixture usada para objetivo historico de temporada inteira.
+- A documentacao SportMonks indica que Premium Odds por fixture fica disponivel por ate 7 dias apos kickoff.
+- Para odds 1X2 pre-jogo, testar primeiro Standard Odds pre-match: `/v3/football/odds/pre-match/fixtures/{ID}` com `filters=markets:1`.
+- Premium Historical Odds deve ser testado apenas em spike controlado por causa de volume, paginacao e janela maxima de 5 minutos no endpoint updated-between.
+
+Restricao:
+
+- `favorite_winning_by_1` permanece NAO APROVADO como favorito real.
+- Nao validar estrategias `favorite_*` sem odds 1X2 pre-jogo com bookmaker e timestamp.
+
+---
+
 ## H8 / Momentum / Pressao
 
 Estado:
@@ -292,11 +325,12 @@ Prioridades imediatas:
 1. Validar semanticamente SportMonks `trends`.
 2. Confirmar se `trends` representa acumulado, incremental ou snapshot por minuto.
 3. Definir pacote oficial minimo H8 SportMonks.
-4. Decidir se SportMonks vira fonte primaria H8 em escala.
-5. So depois encaminhar para importer/schema/feature builder.
-6. Manter API-Football em discovery complementar, especialmente para fixture EPL no plano Pro.
-7. Manter SofaScore como backup/especialista para graph/shotmap.
-8. Avancar `TRADE_ENTRY_PROFILE_ANALYSIS_V1` apos estabilizar fonte H8 por time.
+4. Executar spike minimo de odds 1X2 pre-match em rota corrigida, sem coleta massiva.
+5. Decidir se SportMonks vira fonte primaria H8 em escala.
+6. So depois encaminhar para importer/schema/feature builder.
+7. Manter API-Football em discovery complementar, especialmente para fixture EPL no plano Pro.
+8. Manter SofaScore como backup/especialista para graph/shotmap.
+9. Avancar `TRADE_ENTRY_PROFILE_ANALYSIS_V1` apos estabilizar fonte H8 por time.
 
 Bloqueios:
 
@@ -305,6 +339,7 @@ Bloqueios:
 - Nao criar feature builder definitivo ainda.
 - Nao iniciar modelo/baseline/backtesting com SportMonks antes da validacao semantica.
 - Nao escalar para 17 ligas x 3 temporadas sem pacote oficial minimo aprovado.
+- Nao validar `favorite_winning_by_1` como favorito real sem odds 1X2 pre-jogo com bookmaker e timestamp.
 
 ---
 
@@ -327,13 +362,17 @@ Discussao recente nao oficial:
 
 A proxima decisao critica nao e criar feature nova.
 
-A decisao critica e:
+As decisoes criticas sao:
 
 ```text
 SportMonks `trends` pode ser usado com seguranca para cutoffs 60/65/70/75?
 ```
 
-Se SIM:
+```text
+Qual fonte/rota entregara odds 1X2 pre-jogo com bookmaker e timestamp para validar favorite_*?
+```
+
+Se SIM para `trends`:
 
 - SportMonks passa a ser fonte primaria candidata para H8 por time.
 - Iniciar desenho de `H8_TEAM_SIDE_FEATURES_V1`.
