@@ -1,0 +1,11 @@
+category,endpoint_or_include,fixtures_expected,json_valid,empty_count,error_count,coverage_rate,total_size_mb,avg_size_kb,temporal_granularity,h8_value,leakage_risk,recommended_decision,justification
+base,/fixtures/{id},380,380,0,0,1.0,0.416,1.12,timestamp,BAIXO VALOR,BAIXO,optional if API-Football covers base,"fixture context and join identifiers; low H8 dynamic value"
+identity,/fixtures/{id}?include=participants;league;venue;state,380,380,0,0,1.0,0.927,2.50,timestamp,BAIXO VALOR,BAIXO,optional,"participants/team identifiers for joins; can be collected once/minimally"
+match_state,/fixtures/{id}?include=scores;periods;events,380,380,0,0,1.0,4.175,11.25,minute+timestamp,MEDIO VALOR,MEDIO,keep optional/validation,"goals/cards/substitutions/scores/periods; useful for match state and validation"
+timeline,/fixtures/{id}?include=timeline.type,380,380,0,0,1.0,8.409,22.66,minute+timestamp,ALTO VALOR,MEDIO,mandatory for H8 validation,"objective minute events such as shots corners offsides woodwork; validates trends"
+statistics,/fixtures/{id}?include=statistics.type,380,380,0,0,1.0,8.084,21.78,timestamp,MEDIO VALOR,ALTO,optional; avoid cutoff features,"mostly final aggregate stats; leakage risk for 60/65/70/75 cutoffs"
+commentaries,/fixtures/{id}?include=commentaries,380,380,0,0,1.0,8.208,22.12,minute,MEDIO VALOR,MEDIO,optional enrichment,"textual/narrative minute data; useful for audit but requires parsing"
+trends,/fixtures/{id}?include=trends.type,380,380,0,0,1.0,109.087,293.96,minute+timestamp,ALTO VALOR,MEDIO,mandatory SportMonks H8 core,"best SportMonks source for attacks dangerous attacks possession shots corners passes and pressure by minute/team"
+xgfixture,/fixtures/{id}?include=xgfixture,380,380,0,0,1.0,4.634,12.49,timestamp,MEDIO VALOR,ALTO,optional context; leakage if used before FT,"fixture/team aggregate xG context; not temporal or shot-level"
+matchfacts,/fixtures/{id}?include=matchfacts,380,0,0,0,0.0,0.000,0.00,none,BAIXO VALOR,BAIXO,discard for H8 cutoff core,"not collected in H8 package; contextual/pre-match type data not core intra-game pressure"
+lineups,/fixtures/{id}?include=lineups,380,0,0,0,0.0,0.000,0.00,none,BAIXO VALOR,BAIXO,optional non-H8 context,"not collected in H8 package; lineups can matter later but not core minute pressure"
