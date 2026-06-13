@@ -1,0 +1,11 @@
+fixture_id,fixture_name,premium_odds_file_exists,json_valid,data_empty,home_odd,draw_odd,away_odd,favorite_side,favorite_odd,favorite_tier,no_clear_favorite,implied_home_raw,implied_draw_raw,implied_away_raw,overround,implied_home_normalized,implied_draw_normalized,implied_away_normalized,favorite_strength_normalized,odds_gap,bookmaker_count,timestamp_count,limitation
+19427146,Brentford vs Brighton & Hove Albion,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427147,Chelsea vs Burnley,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427148,Crystal Palace vs Wolverhampton Wanderers,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427149,Everton vs Manchester United,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427150,Manchester City vs Newcastle United,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427151,Nottingham Forest vs Liverpool,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427152,Sunderland vs Fulham,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427153,Tottenham Hotspur vs Arsenal,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427154,West Ham United vs AFC Bournemouth,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
+19427155,Arsenal vs Chelsea,True,True,True,,,,blocked_no_1x2_odds,,blocked,,,,,,,,,,,0,0,premium_odds payload has data: []; no pre-match 1X2 odds available in collected file
