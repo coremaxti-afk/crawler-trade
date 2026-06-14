@@ -2,260 +2,73 @@
 
 ## Sprint Atual
 
-Objetivo:
+Status:
 
-Registrar a correcao metodologica da frente `favorite_winning_by_1 + jogo frio`, redirecionar a proxima pesquisa SportMonks para duas familias (`UNDER_HOLD` e `OVER_JANELA_CURTA`) e incorporar oficialmente o agente `06 - Trade Operations Quant` como gate operacional/financeiro de estrategias.
+```text
+DISCOVERY SPORTMONKS CONCLUIDO
+MIGRACAO PARA PLAYBOOKS OPERACIONAIS
+```
 
-Restricoes permanentes:
+Nova frente oficial:
 
-- Nao criar producao.
-- Nao criar robo.
-- Nao executar trade real.
-- Nao criar modelo ou baseline preditivo sem aprovacao.
-- Nao executar backtesting financeiro real com odds live nao timestampadas.
-- Nao criar features com leakage, target-derived ou pos-cutoff.
+```text
+SPORTMONKS_OPERATIONAL_PLAYBOOKS_V1
+```
 
 ---
 
 ## Concluido
 
-- [x] Consolidar ranking operacional de estrategias (`OPERACIONAL_TRADE_TOP_STRATEGIES_V1`).
-- [x] Catalogar estrategias LAY OVER em jogo frio.
-- [x] Catalogar estrategias BACK OVER em jogo quente.
-- [x] Consolidar odds medias observadas para mercado Proximo Gol.
-- [x] Coletar SportMonks EPL 2025/26 pacote H8.
-- [x] Auditar SportMonks EPL 2025/26 contra SofaScore.
-- [x] Gerar matriz de qualidade SportMonks EPL 2025/26.
-- [x] Registrar spike API-Football fixture `1545540`.
-- [x] Classificar API-Football como complemento candidato, nao substituto oficial H8.
-- [x] Classificar SportMonks como fonte primaria candidata para H8 em escala, pendente validacao semantica.
-- [x] Executar diagnostico `SPORTMONKS_PREMIUM_ODDS_EMPTY_PAYLOAD_DIAGNOSTIC_V1`.
-- [x] Atualizar `OPERACIONAL_TRADE_TOP_STRATEGIES_V1` com consolidado EPL 2024/25 + 2025/26.
-- [x] Atualizar `FOOTBALL_DATA_FAVORITE_VALIDATION_V2`.
-- [x] Registrar que `favorite_side = menor odd pre-jogo 1X2` e a regra operacional correta para comparacao historica.
-- [x] Encerrar `favorite_winning_by_1 + jogo frio` como APROVADO COM RESSALVAS PARA PESQUISA OPERACIONAL.
-- [x] Criar `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1.md`.
-- [x] Corrigir interpretacao de ROI das estrategias Lay Over / Under frias com saida fixa aos 75.
-- [x] Criar documentacao do agente `06 - Trade Operations Quant`.
-- [x] Criar `TRADE_OPERATIONS_CALCULATION_RULES_V1`.
-- [x] Atualizar `GOVERNANCE_V2.md` e `CHAIN_OF_COMMAND.md` com o agente 06.
-- [x] Atualizar `PROJECT_STATUS.md` com a governanca de 6 agentes oficiais.
+- [x] Validacao semantica de trends.
+- [x] Validacao de participant_id por time.
+- [x] Validacao de cutoffs 60/65/70/75.
+- [x] Validacao de janelas 5/10/15 minutos.
+- [x] Descoberta de estrategias por lado/time.
+- [x] Integracao com Football-Data para favorito.
+- [x] Encerrar `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1/V2`.
+- [x] Formalizar agente 06 - Trade Operations Quant.
 
 ---
 
-## Agente 06 - Trade Operations Quant
+## Estrategias Prioritarias
 
-Missao:
+### UNDER HOLD V1
 
-Traduzir resultados estatisticos em metricas operacionais e financeiras de trade:
+- favorite_winning_by_1_opp_cold_2of3
+- both_teams_cold_2of3
+- team_winning_by_1_opp_cold_2of3
 
-- lucro/prejuizo;
-- ROI;
-- EV;
-- break-even;
-- cashout;
-- hold;
-- drawdown;
-- sensibilidade de odds.
+### OVER WINDOW V1
 
-Regra central:
+- home_winning_by_1_visitor_pressing
+- janela 75 -> goal_75_90
+- N=36
+- taxa=63.9%
+- p=0.041
+
+---
+
+## Proximas Etapas
+
+- [ ] Congelar whitelist oficial de estrategias.
+- [ ] Enviar estrategias ao agente 06.
+- [ ] Calcular EV, ROI e break-even.
+- [ ] Construir playbooks operacionais.
+- [ ] Classificar tudo como ESTIMATIVA OPERACIONAL.
+- [ ] Nao promover para producao.
+
+---
+
+## Restricoes
+
+- Nao criar robo.
+- Nao executar trade real.
+- Nao criar producao.
+- Nao fazer backtesting financeiro real.
+- Nao usar odds live nao timestampadas.
+
+Todas as simulacoes com odds medias devem ser classificadas como:
 
 ```text
-O agente 06 nao descobre estrategias.
-Ele avalia financeiramente estrategias ja encontradas pelo Data Science / Quant Research.
+ESTIMATIVA OPERACIONAL
 ```
-
-Vereditos oficiais:
-
-- `APROVADO OPERACIONALMENTE`
-- `APROVADO COM RESSALVAS`
-- `NAO COMPENSA FINANCEIRAMENTE`
-
-Regra obrigatoria:
-
-```text
-Nenhuma estrategia estatisticamente promissora pode ser considerada operacionalmente aprovada sem passar pelo agente 06.
-```
-
----
-
-## Correcao Metodologica - Lay Over / Under Frio
-
-Erro identificado:
-
-O lucro anterior foi interpretado como:
-
-```text
-Acerto = +100
-Erro = -50
-```
-
-Essa leitura corresponde a uma simulacao de HOLD/liquidacao completa, nao a uma operacao com entrada aos 60 e saida/cashout fixo aos 75.
-
-Correcao para janela 60-75:
-
-```text
-Lay Over 60' @1.50
-Back Over fechamento 75' @2.00
-Stake = 100
-```
-
-Resultado aproximado:
-
-```text
-Acerto sem gol ate 75 = +25
-Erro com gol antes de 75 = -50
-```
-
-### h8_cold_combo_10m_2of3
-
-Consolidado EPL 2024/25 + 2025/26:
-
-- 123 entradas.
-- 88 acertos.
-- 35 erros.
-- 71.5% sem gol 60-75.
-- Lucro corrigido saida fixa 75: +450.
-- ROI corrigido saida fixa 75: +3.7%.
-
-### h8_pressure_score_10m_bottom25
-
-Consolidado EPL 2024/25 + 2025/26:
-
-- 80 entradas.
-- 59 acertos.
-- 21 erros.
-- 73.8% sem gol 60-75.
-- Lucro corrigido saida fixa 75: +425.
-- ROI corrigido saida fixa 75: +5.3%.
-
-Leitura PM:
-
-- As estrategias continuam consistentes estatisticamente para prever ausencia de gol 60-75.
-- O lucro operacional com cashout fixo aos 75 e baixo.
-- Lay Over / Under frio tende a fazer mais sentido como HOLD ou janela mais longa.
-- Para janela curta, a proxima pesquisa deve buscar tambem estrategias Over com gol dentro da janela.
-
----
-
-## Em andamento / pendente
-
-### Prioridade 1 - SportMonks semantic validation
-
-- [ ] Finalizar coletas SportMonks ja iniciadas sem aumentar escopo.
-- [ ] Validar semanticamente SportMonks `trends` antes de criar features H8.
-- [ ] Confirmar se valores de `trends` sao acumulados, incrementais ou snapshots por minuto.
-- [ ] Validar se `trends` permite cutoffs seguros 60/65/70/75 usando apenas `minute <= cutoff`.
-- [ ] Definir whitelist V1 de indicadores por time.
-- [ ] Definir pacote oficial minimo H8 SportMonks para escala.
-
-### Prioridade 2 - SportMonks Team-Side Strategy Discovery
-
-Dividir a descoberta em duas familias:
-
-#### UNDER_HOLD
-
-Objetivo:
-
-- Encontrar cenarios com alta probabilidade de nao sair gol ate janela mais longa ou liquidacao relevante.
-
-Meta:
-
-- buscar taxa de acerto 70%+ para segurar ate 80/90 ou ate liquidacao relevante.
-
-#### OVER_JANELA_CURTA
-
-Objetivo:
-
-- Encontrar cenarios com alta probabilidade de gol entre 60-75, 65-80 ou 70-85.
-
-Meta:
-
-- encontrar operacoes com retorno relevante em janela curta, onde o gol dentro da janela gere lucro cheio.
-
-Tarefas:
-
-- [ ] Revisar `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1.md` atualizado.
-- [ ] Selecionar combos iniciais sem p-hacking livre.
-- [ ] Explorar pressao por `participant_id`.
-- [ ] Separar candidatos `UNDER_HOLD` e `OVER_JANELA_CURTA`.
-- [ ] Separar descoberta estatistica de operacionalizacao.
-- [ ] Enviar candidatos relevantes ao `06 - Trade Operations Quant` para avaliacao financeira.
-
-### Prioridade 3 - Odds pre-match / favorito real
-
-- [ ] Executar spike minimo SportMonks Standard Odds pre-match em 1-3 fixtures.
-- [ ] Testar `market_id=1` / `FULLTIME_RESULT` com labels Home/Draw/Away.
-- [ ] Testar rota `/v3/football/odds/pre-match/fixtures/{ID}` com `include=market;bookmaker` e `filters=markets:1`.
-- [ ] Se necessario, testar Premium Historical Odds apenas em janela pequena, sem coleta massiva.
-
-### Prioridade 4 - API-Football discovery complementar
-
-- [ ] Executar discovery API-Football em uma fixture de Premier League usando plano Pro.
-- [ ] Verificar se `/fixtures/events` retorna eventos historicos suficientes por minuto/time.
-- [ ] Verificar se `/fixtures/statistics` tem cobertura robusta em Premier League.
-- [ ] Confirmar se API-Football pode complementar ou substituir algum subconjunto do SofaScore/SportMonks.
-
----
-
-## Decisoes recentes
-
-### Trade Operations Quant
-
-- Agente 06 incorporado oficialmente a governanca.
-- Nenhuma estrategia estatistica pode ser operacionalmente aprovada sem avaliacao do agente 06.
-- Codex pode implementar calculos em lote, mas nao decide interpretacao financeira.
-- Simulacoes com odds medias continuam estimativas, nao backtesting financeiro real.
-
-### favorite_winning_by_1 + jogo frio
-
-- Definicao operacional para comparacao historica: `favorite_side = menor odd pre-jogo 1X2`.
-- Nao usar `favorite_odd <= 1.70` como regra principal nesta comparacao.
-- Frente aprovada com ressalvas para pesquisa operacional EPL.
-- ROI alto anterior representa simulacao tipo HOLD/liquidacao completa.
-- ROI corrigido para saida fixa 60-75 e baixo.
-- Nao autoriza robo, producao, trade real, automacao operacional ou backtesting financeiro real.
-
-### SportMonks
-
-- `trends` e o principal endpoint candidato para pressao por minuto/time.
-- `timeline` e obrigatorio para validacao objetiva de eventos por minuto.
-- `match_state` e recomendado para gols/cartoes/substituicoes/scores/periods.
-- `statistics` e `xgfixture` sao agregados finais e nao devem ser usados como cutoff features sem snapshot temporal.
-- SportMonks Team-Side Strategy Discovery deve priorizar duas familias: `UNDER_HOLD` e `OVER_JANELA_CURTA`.
-
-### SofaScore
-
-- SofaScore deixa de ser dependencia primaria para pressao H8 massiva se SportMonks `trends` for validado semanticamente.
-- SofaScore continua valioso para `graph` e `shotmap`.
-
-### API-Football
-
-- API-Football segue como complemento candidato.
-- Nao promover API-Football a substituto SofaScore/SportMonks para H8 sem novo discovery em fixture EPL/plano Pro.
-
----
-
-## Bloqueios
-
-- Nao criar importer SportMonks ainda.
-- Nao alterar schema/banco ainda.
-- Nao criar feature builder definitivo ainda.
-- Nao iniciar modelo/baseline/backtesting com SportMonks antes da validacao semantica de `trends`.
-- Nao escalar para multiplas ligas/temporadas sem pacote oficial minimo aprovado.
-- Nao transformar API-Football em fonte oficial H8 antes de discovery EPL no plano Pro.
-- Nao tratar odds medias observadas como odds live reais.
-- Nao transformar resultados `favorite_winning_by_1 + jogo frio` em recomendacao operacional real.
-- Nao aprovar operacionalmente estrategia sem parecer do agente 06.
-
----
-
-## Proximo agente recomendado
-
-Quant Research / Data Science, com apoio de Data Acquisition.
-
-Tarefa principal:
-
-Validar semanticamente SportMonks `trends` e preparar a descoberta `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`, separando `UNDER_HOLD` e `OVER_JANELA_CURTA`, preservando anti-leakage por cutoff e sem criar modelo, baseline, robo, producao ou backtesting financeiro real.
-
-Depois disso, enviar candidatos ao `06 - Trade Operations Quant` para avaliacao financeira.
