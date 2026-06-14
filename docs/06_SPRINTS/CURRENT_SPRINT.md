@@ -4,7 +4,7 @@
 
 Objetivo:
 
-Registrar a correcao metodologica da frente `favorite_winning_by_1 + jogo frio` e redirecionar a proxima pesquisa SportMonks para duas familias: `UNDER_HOLD` e `OVER_JANELA_CURTA`, usando SportMonks para investigar pressao por lado/time.
+Registrar a correcao metodologica da frente `favorite_winning_by_1 + jogo frio`, redirecionar a proxima pesquisa SportMonks para duas familias (`UNDER_HOLD` e `OVER_JANELA_CURTA`) e incorporar oficialmente o agente `06 - Trade Operations Quant` como gate operacional/financeiro de estrategias.
 
 Restricoes permanentes:
 
@@ -36,6 +36,46 @@ Restricoes permanentes:
 - [x] Encerrar `favorite_winning_by_1 + jogo frio` como APROVADO COM RESSALVAS PARA PESQUISA OPERACIONAL.
 - [x] Criar `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1.md`.
 - [x] Corrigir interpretacao de ROI das estrategias Lay Over / Under frias com saida fixa aos 75.
+- [x] Criar documentacao do agente `06 - Trade Operations Quant`.
+- [x] Criar `TRADE_OPERATIONS_CALCULATION_RULES_V1`.
+- [x] Atualizar `GOVERNANCE_V2.md` e `CHAIN_OF_COMMAND.md` com o agente 06.
+- [x] Atualizar `PROJECT_STATUS.md` com a governanca de 6 agentes oficiais.
+
+---
+
+## Agente 06 - Trade Operations Quant
+
+Missao:
+
+Traduzir resultados estatisticos em metricas operacionais e financeiras de trade:
+
+- lucro/prejuizo;
+- ROI;
+- EV;
+- break-even;
+- cashout;
+- hold;
+- drawdown;
+- sensibilidade de odds.
+
+Regra central:
+
+```text
+O agente 06 nao descobre estrategias.
+Ele avalia financeiramente estrategias ja encontradas pelo Data Science / Quant Research.
+```
+
+Vereditos oficiais:
+
+- `APROVADO OPERACIONALMENTE`
+- `APROVADO COM RESSALVAS`
+- `NAO COMPENSA FINANCEIRAMENTE`
+
+Regra obrigatoria:
+
+```text
+Nenhuma estrategia estatisticamente promissora pode ser considerada operacionalmente aprovada sem passar pelo agente 06.
+```
 
 ---
 
@@ -119,16 +159,6 @@ Objetivo:
 
 - Encontrar cenarios com alta probabilidade de nao sair gol ate janela mais longa ou liquidacao relevante.
 
-Exemplos:
-
-- jogo muito frio aos 60;
-- favorito vencendo por 1 e jogo esfriando;
-- baixa finalizacao;
-- baixa pressao;
-- poucos dangerous attacks;
-- ausencia de big chances;
-- ausencia de shots on target.
-
 Meta:
 
 - buscar taxa de acerto 70%+ para segurar ate 80/90 ou ate liquidacao relevante.
@@ -138,18 +168,6 @@ Meta:
 Objetivo:
 
 - Encontrar cenarios com alta probabilidade de gol entre 60-75, 65-80 ou 70-85.
-
-Exemplos:
-
-- time perdendo pressionando;
-- favorito perdendo pressionando;
-- underdog vencendo e favorito pressionando;
-- visitante pressionando mandante que vence por 1;
-- dangerous attacks em aceleracao;
-- shots on target recentes;
-- big chances recentes;
-- key passes recentes;
-- escanteios e pressao territorial aumentando.
 
 Meta:
 
@@ -162,6 +180,7 @@ Tarefas:
 - [ ] Explorar pressao por `participant_id`.
 - [ ] Separar candidatos `UNDER_HOLD` e `OVER_JANELA_CURTA`.
 - [ ] Separar descoberta estatistica de operacionalizacao.
+- [ ] Enviar candidatos relevantes ao `06 - Trade Operations Quant` para avaliacao financeira.
 
 ### Prioridade 3 - Odds pre-match / favorito real
 
@@ -180,6 +199,13 @@ Tarefas:
 ---
 
 ## Decisoes recentes
+
+### Trade Operations Quant
+
+- Agente 06 incorporado oficialmente a governanca.
+- Nenhuma estrategia estatistica pode ser operacionalmente aprovada sem avaliacao do agente 06.
+- Codex pode implementar calculos em lote, mas nao decide interpretacao financeira.
+- Simulacoes com odds medias continuam estimativas, nao backtesting financeiro real.
 
 ### favorite_winning_by_1 + jogo frio
 
@@ -208,11 +234,6 @@ Tarefas:
 - API-Football segue como complemento candidato.
 - Nao promover API-Football a substituto SofaScore/SportMonks para H8 sem novo discovery em fixture EPL/plano Pro.
 
-### Agentes
-
-- Estrutura antiga de agentes permanece vigente.
-- Nenhuma reorganizacao oficial foi aplicada.
-
 ---
 
 ## Bloqueios
@@ -225,6 +246,7 @@ Tarefas:
 - Nao transformar API-Football em fonte oficial H8 antes de discovery EPL no plano Pro.
 - Nao tratar odds medias observadas como odds live reais.
 - Nao transformar resultados `favorite_winning_by_1 + jogo frio` em recomendacao operacional real.
+- Nao aprovar operacionalmente estrategia sem parecer do agente 06.
 
 ---
 
@@ -235,3 +257,5 @@ Quant Research / Data Science, com apoio de Data Acquisition.
 Tarefa principal:
 
 Validar semanticamente SportMonks `trends` e preparar a descoberta `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`, separando `UNDER_HOLD` e `OVER_JANELA_CURTA`, preservando anti-leakage por cutoff e sem criar modelo, baseline, robo, producao ou backtesting financeiro real.
+
+Depois disso, enviar candidatos ao `06 - Trade Operations Quant` para avaliacao financeira.
