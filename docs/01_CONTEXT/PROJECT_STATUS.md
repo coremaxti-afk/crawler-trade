@@ -43,6 +43,64 @@ Restricoes permanentes:
 
 ---
 
+## Governança de Agentes
+
+Agentes oficiais atuais:
+
+1. `01 - PM`
+2. `02 - CTO`
+3. `03 - Data Acquisition Engineer`
+4. `04 - Data Engineer / Database do projeto`
+5. `05 - Data Science / Quant Research`
+6. `06 - Trade Operations Quant`
+
+Documentos oficiais:
+
+- `docs/00_AGENTS/GOVERNANCE_V2.md`
+- `docs/00_AGENTS/CHAIN_OF_COMMAND.md`
+- `docs/00_AGENTS/AGENT_06_TRADE_OPERATIONS_QUANT.md`
+- `docs/04_RESEARCH/TRADE_OPERATIONS_CALCULATION_RULES_V1.md`
+
+### 06 - Trade Operations Quant
+
+Missao:
+
+Traduzir resultados estatisticos em metricas operacionais e financeiras de trade:
+
+- lucro/prejuizo;
+- ROI;
+- EV;
+- break-even;
+- cashout;
+- hold;
+- drawdown;
+- sensibilidade de odds.
+
+Regra central:
+
+```text
+O agente 06 nao descobre estrategias.
+Ele avalia financeiramente estrategias ja encontradas pelo Data Science / Quant Research.
+```
+
+Vereditos oficiais:
+
+- `APROVADO OPERACIONALMENTE`
+- `APROVADO COM RESSALVAS`
+- `NAO COMPENSA FINANCEIRAMENTE`
+
+Regra obrigatoria:
+
+```text
+Nenhuma estrategia estatisticamente promissora pode ser considerada operacionalmente aprovada sem passar pelo agente 06.
+```
+
+Motivo:
+
+O caso `Lay Over 60-75` mostrou que uma taxa estatistica alta pode gerar ROI operacional baixo quando se distingue HOLD de cashout fixo.
+
+---
+
 ## Frentes de Fonte de Dados
 
 ### SofaScore EPL 2024/25
@@ -304,15 +362,6 @@ Agente recomendado:
 
 ---
 
-## Estado dos Agentes
-
-Estado oficial:
-
-- Estrutura antiga permanece vigente.
-- Nenhuma reorganizacao oficial foi aplicada.
-
----
-
 ## Sprint / Prioridades Atuais
 
 Prioridades imediatas:
@@ -323,8 +372,9 @@ Prioridades imediatas:
 4. Separar candidatos `UNDER_HOLD` e `OVER_JANELA_CURTA`.
 5. Definir pacote oficial minimo H8 SportMonks para escala.
 6. Autorizar, se aprovado, descoberta controlada `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`.
-7. Manter API-Football em discovery complementar.
-8. Manter SofaScore como backup/especialista para graph/shotmap.
+7. Passar qualquer estrategia candidata pelo `06 - Trade Operations Quant` antes de status operacional.
+8. Manter API-Football em discovery complementar.
+9. Manter SofaScore como backup/especialista para graph/shotmap.
 
 Bloqueios:
 
@@ -334,6 +384,7 @@ Bloqueios:
 - Nao iniciar modelo/baseline/backtesting com SportMonks antes da validacao semantica.
 - Nao escalar para multiplas ligas/temporadas sem pacote oficial minimo aprovado.
 - Nao tratar odds medias observadas como odds live reais.
+- Nenhuma estrategia estatistica pode ser operacionalmente aprovada sem avaliacao do agente 06.
 
 ---
 
@@ -349,6 +400,7 @@ Se SIM:
 
 - SportMonks passa a ser fonte primaria candidata para H8 por time.
 - Autorizar discovery controlado `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1`, separado em `UNDER_HOLD` e `OVER_JANELA_CURTA`.
+- Enviar candidatos relevantes ao `06 - Trade Operations Quant` para avaliacao financeira.
 
 Se NAO:
 
