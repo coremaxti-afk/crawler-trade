@@ -99,12 +99,58 @@ O projeto seguira com:
 SIMULACOES OPERACIONAIS BASEADAS EM ODDS MEDIAS OBSERVADAS
 ```
 
+Curva operacional atual:
+
+```text
+60 = 1.40
+65 = 1.60
+70 = 1.80
+75 = 2.00
+80 = 2.45
+85 = 3.35
+```
+
 Ressalva obrigatoria:
 
 ```text
 Nao constitui backtesting financeiro real.
 Classificar como ESTIMATIVA OPERACIONAL.
 ```
+
+---
+
+## Progresso Recente do Agente 06
+
+Foi registrado o documento:
+
+```text
+docs/04_RESEARCH/OPERACOES_TRADE/BREAK_EVEN_BY_TIME_WINDOW_V1.md
+```
+
+O documento consolida os pontos de break-even por faixa de tempo para:
+
+- Under / Lay Over;
+- Over / Back Over.
+
+Regra operacional registrada:
+
+```text
+Taxa > break-even => lucrativo
+Taxa = break-even => zero a zero
+Taxa < break-even => prejuizo
+```
+
+Nova metrica recomendada para priorizacao de playbooks:
+
+```text
+edge = strike_rate - break_even_rate
+```
+
+Tambem foi reforcado que:
+
+- janelas terminadas em 90 sao HOLD_FINAL;
+- janelas encerradas antes de 90 sao CASHOUT_ESTIMADO;
+- cashout antes de 90 nao pode ser tratado como lucro/prejuizo cheio de hold final.
 
 ---
 
