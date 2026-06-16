@@ -14,6 +14,8 @@ Objetivo: documentar as nomenclaturas usadas no discovery SportMonks team-side p
 - DEFINIDO NA DOCUMENTACAO: `docs/04_RESEARCH/SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_RESULTS_V2.md`
 - DEFINIDO NA CONFIG: `configs/strategy_drawdown_config_v1.json`
 
+Pendencias de leitura: os caminhos `docs/00_AGENTS/GOVERNANCE_V2.md`, `docs/01_CONTEXT/PROJECT_STATUS.md` e `docs/06_SPRINTS/CURRENT_SPRINT.md` nao existem neste clone local. Nao foram atualizados por inexistencia do arquivo.
+
 ## Base Tecnica Comum
 
 ### Fonte de H8
