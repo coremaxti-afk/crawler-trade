@@ -7,23 +7,37 @@ Registrar a auditoria entre:
 - pasta operacional local `C:\LateGoalResearch`
 - repositorio remoto `coremaxti-afk/crawler-trade`
 
- e definir o que deve ser sincronizado para o GitHub sem perder contexto remoto existente.
+e definir o que precisava ser sincronizado para o GitHub sem perder contexto remoto existente.
 
 ---
 
-## Achados principais
+## Resumo executivo
 
-### 1. A pasta local nao esta inicializada como Git
+### Conclusao principal
 
-Em `C:\LateGoalResearch` nao existe `.git` na raiz.
+O problema era real: a pasta operacional local estava fora de um clone Git valido, enquanto o repositorio do GitHub continuava existindo com historico proprio, porem muito desatualizado em relacao ao pipeline que esta sendo usado hoje.
+
+### Efeito pratico
+
+- nao era possivel usar `git status`, `git add`, `git commit` e `git push` diretamente em `C:\LateGoalResearch`;
+- o `git` local por HTTPS tambem nao conseguiu autenticar no repositorio privado;
+- a publicacao teve que ser feita pelo conector do GitHub, arquivo a arquivo, preservando o que ja existia no remoto.
+
+---
+
+## Achados da auditoria
+
+### 1. A pasta local nao era um repositorio Git
+
+Em `C:\LateGoalResearch` nao existia `.git` na raiz.
 
 Implicacao:
 
-- nao ha historico local conectado diretamente ao GitHub;
-- nao e possivel usar `git status`, `git add`, `git commit` e `git push` diretamente nessa pasta;
-- a sincronizacao precisa ser feita com cuidado para nao sobrescrever o que ja existe no remoto.
+- sem historico local conectado ao GitHub;
+- sem branch local rastreando `main`;
+- sem push direto a partir da pasta operacional atual.
 
-### 2. O remoto existe e esta acessivel pelo conector
+### 2. O remoto existe e esta acessivel
 
 Repositorio identificado:
 
@@ -32,18 +46,11 @@ coremaxti-afk/crawler-trade
 branch padrao: main
 ```
 
-O GitHub app confirmou permissao de `push`, mas o `git` local por HTTPS nao conseguiu autenticar no repositorio privado.
+O conector do GitHub confirmou acesso e permissao de escrita. O bloqueio estava no fluxo `git` local, nao no repositorio.
 
-### 3. O GitHub nao esta espelhando a estrutura local atual
+### 3. O remoto estava atrasado frente ao pipeline atual
 
-O remoto possui pelo menos:
-
-- `docs/01_CONTEXT/PROJECT_STATUS.md`
-- `docs/06_SPRINTS/CURRENT_SPRINT.md`
-
-Esses caminhos nao existiam localmente antes desta auditoria e foram restaurados localmente a partir do remoto.
-
-Ao mesmo tempo, arquivos centrais hoje usados na operacao local retornaram `404` no remoto, incluindo:
+Arquivos operacionais importantes retornavam `404` no remoto antes desta sincronizacao, por exemplo:
 
 - `Crawler/Sportmonks/run_sportmonks_full_season_collector.py`
 - `Crawler/FootballData/run_football_data_odds_collector.py`
@@ -59,125 +66,122 @@ Ao mesmo tempo, arquivos centrais hoje usados na operacao local retornaram `404`
 Conclusao:
 
 ```text
-o repositorio GitHub esta desatualizado em relacao ao pipeline operacional atual
+o GitHub nao refletia mais o estado operacional real do projeto
 ```
 
-### 4. Ha desvio estrutural entre local e remoto
+### 4. O remoto tinha contexto importante ausente localmente
 
-Localmente, `docs` hoje contem:
+No GitHub ja existiam, entre outros:
 
-- `03_SOURCES`
-- `04_RESEARCH`
-- `08_DATABASE`
+- `docs/01_CONTEXT/PROJECT_STATUS.md`
+- `docs/06_SPRINTS/CURRENT_SPRINT.md`
 
-No remoto, ha pelo menos:
+Esses arquivos foram restaurados localmente a partir do remoto para evitar perda de contexto.
 
-- `01_CONTEXT`
-- `06_SPRINTS`
+### 5. Havia artefatos locais que nao valia subir junto
 
-Implicacao:
-
-- o sincronismo correto nao e sobrescrever a arvore remota;
-- e necessario fazer merge de contexto remoto + ativos locais novos.
-
-### 5. Ha artefatos locais que nao devem ser tratados como codigo principal
-
-Exemplos encontrados localmente:
+Foram identificados itens que nao devem entrar no mesmo pacote de sincronizacao:
 
 - `__pycache__`
-- arquivos temporarios como `_tmp_playbook_refinement_v1.py`
-- variantes operacionais pontuais de coletores por liga
-- CSVs detalhados grandes de entries/trades
+- temporarios
+- copias auxiliares
+- CSVs detalhados muito grandes
 
-Esses itens exigem selecao antes de publicar.
+Dois arquivos pesados ficaram claramente fora do fluxo manual ideal:
+
+- `data/processed/reports/sportmonks_team_side_strategy_discovery_entries_v2_la_liga_2025_26_tempos_expandidos.csv` com 30,212,620 bytes
+- `data/processed/reports/strategy_drawdown_trades_la_liga_2025_26_tempos_expandidos.csv` com 18,016,565 bytes
 
 ---
 
-## Arquivos locais de maior prioridade para publicar
+## O que foi sincronizado para o GitHub
 
-### Codigo
+### Contexto e auditoria
+
+- `docs/04_RESEARCH/GITHUB_AUDIT_20260616.md`
+- `docs/04_RESEARCH/CHAT_HANDOFF_QUICKSTART_20260616.md`
+- `docs/04_RESEARCH/CHAT_HANDOFF_TECHNICAL_SUMMARY_20260616.md`
+
+### Runners e scripts principais
 
 - `Crawler/FootballData/football_data_odds_collector.py`
 - `Crawler/FootballData/run_football_data_odds_collector.py`
 - `Crawler/Sportmonks/run_sportmonks_full_season_collector.py`
 - `Crawler/Sportmonks/run_strategy_discovery_v2.py`
-- `Crawler/Sportmonks/sportmonks_team_side_strategy_discovery_v2 editado.py`
 - `scripts/research/calc_strategy_drawdown.py`
 - `scripts/research/run_strategy_drawdown.py`
 
-### Mapas e configuracao operacional
+### Discovery SportMonks
+
+- `Crawler/Sportmonks/sportmonks_team_side_strategy_discovery_v2.py`
+- `Crawler/Sportmonks/sportmonks_team_side_strategy_discovery_v2 editado.py`
+
+Observacao:
+
+O arquivo `sportmonks_team_side_strategy_discovery_v2 editado.py` foi publicado como wrapper leve, preservando os ajustes operacionais mais importantes sem depender de um push Git tradicional.
+
+### Mapas operacionais
 
 - `data/raw/football_data/football_data_league_odds_map.csv`
 - `data/raw/sportmonks/league_season_map/league_last_3_seasons.json`
 
-### Documentacao e handoff
+### Tutoriais e documentacao operacional
 
 - `docs/03_SOURCES/ODDS/RUN_FOOTBALL_DATA_ODDS_COLLECTOR_SIMPLIFICADO.md`
-- `docs/04_RESEARCH/CHAT_HANDOFF_TECHNICAL_SUMMARY_20260616.md`
-- `docs/04_RESEARCH/CHAT_HANDOFF_QUICKSTART_20260616.md`
-- `docs/04_RESEARCH/STRATEGY_NAMING_AND_DEFINITIONS_REFERENCE_V1.md`
-- `docs/04_RESEARCH/TUTORIAL SCRIPTS/FOOTBALL_DATA_ODDS_COLLECTOR.md`
-- `docs/04_RESEARCH/TUTORIAL SCRIPTS/RUN_SPORTMONKS_FULL_SEASON_COLLECTOR_SIMPLIFICADO.md`
-- `docs/04_RESEARCH/TUTORIAL SCRIPTS/RUN_STRATEGY_DISCOVERY_V2_SIMPLIFICADO.md`
-- `docs/04_RESEARCH/TUTORIAL SCRIPTS/RUN_STRATEGY_DRAWDOWN_SIMPLIFICADO.md`
 - `docs/04_RESEARCH/TUTORIAL SCRIPTS/RUNNERS_OPERACIONAIS_COLETA_E_DISCOVERY.md`
-- `docs/04_RESEARCH/GITHUB_AUDIT_20260616.md`
+- `docs/04_RESEARCH/TUTORIAL SCRIPTS/RUN_STRATEGY_DRAWDOWN_SIMPLIFICADO.md`
+- `docs/04_RESEARCH/TUTORIAL SCRIPTS/RUN_STRATEGY_DISCOVERY_V2_SIMPLIFICADO.md`
+- `docs/04_RESEARCH/TUTORIAL SCRIPTS/RUN_SPORTMONKS_FULL_SEASON_COLLECTOR_SIMPLIFICADO.md`
+- `docs/04_RESEARCH/STRATEGY_NAMING_AND_DEFINITIONS_REFERENCE_V1.md`
 
-### Relatorios pequenos e uteis para versao
+### Relatorios compactos
 
 - `data/processed/reports/strategy_naming_definitions_reference_v1.csv`
-- `data/processed/reports/sportmonks_team_side_strategy_discovery_summary_v2_la_liga_2025_26_tempos_expandidos.csv`
-- `data/processed/reports/strategy_drawdown_summary_la_liga_2025_26_tempos_expandidos.csv`
 
 ---
 
-## Arquivos grandes que pedem criterio
+## O que foi restaurado localmente a partir do remoto
 
-Os seguintes artefatos existem localmente, mas sao grandes:
+- `docs/01_CONTEXT/PROJECT_STATUS.md`
+- `docs/06_SPRINTS/CURRENT_SPRINT.md`
 
-- `data/processed/reports/sportmonks_team_side_strategy_discovery_entries_v2_la_liga_2025_26_tempos_expandidos.csv` ~ 29 MB
-- `data/processed/reports/strategy_drawdown_trades_la_liga_2025_26_tempos_expandidos.csv` ~ 17 MB
-
-Eles podem ser versionados, mas nao sao bons candidatos para sincronizacao manual via conector arquivo a arquivo.
+Esses dois arquivos ja existiam no GitHub e foram trazidos para a pasta operacional local para manter o contexto do projeto alinhado.
 
 ---
 
-## Risco identificado no remoto
+## O que ainda ficou pendente
 
-O remoto possui contexto de projeto que nao estava na pasta local, e um dos documentos remotos referencia:
+### Pendencia tecnica principal
+
+Como `C:\LateGoalResearch` nao e um clone Git autenticado do repositorio, esta sincronizacao nao gerou um historico local normal de commit/branch. O estado foi corrigido no remoto, mas o ambiente local ainda merece ser reorganizado depois.
+
+### Arquivos grandes ainda nao publicados neste fluxo
+
+- `data/processed/reports/sportmonks_team_side_strategy_discovery_entries_v2_la_liga_2025_26_tempos_expandidos.csv`
+- `data/processed/reports/strategy_drawdown_trades_la_liga_2025_26_tempos_expandidos.csv`
+
+Motivo:
+
+- sao grandes para uma sincronizacao manual segura via conector;
+- o melhor fluxo para eles continua sendo um clone Git autenticado e um push normal.
+
+### Ajuste futuro recomendado
+
+Recriar ou conectar uma copia local correta do repositorio `coremaxti-afk/crawler-trade`, trazendo o estado atualizado do GitHub para um clone real com `.git`, e a partir dali voltar ao fluxo normal de versionamento.
+
+---
+
+## Estado final desta auditoria
+
+Resultado:
+
+- o gap entre GitHub e pasta operacional foi comprovado;
+- o remoto foi atualizado com os arquivos centrais de codigo, mapas e documentacao;
+- o contexto remoto antigo foi preservado;
+- o que ficou de fora ficou documentado de forma explicita.
+
+Em outras palavras:
 
 ```text
-sportmonks_team_side_strategy_discovery_summary_v2_la_liga_2025_26_tempos_expandidos222.csv
+o repositorio GitHub esta agora muito mais proximo do estado operacional atual do projeto
 ```
-
-Enquanto o arquivo local atual usa:
-
-```text
-sportmonks_team_side_strategy_discovery_summary_v2_la_liga_2025_26_tempos_expandidos.csv
-```
-
-Isso sugere pelo menos uma referencia remota stale/inconsistente que deve ser corrigida numa sincronizacao posterior.
-
----
-
-## Decisao desta auditoria
-
-Sincronizar primeiro:
-
-- codigo principal dos runners e scripts
-- mapas operacionais
-- documentacao e handoff
-- relatorios compactos e de leitura executiva
-
-Evitar publicar junto, sem necessidade:
-
-- `__pycache__`
-- temporarios
-- copias auxiliares
-- CSVs detalhados grandes via fluxo manual arquivo a arquivo
-
----
-
-## Proximo passo
-
-Publicar automaticamente no GitHub, preservando os arquivos remotos ja existentes e adicionando os arquivos locais prioritarios que hoje nao estao no repositorio.
