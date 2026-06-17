@@ -259,6 +259,27 @@ Funcao:
 - registrar logs e processo;
 - sugerir a proxima agenda.
 
+## Sincronizacao GitHub
+
+Documentacao publicada no GitHub:
+
+- `docs/03_SOURCES/API_FOOTBALL/API_FOOTBALL_LIVE_ODDS_AUTOMATION_20260617.md`
+- `docs/03_SOURCES/API_FOOTBALL/API_FOOTBALL_LIVE_MATCH_COLLECTOR_V2.md`
+- `docs/03_SOURCES/API_FOOTBALL/API_FOOTBALL_WORLD_CUP_LIVE_MONITOR_LAUNCHER.md`
+
+Pendencia de sincronizacao de codigo no GitHub:
+
+- `Crawler/ApiFootball/api_football_world_cup_group_stage_fixtures_v1.py`
+- `Crawler/ApiFootball/api_football_live_match_collector_v1.py`
+- `Crawler/ApiFootball/api_football_live_match_collector_v2.py`
+- `scripts/api_football_world_cup_live_monitor_launcher.py`
+
+Motivo:
+
+```text
+os scripts existem localmente e sao referenciados pela documentacao, mas ainda nao estavam presentes no remoto no momento desta atualizacao
+```
+
 ## Desenho aprovado da automacao
 
 A automacao nao deve acompanhar o jogo.
