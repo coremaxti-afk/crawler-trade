@@ -2,7 +2,7 @@
 
 Status: ATIVA
 
-Versão: V2.1
+Versão: V2.2
 
 ## Objetivo
 
@@ -12,6 +12,42 @@ Regra central:
 
 ```text
 O chat coordena. O GitHub registra.
+```
+
+## Padrão Oficial de Nomenclatura
+
+Regra obrigatória:
+
+```text
+O idioma oficial do projeto é português.
+```
+
+Aplicar preferencialmente nomes em português para:
+
+- estratégias;
+- playbooks;
+- documentos;
+- frentes de pesquisa;
+- métricas operacionais;
+- classificações e status.
+
+Exemplos:
+
+- `ESTRATEGIAS_UNDER_HOLD_V1`
+- `VALIDACAO_PERIODO_DA_TEMPORADA_V1`
+- `PLAYBOOK_OPERACIONAL_BACK_OVER_75_V1`
+
+Exceções permitidas:
+
+- nomes históricos já consolidados;
+- campos técnicos do banco;
+- APIs externas;
+- features legadas (`h8_*`, `xg_*`, etc.).
+
+Sempre que possível, manter:
+
+```text
+nome técnico + descrição em português.
 ```
 
 ## Objetivo do Projeto
