@@ -2,7 +2,7 @@
 
 Status: ATIVA
 
-Versão: V2.2
+Versão: V2.3
 
 ## Objetivo
 
@@ -171,6 +171,23 @@ Simulações com odds médias NÃO são backtesting financeiro real.
 
 Sem odds live timestampadas, cashout deve ser marcado como ESTIMATIVA.
 
+## Recursos ECC Auxiliares
+
+Recursos ECC podem ser usados para apoiar o Codex, desde que subordinados à governança oficial.
+
+Regra obrigatória:
+
+```text
+Os 6 agentes oficiais continuam mandando o prompt.
+Os recursos ECC apenas auxiliam o Codex na execução técnica.
+```
+
+Recursos ECC não viram novos agentes oficiais do projeto.
+
+A ordem de uso por tipo de tarefa e por agente oficial deve seguir:
+
+- `docs/00_AGENTS/ECC_AUXILIARES_DO_CODEX_V1.md`
+
 ## Justificativa
 
 ```text
@@ -183,6 +200,7 @@ O caso recente do Lay Over 60→75 demonstrou esse risco.
 ## Documentos Oficiais
 
 - docs/00_AGENTS/AGENT_06_TRADE_OPERATIONS_QUANT.md
+- docs/00_AGENTS/ECC_AUXILIARES_DO_CODEX_V1.md
 - docs/04_RESEARCH/TRADE_OPERATIONS_CALCULATION_RULES_V1.md
 - docs/01_CONTEXT/PROJECT_STATUS.md
 - docs/06_SPRINTS/CURRENT_SPRINT.md
