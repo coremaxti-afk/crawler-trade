@@ -2,7 +2,7 @@
 
 Agente responsavel: `05 - Data Science / Quant Research`
 
-Status: `DESENHO METODOLOGICO APROVADO - EXECUCAO DEPENDE DAS TOP 20 E DOS OUTPUTS FINANCEIROS`
+Status: `DESENHO METODOLOGICO APROVADO - EXECUCAO DEPENDE DE ESTRATEGIAS LUCRATIVAS COM METRICAS FINANCEIRAS CALCULADAS`
 
 Data: 2026-06-18
 
@@ -10,7 +10,7 @@ Data: 2026-06-18
 
 ## 1. Objetivo
 
-Descobrir quais times contribuem positiva ou negativamente para o desempenho das Top 20 estrategias do projeto.
+Descobrir quais times contribuem positiva ou negativamente para o desempenho das estrategias lucrativas analisadas pelo projeto.
 
 Pergunta central:
 
@@ -32,33 +32,54 @@ Esta frente deve acontecer depois de:
 
 ```text
 1. discovery bruto;
-2. auditoria de drawdown;
-3. validacao financeira inicial pelo Agente 06;
-4. definicao das Top 20 estrategias candidatas.
+2. auditoria de drawdown, quando existir;
+3. calculo das metricas financeiras basicas da estrategia.
+```
+
+Metricas financeiras basicas exigidas:
+
+```text
+N
+wins
+losses
+lucro_estimado
+ROI_estimado
+EV_estimado, quando disponivel
+sequencia_maxima_perdas, quando disponivel
 ```
 
 Motivo:
 
 ```text
-Nao faz sentido auditar rentabilidade por time em estrategias que ainda nao passaram pelo filtro financeiro principal.
+Nao faz sentido auditar rentabilidade por time em estrategias que ainda nao possuem lucro/ROI calculados.
 ```
 
 Fluxo recomendado:
 
 ```text
 Discovery
--> Drawdown Audit
--> Agente 06: lucro / ROI / EV / drawdown
--> Top 20 estrategias
+-> Calculo financeiro operacional da estrategia
+-> Drawdown Audit, quando existir
 -> RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V1
--> Decisao de robustez operacional
+-> Decisao de robustez operacional por time
 ```
 
 ---
 
 ## 3. Escopo
 
-Executar somente para as Top 20 estrategias do projeto.
+Executar para estrategias lucrativas que ja possuam metricas financeiras calculadas.
+
+Nao limitar a Top 20.
+
+O estudo pode ser aplicado a:
+
+```text
+estrategias lucrativas
+estrategias promissoras
+estrategias em observacao com lucro positivo
+estrategias segmentadas por liga/temporada/categoria
+```
 
 Nunca misturar:
 
@@ -448,6 +469,6 @@ perfis Over/Under por equipe
 Parecer:
 
 ```text
-APROVADO COMO FRENTE POS-RANKING FINANCEIRO.
-EXECUTAR APOS DEFINICAO DAS TOP 20 ESTRATEGIAS.
+APROVADO COMO FRENTE POS-CALCULO FINANCEIRO OPERACIONAL.
+EXECUTAR PARA ESTRATEGIAS LUCRATIVAS COM METRICAS FINANCEIRAS CALCULADAS.
 ```
