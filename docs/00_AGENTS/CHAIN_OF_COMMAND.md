@@ -98,6 +98,34 @@ Proibido:
 * Não toma decisões arquiteturais.
 * Não interpreta resultados financeiros.
 * Deve seguir regras documentadas.
+* Pode usar recursos ECC auxiliares somente quando solicitados ou aplicáveis ao prompt do agente oficial.
+
+## Recursos ECC Auxiliares
+
+Regra central:
+
+```text
+Os 6 agentes oficiais continuam mandando o prompt.
+Os recursos ECC apenas auxiliam o Codex na execução técnica.
+```
+
+Recursos ECC não adicionam novos agentes oficiais ao projeto.
+
+A ordem de uso por agente e tipo de tarefa está documentada em:
+
+* `docs/00_AGENTS/ECC_AUXILIARES_DO_CODEX_V1.md`
+
+Ao mandar um prompt para o Codex, cada agente oficial deve informar:
+
+* agente responsável;
+* objetivo;
+* escopo;
+* arquivos permitidos;
+* arquivos proibidos;
+* recursos ECC a usar;
+* ordem de uso, quando aplicável;
+* entregáveis esperados;
+* verificação obrigatória.
 
 ## Fluxos Oficiais
 
