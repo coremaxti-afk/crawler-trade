@@ -7,12 +7,19 @@ Status:
 ```text
 AUDITORIA DE DRAWDOWN DAS ESTRATEGIAS ORIGINAIS
 VALIDACAO MULTI-LIGA INICIADA
+ROBUSTEZ POR TIME EM AJUSTE V4
 ```
 
 Frente oficial ativa:
 
 ```text
 SPORTMONKS_STRATEGY_DRAWDOWN_AUDIT_V1
+```
+
+Frente auxiliar ativa:
+
+```text
+RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V4
 ```
 
 Proxima frente:
@@ -39,6 +46,11 @@ MULTI_LEAGUE_DRAWDOWN_AUDIT_V1
 - [x] Criar script de auditoria de drawdown por estrategia/temporada.
 - [x] Auditar drawdown EPL 2024/25 e EPL 2025/26.
 - [x] Iniciar discovery multi-liga com La Liga 2025/26.
+- [x] Criar normalizacao fixture-level pre-DD.
+- [x] Integrar DD com entrada normalizada pre-DD.
+- [x] Avaliar rentabilidade por time V2.
+- [x] Abortar V3 da rentabilidade por time como camada principal.
+- [x] Aprovar V4 como extensao quantitativa da V2.
 
 ---
 
@@ -56,7 +68,42 @@ sem juntar estrategias parecidas
 Prioridade atual:
 
 ```text
-lucro final + ROI + EV + drawdown + sequencia maxima de perdas
+lucro final + ROI + EV + drawdown + sequencia maxima de perdas + robustez por time
+```
+
+---
+
+## Decisao Rentabilidade por Time
+
+```text
+V3 ABORTADA.
+V2 MANTIDA COMO BASE DETALHADA.
+V4 APROVADA COM PEQUENOS AJUSTES.
+```
+
+Documento oficial:
+
+```text
+docs/04_RESEARCH/RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_RESULTADOS_V4.md
+```
+
+Documento de decisao:
+
+```text
+docs/04_RESEARCH/DECISAO_RENTABILIDADE_POR_TIME_V4_VS_V3.md
+```
+
+Issue registrada:
+
+```text
+#4 - DECISAO — abortar V3 e promover V4 da rentabilidade por time
+```
+
+Ajustes pendentes:
+
+```text
+1. robustez_score >= 0.60 deve ser ROBUSTA.
+2. ranking das mais dependentes deve filtrar lucro_total >= 500 OU N >= 30.
 ```
 
 ---
@@ -87,15 +134,6 @@ Status:
 APROVADO COM RESSALVAS PARA AUDITORIA OPERACIONAL
 ```
 
-Resumo:
-
-```text
-714 combinacoes avaliadas
-28 PROMISSOR
-442 OBSERVACAO
-244 DESCARTADO
-```
-
 Principais candidatas para auditoria:
 
 - `favorite_drawing_pressure_high_2of3 | 60 | goal_60_75 | last_10m`
@@ -108,6 +146,8 @@ Principais candidatas para auditoria:
 
 ## Proximas Etapas
 
+- [ ] Corrigir V4: fronteira do robustez_score.
+- [ ] Corrigir V4: filtro do ranking das mais dependentes.
 - [ ] Rodar drawdown audit nas estrategias La Liga 2025/26.
 - [ ] Comparar EPL vs La Liga por estrategia/familia.
 - [ ] Manter estrategias, targets e temporadas separados.
@@ -120,7 +160,6 @@ Principais candidatas para auditoria:
 ## Restricoes
 
 - Nao criar robo.
-- Nao executar trade real.
 - Nao criar producao.
 - Nao fazer backtesting financeiro real.
 - Nao usar odds live nao timestampadas.
