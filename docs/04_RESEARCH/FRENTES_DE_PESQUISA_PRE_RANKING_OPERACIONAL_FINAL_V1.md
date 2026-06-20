@@ -9,7 +9,7 @@
 Antes de executar qualquer uma das frentes abaixo, todos os agentes devem seguir:
 
 ```text
-docs/00_PROJECT/DIRETRIZ_GOVERNANCA_AGENTES_V1.md
+docs/00_AGENTS/GOVERNANCE_V2.md
 ```
 
 Regra central: nenhum agente deve concordar com o usuario apenas para agradar. Se uma solicitacao pular etapas, misturar objetivos ou fragilizar a metodologia, o agente deve discordar primeiro, explicar o risco tecnico e propor o caminho correto.
