@@ -8,9 +8,7 @@
 
 Antes de gerar o `RANKING_OPERACIONAL_FINAL_V1`, foram identificadas 3 frentes que precisam ser tratadas separadamente para evitar mistura conceitual e para impedir que o ranking conte a mesma oportunidade varias vezes.
 
-A validacao preditiva V1.1 foi util, mas misturou parte da leitura de fase da temporada com a leitura de estabilidade por rodada.
-
-A partir daqui, as frentes ficam separadas.
+A validacao preditiva V1.1 foi util, mas misturou parte da leitura de fase da temporada com a leitura de estabilidade por rodada. A partir daqui, as frentes ficam separadas.
 
 ---
 
@@ -37,7 +35,7 @@ phase_count = 6
 phase_count = 8
 ```
 
-Interpretação:
+Interpretacao:
 
 - `6 fases`: leitura macro da temporada.
 - `8 fases`: leitura mais sensivel para detectar viradas menores de regime.
