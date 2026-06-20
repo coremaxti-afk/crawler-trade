@@ -4,6 +4,16 @@
 
 `DEFINIDO COMO ETAPA PREVIA AO RANKING_OPERACIONAL_FINAL_V1`
 
+## Diretriz obrigatoria relacionada
+
+Antes de executar qualquer uma das frentes abaixo, todos os agentes devem seguir:
+
+```text
+docs/00_PROJECT/DIRETRIZ_GOVERNANCA_AGENTES_V1.md
+```
+
+Regra central: nenhum agente deve concordar com o usuario apenas para agradar. Se uma solicitacao pular etapas, misturar objetivos ou fragilizar a metodologia, o agente deve discordar primeiro, explicar o risco tecnico e propor o caminho correto.
+
 ## Motivo
 
 Antes de gerar o `RANKING_OPERACIONAL_FINAL_V1`, foram identificadas 3 frentes que precisam ser tratadas separadamente para evitar mistura conceitual e para impedir que o ranking conte a mesma oportunidade varias vezes.
