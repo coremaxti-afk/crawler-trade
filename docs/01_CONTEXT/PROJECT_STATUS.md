@@ -5,41 +5,170 @@
 FASE ATUAL:
 
 ```text
-AUDITORIA DE RISCO DAS ESTRATEGIAS ORIGINAIS + VALIDACAO MULTI-LIGA + ROBUSTEZ POR TIME
+ANALISE EXPLORATORIA E DESCOBERTA DE PADROES PRE-RANKING OPERACIONAL
 ```
 
-Frentes encerradas:
+O projeto esta na etapa de organizar e testar padroes exploratorios antes do `RANKING_OPERACIONAL_FINAL_V1`.
+
+O objetivo agora nao e prever diretamente a proxima temporada nem aprovar operacao final. O objetivo e descobrir padroes historicos fortes, separar duplicidades, entender regime da temporada e preparar hipoteses para validacao preditiva/operacional posterior.
+
+---
+
+## Governanca obrigatoria
+
+Documento oficial:
 
 ```text
-SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1/V2
-STATUS: CONCLUIDO
-DECISAO: APROVADO COM RESSALVAS
+docs/00_AGENTS/GOVERNANCE_V2.md
 ```
 
+Regra central ativa:
+
 ```text
-SPORTMONKS_OPERATIONAL_PLAYBOOKS_V1/V2/V3
-STATUS: DOCUMENTADO, MAS PAUSADO COMO FRENTE PRINCIPAL
-DECISAO: USAR COMO REFERENCIA, NAO COMO BASE FINAL DE LUCRO
+Nenhum agente deve concordar com o usuario apenas para agradar.
 ```
 
-Frentes atuais:
+Se uma solicitacao pular etapas, misturar objetivos, fragilizar a metodologia ou gerar falsa confianca operacional, o agente deve discordar primeiro, explicar o risco tecnico e propor o caminho correto.
+
+---
+
+## Roadmap Exploratorio Atual
+
+Documento oficial:
 
 ```text
-SPORTMONKS_STRATEGY_DRAWDOWN_AUDIT_V1
-STATUS: ATIVA
-DECISAO: APROVADO COM RESSALVAS PARA AUDITORIA DE RISCO DAS ESTRATEGIAS ORIGINAIS
+docs/04_RESEARCH/FRENTES_DE_PESQUISA_PRE_RANKING_OPERACIONAL_FINAL_V1.md
 ```
 
+Ordem oficial:
+
 ```text
-SPORTMONKS_MULTI_LEAGUE_DISCOVERY_VALIDATION
-STATUS: INICIADA
-PRIMEIRA LIGA: LA LIGA 2025/26
+1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+2. ANALISE_REGIME_POR_FASE_V1
+3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1
+```
+
+---
+
+## Frentes concluidas do roadmap atual
+
+### 1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+
+Status:
+
+```text
+APROVADA COMO V1 EXPLORATORIA
+```
+
+Documento:
+
+```text
+docs/04_RESEARCH/agrupamento_por_familia_e_variacoes_v1/AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
+```
+
+Achado principal:
+
+```text
+18 familias
+714 variacoes
+18 familias com alta sobreposicao
+overlap maximo por fixture = 100% em todas as familias
+```
+
+Decisao metodologica:
+
+```text
+Nao somar lucro de variacoes da mesma familia como se fossem estrategias independentes.
+Manter variacoes disponiveis para proximas frentes, mas considerar alertas de overlap.
+```
+
+### 2. ANALISE_REGIME_POR_FASE_V1
+
+Status:
+
+```text
+APROVADA COMO V1 EXPLORATORIA
+```
+
+Documento:
+
+```text
+docs/04_RESEARCH/analise_regime_por_fase_v1/ANALISE_REGIME_POR_FASE_V1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
+```
+
+Achados principais:
+
+```text
+Goal / Over:
+- negativo em todas as fases no phase6
+- negativo em todas as fases no phase8
+- nao houve fase claramente lucrativa para Over
+
+No Goal / Under:
+- positivo em todas as fases no phase6
+- positivo em todas as fases no phase8
+- melhor bloco phase6: fase 4
+- melhor bloco phase8: fase 5
+```
+
+Decisao metodologica:
+
+```text
+Nao corrigir agora.
+O estudo respondeu a pergunta principal de regime por fase.
+Seguir para ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1.
+```
+
+---
+
+## Frente atual
+
+```text
+ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+```
+
+Objetivo:
+
+```text
+Descobrir a partir de qual rodada os sinais da Serie A comecam a ficar confiaveis, sem misturar sinais bons com ruins.
+```
+
+Niveis obrigatorios:
+
+```text
+1. Liga geral
+2. Direcao de mercado: Over/Goal/Back Over vs Under/No Goal/Lay Over
+3. Familia/estrategia com todos os cutoffs/windows
+```
+
+Rodadas obrigatorias:
+
+```text
+5, 6, 7, 8, 9, 10, 11, 12
+```
+
+---
+
+## Frentes anteriores importantes
+
+```text
+VALIDACAO_PREDITIVA_DA_ESTRATEGIA_V1_1
+STATUS: APROVADA
+DECISAO: base para classificacao preditiva exploratoria/operacional, mas nao substitui o roadmap atual.
 ```
 
 ```text
 RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V4
 STATUS: APROVADA COM PEQUENOS AJUSTES
-DECISAO: V2 CONTINUA COMO BASE DETALHADA; V3 ABORTADA; V4 PROMOVIDA COMO EXTENSAO QUANTITATIVA OFICIAL
+DECISAO: usar como base para robustez por time e futura ANALISE_PADROES_PREJUIZO_POR_TIME_V1.
+```
+
+```text
+STRATEGY_DRAWDOWN_TOP20_SERIE_A_2025_TEMPOS_EXPANDIDOS / DD V4 corrigido
+STATUS: APROVADA
+DECISAO: fonte base para lucro, ROI, drawdown, max losing streak e ordem temporal.
 ```
 
 ---
@@ -59,32 +188,10 @@ DECISAO: V2 CONTINUA COMO BASE DETALHADA; V3 ABORTADA; V4 PROMOVIDA COMO EXTENSA
 - criacao de auditoria de drawdown por estrategia e temporada;
 - criacao da normalizacao fixture-level pre-DD;
 - integracao do DD com a entrada normalizada pre-DD;
-- criacao da rentabilidade por time V2;
-- decisao de abortar a V3 e promover a V4.
-
----
-
-## Decisao Operacional Atual
-
-A documentacao de playbooks V3 permanece como referencia operacional, mas a selecao de estrategias volta a usar:
-
-```text
-estrategias originais
-sem filtros V3 por padrao
-sem agregacao de targets
-sem juntar estrategias parecidas
-```
-
-A partir deste ponto, a escolha de estrategias deve priorizar:
-
-- lucro final;
-- ROI;
-- EV por trade;
-- drawdown maximo;
-- sequencia maxima de perdas;
-- consistencia por temporada;
-- duplicidades;
-- robustez por time.
+- criacao da rentabilidade por time V2/V4;
+- validacao preditiva V1.1 pos-DD corrigido;
+- agrupamento por familia e variacoes V1;
+- analise de regime por fase V1.
 
 ---
 
@@ -116,62 +223,43 @@ Classificar como ESTIMATIVA OPERACIONAL COM ODDS MEDIAS.
 
 ---
 
-## Decisao sobre Rentabilidade por Time
+## Decisao Operacional Atual
 
-Documentos oficiais:
-
-```text
-docs/04_RESEARCH/RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_RESULTADOS_V4.md
-docs/04_RESEARCH/DECISAO_RENTABILIDADE_POR_TIME_V4_VS_V3.md
-```
-
-Issue de decisao:
+A documentacao de playbooks V3 permanece como referencia operacional, mas a selecao de estrategias volta a usar:
 
 ```text
-#4 - DECISAO — abortar V3 e promover V4 da rentabilidade por time
+estrategias originais
+sem filtros V3 por padrao
+sem agregacao de targets
+sem juntar estrategias parecidas sem agrupamento/overlap
 ```
 
-Decisao oficial:
+A partir deste ponto, a escolha de estrategias deve priorizar:
 
-```text
-V3 ABORTADA.
-V2 MANTIDA COMO BASE DETALHADA.
-V4 APROVADA COM PEQUENOS AJUSTES.
-```
-
-Metricas oficiais adicionadas na V4:
-
-- `robustez_score`;
-- `impacto_top3_pct`;
-- `lucro_sem_top1_negativo`;
-- `lucro_sem_top3_negativo`;
-- ranking das estrategias mais robustas;
-- ranking das estrategias mais dependentes.
-
-Ajustes pendentes:
-
-```text
-1. robustez_score >= 0.60 deve ser ROBUSTA.
-2. ranking das mais dependentes deve filtrar lucro_total >= 500 OU N >= 30.
-```
+- lucro final;
+- ROI;
+- EV por trade;
+- drawdown maximo;
+- sequencia maxima de perdas;
+- consistencia por temporada/fase;
+- duplicidades por familia/variacao;
+- robustez por time.
 
 ---
 
 ## Proxima Frente Oficial
 
 ```text
-MULTI_LEAGUE_DRAWDOWN_AUDIT_V1
+ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
 ```
 
-Objetivo:
+Depois dela:
 
-Aplicar o script de drawdown nas estrategias originais para La Liga e futuras ligas/temporadas, mantendo:
-
-- estrategias separadas;
-- temporadas separadas;
-- targets separados;
-- sem filtros V3 por padrao;
-- foco em lucro final + drawdown + ROI + EV.
+```text
+ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+ANALISE_PADROES_PREJUIZO_POR_TIME_V1
+RANKING_OPERACIONAL_FINAL_V1
+```
 
 ---
 
@@ -182,3 +270,4 @@ Aplicar o script de drawdown nas estrategias originais para La Liga e futuras li
 - Nao chamar simulacao com odds medias de backtesting financeiro real.
 - Nao usar odds live inexistentes.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
+- Nao aprovar operacao final durante etapa exploratoria.
