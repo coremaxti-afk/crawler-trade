@@ -113,12 +113,67 @@ No Goal / Under:
 - melhor bloco phase8: fase 5
 ```
 
-Decisao metodologica:
+### 3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+
+Status:
 
 ```text
-Nao corrigir agora.
-O estudo respondeu a pergunta principal de regime por fase.
-Seguir para ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1.
+APROVADA COMO V1 EXPLORATORIA
+```
+
+Documento:
+
+```text
+docs/04_RESEARCH/analise_maturidade_liga_por_rodada_v1/ANALISE_MATURIDADE_LIGA_POR_RODADA_V1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
+```
+
+Achados principais:
+
+```text
+A liga geral pode enganar porque mistura Goal ruim com No Goal bom.
+Goal / Over continua ruim mesmo removendo rodadas iniciais.
+No Goal / Under permanece positivo desde a primeira rodada testada.
+As melhores familias No Goal amadurecem cedo.
+Nao apareceu evidencia de que esperar ate rodada 10 melhora significativamente as melhores familias No Goal.
+```
+
+Ressalva:
+
+```text
+A V1 testou apenas rodadas 5 a 12.
+Ela mostra que rodada 5 ja funciona para No Goal, mas nao prova que a maturidade comeca exatamente na rodada 5.
+```
+
+### 4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+
+Status:
+
+```text
+APROVADA COMO V1 EXPLORATORIA COM RESSALVA DE INTERPRETACAO
+```
+
+Documento:
+
+```text
+docs/04_RESEARCH/analise_forca_favorito_por_estrategia_v1/ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
+```
+
+Achados principais:
+
+```text
+A forca do favorito importa.
+As melhores familias No Goal parecem mais fortes em jogos parelhos/sem favorito claro.
+Goal nao ficou lucrativo no agregado em nenhum segmento.
+Algumas familias Goal geraram hipoteses segmentadas, mas ainda com risco de overfitting.
+both_teams_cold_2of3 parece especialmente interessante em jogos parelhos.
+favorite_winning_by_1_opp_cold_2of3 teve resultado contraintuitivo: melhor em jogo parelho do que em favorito forte.
+```
+
+Ressalva de interpretacao:
+
+```text
+Goal nao passou a funcionar no agregado.
+Algumas familias Goal ficaram menos negativas ou pontualmente positivas em segmentos especificos.
 ```
 
 ---
@@ -126,27 +181,29 @@ Seguir para ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1.
 ## Frente atual
 
 ```text
-ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+ANALISE_PADROES_PREJUIZO_POR_TIME_V1
 ```
 
 Objetivo:
 
 ```text
-Descobrir a partir de qual rodada os sinais da Serie A comecam a ficar confiaveis, sem misturar sinais bons com ruins.
+Evoluir a rentabilidade por time para descobrir quais padroes aparecem nos times que dao prejuizo para cada estrategia/familia.
 ```
 
-Niveis obrigatorios:
+Pergunta principal:
 
 ```text
-1. Liga geral
-2. Direcao de mercado: Over/Goal/Back Over vs Under/No Goal/Lay Over
-3. Familia/estrategia com todos os cutoffs/windows
+Quais caracteristicas aparecem nos times que deram prejuizo para uma estrategia?
 ```
 
-Rodadas obrigatorias:
+Essa frente deve usar como insumos:
 
 ```text
-5, 6, 7, 8, 9, 10, 11, 12
+RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V4
+AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+ANALISE_REGIME_POR_FASE_V1
+ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
 ```
 
 ---
@@ -191,7 +248,9 @@ DECISAO: fonte base para lucro, ROI, drawdown, max losing streak e ordem tempora
 - criacao da rentabilidade por time V2/V4;
 - validacao preditiva V1.1 pos-DD corrigido;
 - agrupamento por familia e variacoes V1;
-- analise de regime por fase V1.
+- analise de regime por fase V1;
+- analise de maturidade por rodada V1;
+- analise de forca do favorito por estrategia V1.
 
 ---
 
@@ -242,6 +301,8 @@ A partir deste ponto, a escolha de estrategias deve priorizar:
 - drawdown maximo;
 - sequencia maxima de perdas;
 - consistencia por temporada/fase;
+- maturidade por rodada;
+- contexto de favorito/equilibrio;
 - duplicidades por familia/variacao;
 - robustez por time.
 
@@ -250,14 +311,12 @@ A partir deste ponto, a escolha de estrategias deve priorizar:
 ## Proxima Frente Oficial
 
 ```text
-ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+ANALISE_PADROES_PREJUIZO_POR_TIME_V1
 ```
 
 Depois dela:
 
 ```text
-ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-ANALISE_PADROES_PREJUIZO_POR_TIME_V1
 RANKING_OPERACIONAL_FINAL_V1
 ```
 
