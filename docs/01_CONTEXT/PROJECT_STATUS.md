@@ -5,12 +5,12 @@
 FASE ATUAL:
 
 ```text
-ANALISE EXPLORATORIA E DESCOBERTA DE PADROES PRE-RANKING OPERACIONAL
+VALIDACAO MULTI-TEMPORADA PRE-RANKING OPERACIONAL
 ```
 
-O projeto esta na etapa de organizar e testar padroes exploratorios antes do `RANKING_OPERACIONAL_FINAL_V1`.
+O projeto concluiu as 5 frentes exploratorias da Serie A 2025 e agora deve validar fora da amostra os principais achados antes de construir o `RANKING_OPERACIONAL_FINAL_V1`.
 
-O objetivo agora nao e prever diretamente a proxima temporada nem aprovar operacao final. O objetivo e descobrir padroes historicos fortes, separar duplicidades, entender regime da temporada e preparar hipoteses para validacao preditiva/operacional posterior.
+O objetivo agora nao e aprovar operacao final. O objetivo e verificar quais padroes descobertos em 2025 sobrevivem em outras temporadas.
 
 ---
 
@@ -32,27 +32,21 @@ Se uma solicitacao pular etapas, misturar objetivos, fragilizar a metodologia ou
 
 ---
 
-## Roadmap Exploratorio Atual
+## Roadmap Exploratorio Serie A 2025 — Concluido
 
-Documento oficial:
-
-```text
-docs/04_RESEARCH/FRENTES_DE_PESQUISA_PRE_RANKING_OPERACIONAL_FINAL_V1.md
-```
-
-Ordem oficial:
+Ordem executada:
 
 ```text
 1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
 2. ANALISE_REGIME_POR_FASE_V1
 3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
 4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1
+5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
 ```
 
 ---
 
-## Frentes concluidas do roadmap atual
+## Frentes concluidas
 
 ### 1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
 
@@ -176,81 +170,79 @@ Goal nao passou a funcionar no agregado.
 Algumas familias Goal ficaram menos negativas ou pontualmente positivas em segmentos especificos.
 ```
 
+### 5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
+
+Status:
+
+```text
+APROVADA COMO V1_1 EXPLORATORIA
+```
+
+Documento:
+
+```text
+docs/04_RESEARCH/analise_padroes_prejuizo_por_time_v1_1/ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
+```
+
+Achados principais:
+
+```text
+A V1.1 corrigiu a V1 ao focar apenas em familias No Goal lucrativas.
+O problema nao e apenas o time isolado, mas time + contexto + familia.
+O perfil mais forte de prejuizo No Goal foi FAVORITO_MEDIO_DOMINANTE/PREJUIZO_DISTRIBUIDO/MULTI_FAMILIA.
+São Paulo, Internacional e Botafogo sao os principais alertas exploratorios.
+Nenhum time deve ser excluido automaticamente com base nesta etapa.
+```
+
+---
+
+## Hipoteses congeladas para validacao multi-temporada
+
+As hipoteses abaixo devem ser testadas fora da amostra antes do ranking operacional final:
+
+```text
+1. Familias No Goal sao superiores a Goal/Over no agregado.
+2. No Goal e lucrativo em varias fases da temporada.
+3. As melhores familias No Goal amadurecem cedo.
+4. Jogos parelhos/sem favorito claro parecem favorecer as melhores familias No Goal.
+5. Favorito medio dominante + prejuizo distribuido + multi-familia aparece como perfil recorrente de risco.
+6. Alguns times sao contraditorios: bons para uma familia e ruins para outra.
+7. A selecao final deve considerar familia + contexto + time, e nao apenas estrategia isolada.
+```
+
 ---
 
 ## Frente atual
 
 ```text
-ANALISE_PADROES_PREJUIZO_POR_TIME_V1
+VALIDACAO_MULTI_TEMPORADA_V1
 ```
 
 Objetivo:
 
 ```text
-Evoluir a rentabilidade por time para descobrir quais padroes aparecem nos times que dao prejuizo para cada estrategia/familia.
+Validar se os padroes descobertos na Serie A 2025 sobrevivem em outras temporadas antes de construir o RANKING_OPERACIONAL_FINAL_V1.
 ```
 
 Pergunta principal:
 
 ```text
-Quais caracteristicas aparecem nos times que deram prejuizo para uma estrategia?
+Quais achados de 2025 continuam validos fora da amostra?
 ```
 
-Essa frente deve usar como insumos:
-
-```text
-RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V4
-AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-ANALISE_REGIME_POR_FASE_V1
-ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-```
+Temporadas/escopo a definir conforme dados disponiveis.
 
 ---
 
-## Frentes anteriores importantes
+## Roadmap a partir de agora
 
 ```text
-VALIDACAO_PREDITIVA_DA_ESTRATEGIA_V1_1
-STATUS: APROVADA
-DECISAO: base para classificacao preditiva exploratoria/operacional, mas nao substitui o roadmap atual.
+1. VALIDACAO_MULTI_TEMPORADA_V1
+2. COMPARACAO_PADROES_2025_VS_OUTRAS_TEMPORADAS_V1
+3. RANKING_OPERACIONAL_FINAL_V1
+4. VALIDACAO_OPERACIONAL_FINAL_V1
+5. PLAYBOOK_OPERACIONAL_FINAL
 ```
-
-```text
-RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V4
-STATUS: APROVADA COM PEQUENOS AJUSTES
-DECISAO: usar como base para robustez por time e futura ANALISE_PADROES_PREJUIZO_POR_TIME_V1.
-```
-
-```text
-STRATEGY_DRAWDOWN_TOP20_SERIE_A_2025_TEMPOS_EXPANDIDOS / DD V4 corrigido
-STATUS: APROVADA
-DECISAO: fonte base para lucro, ROI, drawdown, max losing streak e ordem temporal.
-```
-
----
-
-## Objetivos ja atingidos
-
-- validacao semantica de SportMonks trends;
-- validacao de participant_id por time;
-- validacao de cutoffs 60/65/70/75;
-- validacao de janelas 5/10/15 minutos;
-- descoberta de estrategias por lado/time;
-- integracao Football-Data para definicao de favorito;
-- avaliacao financeira inicial pelo agente 06;
-- criacao dos playbooks operacionais V1/V2/V3;
-- identificacao de inconsistencia causada por agregacao/filtros dos playbooks;
-- retorno para estrategias originais;
-- criacao de auditoria de drawdown por estrategia e temporada;
-- criacao da normalizacao fixture-level pre-DD;
-- integracao do DD com a entrada normalizada pre-DD;
-- criacao da rentabilidade por time V2/V4;
-- validacao preditiva V1.1 pos-DD corrigido;
-- agrupamento por familia e variacoes V1;
-- analise de regime por fase V1;
-- analise de maturidade por rodada V1;
-- analise de forca do favorito por estrategia V1.
 
 ---
 
@@ -284,16 +276,9 @@ Classificar como ESTIMATIVA OPERACIONAL COM ODDS MEDIAS.
 
 ## Decisao Operacional Atual
 
-A documentacao de playbooks V3 permanece como referencia operacional, mas a selecao de estrategias volta a usar:
+Nenhuma estrategia, time ou filtro deve ser aprovado operacionalmente antes da validacao multi-temporada.
 
-```text
-estrategias originais
-sem filtros V3 por padrao
-sem agregacao de targets
-sem juntar estrategias parecidas sem agrupamento/overlap
-```
-
-A partir deste ponto, a escolha de estrategias deve priorizar:
+A escolha futura deve priorizar:
 
 - lucro final;
 - ROI;
@@ -303,22 +288,9 @@ A partir deste ponto, a escolha de estrategias deve priorizar:
 - consistencia por temporada/fase;
 - maturidade por rodada;
 - contexto de favorito/equilibrio;
+- perfil de prejuizo por time;
 - duplicidades por familia/variacao;
-- robustez por time.
-
----
-
-## Proxima Frente Oficial
-
-```text
-ANALISE_PADROES_PREJUIZO_POR_TIME_V1
-```
-
-Depois dela:
-
-```text
-RANKING_OPERACIONAL_FINAL_V1
-```
+- robustez multi-temporada.
 
 ---
 
@@ -329,4 +301,4 @@ RANKING_OPERACIONAL_FINAL_V1
 - Nao chamar simulacao com odds medias de backtesting financeiro real.
 - Nao usar odds live inexistentes.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
-- Nao aprovar operacao final durante etapa exploratoria.
+- Nao aprovar operacao final durante etapa exploratoria ou validacao multi-temporada.
