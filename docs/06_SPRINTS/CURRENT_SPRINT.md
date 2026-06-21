@@ -5,35 +5,43 @@
 Status:
 
 ```text
-ROADMAP EXPLORATORIO PRE-RANKING OPERACIONAL
+VALIDACAO MULTI-TEMPORADA PRE-RANKING OPERACIONAL
 ```
 
 Fase atual:
 
 ```text
-ANALISE EXPLORATORIA E DESCOBERTA DE PADROES
+VALIDACAO FORA DA AMOSTRA
 ```
 
 Frente oficial ativa:
 
 ```text
-ANALISE_PADROES_PREJUIZO_POR_TIME_V1
+VALIDACAO_MULTI_TEMPORADA_V1
 ```
 
-Frentes concluidas neste roadmap:
+---
+
+## Roadmap exploratorio Serie A 2025 concluido
+
+Frentes concluidas:
 
 ```text
 1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1 — APROVADA COMO V1 EXPLORATORIA
 2. ANALISE_REGIME_POR_FASE_V1 — APROVADA COMO V1 EXPLORATORIA
 3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1 — APROVADA COMO V1 EXPLORATORIA
 4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1 — APROVADA COMO V1 EXPLORATORIA COM RESSALVA DE INTERPRETACAO
+5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1 — APROVADA COMO V1_1 EXPLORATORIA
 ```
 
 Proximas frentes:
 
 ```text
-5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1 — ATIVA
-6. RANKING_OPERACIONAL_FINAL_V1
+6. VALIDACAO_MULTI_TEMPORADA_V1 — ATIVA
+7. COMPARACAO_PADROES_2025_VS_OUTRAS_TEMPORADAS_V1
+8. RANKING_OPERACIONAL_FINAL_V1
+9. VALIDACAO_OPERACIONAL_FINAL_V1
+10. PLAYBOOK_OPERACIONAL_FINAL
 ```
 
 ---
@@ -56,7 +64,7 @@ Se uma solicitacao pular etapas, misturar objetivos ou fragilizar a metodologia,
 
 ---
 
-## Concluido no roadmap atual
+## Concluido no roadmap exploratorio atual
 
 ### 1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
 
@@ -156,54 +164,83 @@ both_teams_cold_2of3 parece especialmente interessante em jogos parelhos.
 favorite_winning_by_1_opp_cold_2of3 teve melhor resultado em jogo parelho do que em favorito forte.
 ```
 
+### 5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
+
+- [x] Corrigir a V1 para focar apenas familias No Goal lucrativas.
+- [x] Identificar times que prejudicam No Goal.
+- [x] Construir perfis de times prejudiciais.
+- [x] Identificar times contraditorios.
+- [x] Gerar hipoteses para validacao multi-temporada.
+
+Documento:
+
+```text
+docs/04_RESEARCH/analise_padroes_prejuizo_por_time_v1_1/ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
+```
+
+Achados principais:
+
+```text
+O perfil mais forte de prejuizo No Goal foi FAVORITO_MEDIO_DOMINANTE/PREJUIZO_DISTRIBUIDO/MULTI_FAMILIA.
+São Paulo, Internacional e Botafogo sao os principais alertas exploratorios.
+O problema nao e apenas o time isolado, mas time + contexto + familia.
+Nenhum time deve ser excluido automaticamente com base nesta etapa.
+```
+
+---
+
+## Hipoteses congeladas para validacao
+
+```text
+1. Familias No Goal sao superiores a Goal/Over no agregado.
+2. No Goal e lucrativo em varias fases da temporada.
+3. As melhores familias No Goal amadurecem cedo.
+4. Jogos parelhos/sem favorito claro parecem favorecer as melhores familias No Goal.
+5. Favorito medio dominante + prejuizo distribuido + multi-familia aparece como perfil recorrente de risco.
+6. Alguns times sao contraditorios: bons para uma familia e ruins para outra.
+7. A selecao final deve considerar familia + contexto + time, e nao apenas estrategia isolada.
+```
+
 ---
 
 ## Em andamento
 
-### 5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1
+### 6. VALIDACAO_MULTI_TEMPORADA_V1
 
 Objetivo:
 
 ```text
-Descobrir quais caracteristicas aparecem nos times que deram prejuizo para cada estrategia/familia.
+Validar se os padroes descobertos na Serie A 2025 sobrevivem em outras temporadas antes de construir o RANKING_OPERACIONAL_FINAL_V1.
 ```
 
 Perguntas centrais:
 
 ```text
-1. Quais times deram prejuizo para cada familia?
-2. Quais padroes esses times tinham?
-3. O prejuizo aparece em determinados contextos de favorito/equilibrio?
-4. O prejuizo aparece em determinadas fases da temporada?
-5. O prejuizo aparece em determinadas janelas/cutoffs?
-6. Existem perfis de time que quebram No Goal no fim do jogo?
-```
-
-Insumos obrigatorios:
-
-```text
-RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V4
-AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-ANALISE_REGIME_POR_FASE_V1
-ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+1. As familias No Goal continuam superiores em outras temporadas?
+2. Goal/Over continua negativo em outras temporadas?
+3. Jogos parelhos continuam sendo o melhor contexto para No Goal?
+4. A maturidade cedo se repete?
+5. O perfil FAVORITO_MEDIO_DOMINANTE/PREJUIZO_DISTRIBUIDO/MULTI_FAMILIA reaparece?
+6. Os times/perfis prejudiciais de 2025 se repetem ou foram especificos da temporada?
+7. Quais padroes sobrevivem o suficiente para entrar no Ranking Operacional Final?
 ```
 
 ---
 
 ## Proximas Etapas
 
-- [ ] Gerar prompt para `ANALISE_PADROES_PREJUIZO_POR_TIME_V1`.
-- [ ] Executar script de padroes de prejuizo por time.
-- [ ] Auditar entrega.
-- [ ] Atualizar GitHub com a entrega.
-- [ ] Somente depois preparar `RANKING_OPERACIONAL_FINAL_V1`.
+- [ ] Gerar prompt para `VALIDACAO_MULTI_TEMPORADA_V1`.
+- [ ] Executar validacao multi-temporada.
+- [ ] Auditar resultado comparando 2025 vs outras temporadas.
+- [ ] Separar padroes confirmados, enfraquecidos e reprovados.
+- [ ] Atualizar GitHub com a validacao multi-temporada.
+- [ ] Preparar `RANKING_OPERACIONAL_FINAL_V1` apenas com padroes confirmados.
 
 ---
 
 ## Decisao Operacional Atual
 
-Nenhuma estrategia deve ser aprovada operacionalmente apenas com base nas frentes exploratorias.
+Nenhuma estrategia, time ou filtro deve ser aprovado operacionalmente antes da validacao multi-temporada.
 
 As frentes atuais servem para:
 
@@ -211,13 +248,13 @@ As frentes atuais servem para:
 descobrir padroes
 organizar hipoteses
 identificar riscos
-preparar validacao preditiva/operacional posterior
+preparar validacao fora da amostra
 ```
 
 A selecao futura deve priorizar:
 
 ```text
-lucro final + ROI + EV + drawdown + sequencia maxima de perdas + robustez por time + consistencia por fase + maturidade por rodada + contexto de favorito + duplicidade por familia
+lucro final + ROI + EV + drawdown + sequencia maxima de perdas + robustez por time + consistencia por fase + maturidade por rodada + contexto de favorito + perfil de prejuizo por time + duplicidade por familia + robustez multi-temporada
 ```
 
 ---
@@ -229,7 +266,7 @@ lucro final + ROI + EV + drawdown + sequencia maxima de perdas + robustez por ti
 - Nao fazer backtesting financeiro real.
 - Nao usar odds live nao timestampadas.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
-- Nao aprovar operacao final durante fase exploratoria.
+- Nao aprovar operacao final durante fase exploratoria ou validacao multi-temporada.
 
 Todas as simulacoes com odds medias devem ser classificadas como:
 
