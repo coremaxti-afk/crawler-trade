@@ -5,155 +5,168 @@
 Status:
 
 ```text
-AUDITORIA DE DRAWDOWN DAS ESTRATEGIAS ORIGINAIS
-VALIDACAO MULTI-LIGA INICIADA
-ROBUSTEZ POR TIME EM AJUSTE V4
+ROADMAP EXPLORATORIO PRE-RANKING OPERACIONAL
+```
+
+Fase atual:
+
+```text
+ANALISE EXPLORATORIA E DESCOBERTA DE PADROES
 ```
 
 Frente oficial ativa:
 
 ```text
-SPORTMONKS_STRATEGY_DRAWDOWN_AUDIT_V1
+ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
 ```
 
-Frente auxiliar ativa:
+Frentes concluidas neste roadmap:
 
 ```text
-RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_V4
+1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1 — APROVADA COMO V1 EXPLORATORIA
+2. ANALISE_REGIME_POR_FASE_V1 — APROVADA COMO V1 EXPLORATORIA
 ```
 
-Proxima frente:
+Proximas frentes:
 
 ```text
-MULTI_LEAGUE_DRAWDOWN_AUDIT_V1
+3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1 — ATIVA
+4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1
+6. RANKING_OPERACIONAL_FINAL_V1
 ```
 
 ---
 
-## Concluido
+## Governanca obrigatoria
 
-- [x] Validacao semantica de trends.
-- [x] Validacao de participant_id por time.
-- [x] Validacao de cutoffs 60/65/70/75.
-- [x] Validacao de janelas 5/10/15 minutos.
-- [x] Descoberta de estrategias por lado/time EPL.
-- [x] Integracao com Football-Data para favorito.
-- [x] Encerrar `SPORTMONKS_TEAM_SIDE_STRATEGY_DISCOVERY_V1/V2`.
-- [x] Formalizar agente 06 - Trade Operations Quant.
-- [x] Criar playbooks operacionais V1/V2/V3.
-- [x] Identificar risco de confusao por filtros/agregacoes de playbook V3.
-- [x] Retornar para estrategias originais.
-- [x] Criar script de auditoria de drawdown por estrategia/temporada.
-- [x] Auditar drawdown EPL 2024/25 e EPL 2025/26.
-- [x] Iniciar discovery multi-liga com La Liga 2025/26.
-- [x] Criar normalizacao fixture-level pre-DD.
-- [x] Integrar DD com entrada normalizada pre-DD.
-- [x] Avaliar rentabilidade por time V2.
-- [x] Abortar V3 da rentabilidade por time como camada principal.
-- [x] Aprovar V4 como extensao quantitativa da V2.
+Todos os agentes devem seguir:
+
+```text
+docs/00_AGENTS/GOVERNANCE_V2.md
+```
+
+Regra central:
+
+```text
+Nenhum agente deve concordar com o usuario apenas para agradar.
+```
+
+Se uma solicitacao pular etapas, misturar objetivos ou fragilizar a metodologia, o agente deve discordar primeiro e propor o caminho correto.
 
 ---
 
-## Decisao Operacional Atual
+## Concluido no roadmap atual
 
-A documentacao de playbooks V3 permanece como referencia operacional, mas a selecao de estrategias volta a usar:
+### 1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+
+- [x] Agrupar familias e variacoes.
+- [x] Medir overlap por fixture.
+- [x] Identificar risco de duplicidade.
+- [x] Confirmar que lucros de variacoes sobrepostas nao devem ser somados.
+
+Documento:
 
 ```text
-estrategias originais
-sem filtros V3 por padrao
-sem agregacao de targets
-sem juntar estrategias parecidas
+docs/04_RESEARCH/agrupamento_por_familia_e_variacoes_v1/AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
 ```
 
-Prioridade atual:
+Achado principal:
 
 ```text
-lucro final + ROI + EV + drawdown + sequencia maxima de perdas + robustez por time
+18 familias
+714 variacoes
+18 familias com alta sobreposicao
+overlap maximo por fixture = 100% em todas as familias
 ```
 
----
+### 2. ANALISE_REGIME_POR_FASE_V1
 
-## Decisao Rentabilidade por Time
+- [x] Rodar phase_count=6.
+- [x] Rodar phase_count=8.
+- [x] Separar Goal/Over e No Goal/Under.
+- [x] Medir lucro/ROI/DD por fase.
+- [x] Identificar familias consistentes e regime dependente.
+
+Documento:
 
 ```text
-V3 ABORTADA.
-V2 MANTIDA COMO BASE DETALHADA.
-V4 APROVADA COM PEQUENOS AJUSTES.
+docs/04_RESEARCH/analise_regime_por_fase_v1/ANALISE_REGIME_POR_FASE_V1_SERIE_A_2025_TEMPOS_EXPANDIDOS.md
 ```
 
-Documento oficial:
+Achados principais:
 
 ```text
-docs/04_RESEARCH/RENTABILIDADE_DAS_ESTRATEGIAS_POR_TIME_RESULTADOS_V4.md
-```
-
-Documento de decisao:
-
-```text
-docs/04_RESEARCH/DECISAO_RENTABILIDADE_POR_TIME_V4_VS_V3.md
-```
-
-Issue registrada:
-
-```text
-#4 - DECISAO — abortar V3 e promover V4 da rentabilidade por time
-```
-
-Ajustes pendentes:
-
-```text
-1. robustez_score >= 0.60 deve ser ROBUSTA.
-2. ranking das mais dependentes deve filtrar lucro_total >= 500 OU N >= 30.
+Goal / Over: negativo em todas as fases no phase6 e phase8.
+No Goal / Under: positivo em todas as fases no phase6 e phase8.
+Melhor bloco phase6 para No Goal: fase 4.
+Melhor bloco phase8 para No Goal: fase 5.
 ```
 
 ---
 
-## Estrategias Prioritarias EPL apos Drawdown Audit
+## Em andamento
 
-### Lay Over / No Goal
+### 3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
 
-- `team_winning_by_1_opp_cold_2of3 | 65 | no_goal_65_80 | last_10m`
-- `favorite_winning_by_1_opp_cold_2of3 | 65 | no_goal_65_80 | last_10m`
-- `favorite_winning_by_1_opp_cold_2of3 | 70 | no_goal_70_85 | last_15m` em observacao forte
-
-### Back Over / Goal
-
-- `home_winning_by_1_visitor_pressing | 75 | goal_75_90`
-
-Pausar/descartar:
-
-- `home_winning_by_1_visitor_pressing | 70 | goal_70_80 | last_15m`
-
----
-
-## La Liga 2025/26 - Discovery Inicial
-
-Status:
+Objetivo:
 
 ```text
-APROVADO COM RESSALVAS PARA AUDITORIA OPERACIONAL
+Descobrir a partir de qual rodada os sinais da Serie A comecam a ficar confiaveis, sem misturar sinais bons com ruins.
 ```
 
-Principais candidatas para auditoria:
+Rodadas a testar:
 
-- `favorite_drawing_pressure_high_2of3 | 60 | goal_60_75 | last_10m`
-- `away_winning_by_1_home_pressing | 70 | goal_70_90 | last_15m`
-- `key_passes_recent_high | 65 | goal_65_85 | last_10m`
-- `both_teams_cold_2of3 | 75 | no_goal_75_90 | last_5m`
-- `favorite_winning_by_1_opp_cold_2of3 | 60 | no_goal_60_80 | last_10m`
+```text
+5, 6, 7, 8, 9, 10, 11, 12
+```
+
+Niveis obrigatorios:
+
+```text
+1. Liga geral
+2. Direcao de mercado: Over/Goal/Back Over vs Under/No Goal/Lay Over
+3. Familia/estrategia com todos os cutoffs/windows
+```
+
+Importante:
+
+```text
+A decisao exploratoria nao deve depender apenas da liga geral, porque Over ruim pode contaminar Under bom e uma estrategia Under ruim pode contaminar outra estrategia Under boa.
+```
 
 ---
 
 ## Proximas Etapas
 
-- [ ] Corrigir V4: fronteira do robustez_score.
-- [ ] Corrigir V4: filtro do ranking das mais dependentes.
-- [ ] Rodar drawdown audit nas estrategias La Liga 2025/26.
-- [ ] Comparar EPL vs La Liga por estrategia/familia.
-- [ ] Manter estrategias, targets e temporadas separados.
-- [ ] Auditar duplicidades em `both_teams_cold_2of3`.
-- [ ] Decidir top estrategias por lucro final, ROI, EV e drawdown.
-- [ ] Documentar tutorial de uso do script para novas ligas/temporadas.
+- [ ] Gerar prompt para `ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1`.
+- [ ] Executar script da maturidade por rodada.
+- [ ] Auditar entrega da maturidade por rodada.
+- [ ] Atualizar GitHub com a entrega da maturidade.
+- [ ] Gerar prompt para `ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1`.
+- [ ] Gerar prompt para `ANALISE_PADROES_PREJUIZO_POR_TIME_V1`.
+- [ ] Somente depois preparar `RANKING_OPERACIONAL_FINAL_V1`.
+
+---
+
+## Decisao Operacional Atual
+
+Nenhuma estrategia deve ser aprovada operacionalmente apenas com base nas frentes exploratorias.
+
+As frentes atuais servem para:
+
+```text
+descobrir padroes
+organizar hipoteses
+identificar riscos
+preparar validacao preditiva/operacional posterior
+```
+
+A selecao futura deve priorizar:
+
+```text
+lucro final + ROI + EV + drawdown + sequencia maxima de perdas + robustez por time + consistencia por fase + maturidade por rodada + duplicidade por familia
+```
 
 ---
 
@@ -164,6 +177,7 @@ Principais candidatas para auditoria:
 - Nao fazer backtesting financeiro real.
 - Nao usar odds live nao timestampadas.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
+- Nao aprovar operacao final durante fase exploratoria.
 
 Todas as simulacoes com odds medias devem ser classificadas como:
 
