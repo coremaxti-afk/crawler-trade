@@ -5,107 +5,39 @@
 Status:
 
 ```text
-PREPARACAO DA COMPARACAO 2024 X 2025
+PREPARACAO DO RANKING_OPERACIONAL_FINAL_V1
 ```
 
 Fase atual:
 
 ```text
-ORQUESTRACAO DE TEMPORADA + COMPARACAO BI-TEMPORADA
+POS-COMPARACAO BI-TEMPORADA 2024 X 2025
 ```
 
 Frente oficial ativa:
 
 ```text
-PIPELINE_TEMPORADA_COMPLETA_V1
-```
-
-Frente analitica seguinte:
-
-```text
-COMPARACAO_BI_TEMPORADA_QUALIDADE_E_OSCILACAO_V1
+RANKING_OPERACIONAL_FINAL_V1
 ```
 
 ---
 
 ## Contexto
 
-O projeto concluiu o roadmap exploratorio da Serie A 2025 e ja processou a Serie A 2024 com a mesma familia de estudos.
+O projeto concluiu o roadmap exploratorio da Serie A 2025, processou a Serie A 2024 e concluiu a comparacao bi-temporada entre 2024 e 2025.
 
-Como nao ha acesso atual a 2023 via SportMonks, a validacao fora da amostra sera inicialmente uma comparacao bi-temporada:
+Status da comparacao:
 
 ```text
-Serie A 2024 x Serie A 2025
+COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
+APROVADA COMO TRIAGEM BI-TEMPORADA
+NAO APROVA OPERACAO FINAL
 ```
 
-O foco deixa de ser validacao por time especifico e passa a ser:
+Documento registrado:
 
 ```text
-rodada de maturidade
-phase6
-phase8
-oscilacao de lucro
-oscilacao de ROI
-oscilacao de drawdown
-max losing streak
-qualidade por familia/variacao
-```
-
----
-
-## Script que analisa/orquestra todos os dados da temporada
-
-### PIPELINE_TEMPORADA_COMPLETA_V1
-
-Papel:
-
-```text
-Rodar automaticamente todos os scripts aprovados para uma temporada.
-```
-
-Etapas esperadas:
-
-```text
-1. DISCOVERY
-2. NORMALIZACAO_FIXTURE_LEVEL
-3. DRAWDOWN_V4
-4. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-5. ANALISE_REGIME_POR_FASE_V1
-6. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-7. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-8. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
-```
-
-Regra:
-
-```text
-O pipeline apenas orquestra.
-Ele nao muda calculos.
-Ele nao consolida resultados analiticos em um unico MD/CSV.
-Cada script segue gerando seus proprios artefatos nas respectivas pastas.
-```
-
-Artefatos do proprio pipeline:
-
-```text
-INVENTARIO_PIPELINE_TEMPORADA_COMPLETA_V1.csv
-pipeline_temporada_completa_v1.log
-pipeline_temporada_completa_v1_manifest.json
-PIPELINE_TEMPORADA_COMPLETA_V1_RELATORIO.md
-```
-
----
-
-## Roadmap exploratorio Serie A 2025 concluido
-
-Frentes concluidas:
-
-```text
-1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1 — APROVADA COMO V1 EXPLORATORIA
-2. ANALISE_REGIME_POR_FASE_V1 — APROVADA COMO V1 EXPLORATORIA
-3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1 — APROVADA COMO V1 EXPLORATORIA
-4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1 — APROVADA COMO V1 EXPLORATORIA COM RESSALVA DE INTERPRETACAO
-5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1 — APROVADA COMO V1_1 EXPLORATORIA
+docs/04_RESEARCH/comparacao_multi_liga_temporada_qualidade_e_oscilacao_v1/COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1_SERIE_A_2024__VS__SERIE_A_2025.md
 ```
 
 ---
@@ -128,60 +60,82 @@ Se uma solicitacao pular etapas, misturar objetivos ou fragilizar a metodologia,
 
 ---
 
-## Hipoteses congeladas para comparacao 2024 x 2025
+## Resultado aprovado da triagem bi-temporada
+
+### Goal vs No Goal
 
 ```text
-1. Familias No Goal sao superiores a Goal/Over no agregado.
-2. No Goal e lucrativo em varias fases da temporada.
-3. As melhores familias No Goal amadurecem cedo.
-4. A maturidade por rodada deve ser parecida entre 2024 e 2025.
-5. A curva phase6 deve ser medida para estabilidade.
-6. A curva phase8 deve ser medida para oscilacao.
-7. A segmentacao por favorito importa, mas a melhor faixa ainda e inconclusiva.
-8. Favorito forte nao deve ser automaticamente privilegiado.
-9. Time especifico nao deve dominar a validacao porque muda muito entre temporadas.
-10. Perfis/contextos podem ser mantidos como variaveis auxiliares.
+Goal/Over: reprovado no agregado das duas temporadas.
+No Goal/Under: superior nas duas temporadas.
 ```
+
+### Maturidade
+
+```text
+As principais familias No Goal amadureceram na rodada 5 em 2024 e 2025.
+```
+
+### Phase6 / Phase8
+
+```text
+As familias No Goal aprovadas sao lucrativas nas duas temporadas, mas apresentam oscilacao por fase.
+A maioria ficou OSCILANTE_PHASE6 e OSCILANTE_PHASE8.
+```
+
+---
+
+## Familias consistentes para entrada no ranking
+
+```text
+1. team_winning_by_1_no_sot_against__no_goal — score 82,8
+2. opponent_no_big_chances__no_goal — score 82,5
+3. both_teams_cold_2of3__no_goal — score 78,7
+4. opponent_no_recent_key_passes__no_goal — score 73,4
+5. team_winning_by_1_low_dangerous_attacks_against__no_goal — score 71,1
+```
+
+Familias No Goal oscilantes:
+
+```text
+team_winning_by_1_opp_cold_2of3__no_goal
+favorite_winning_by_1_opp_cold_2of3__no_goal
+```
+
+Todas as familias Goal/Over ficaram reprovadas ou inconclusivas.
 
 ---
 
 ## Em andamento
 
-### 1. PIPELINE_TEMPORADA_COMPLETA_V1
+### RANKING_OPERACIONAL_FINAL_V1
 
 Objetivo:
 
 ```text
-Garantir que qualquer temporada seja processada de forma reprodutivel e com os mesmos artefatos das frentes aprovadas.
+Construir um ranking conservador das familias/variacoes candidatas usando a triagem 2024 x 2025 como base.
 ```
 
-Critico:
+A ranking deve considerar obrigatoriamente:
 
 ```text
-Nao transformar o pipeline em relatorio analitico consolidado.
-Nao gerar um CSV gigante com todos os resultados.
-Nao gerar um MD gigante com todas as analises.
+lucro final
+ROI
+EV por trade
+N
+drawdown
+max losing streak
+maturidade por rodada
+phase6_class
+phase8_class
+oscilacao entre temporadas
+overlap/duplicidade por familia
 ```
 
-### 2. COMPARACAO_BI_TEMPORADA_QUALIDADE_E_OSCILACAO_V1
-
-Objetivo:
+Importante:
 
 ```text
-Comparar 2024 x 2025 por familia, variacao, rodada, phase6, phase8, lucro, ROI, DD, max losing streak e N.
-```
-
-Perguntas centrais:
-
-```text
-1. As estrategias validam nas mesmas rodadas?
-2. A qualidade do lucro/ROI e parecida?
-3. O drawdown piora muito de uma temporada para outra?
-4. A curva phase6 e estavel?
-5. A curva phase8 revela oscilacao perigosa?
-6. Quais familias validam nas duas temporadas?
-7. Quais familias validam so em uma temporada?
-8. Quais variacoes devem ser rebaixadas por instabilidade?
+Ranking nao significa operacao aprovada.
+Ranking e uma lista priorizada de candidatas para validacao operacional final.
 ```
 
 ---
@@ -194,25 +148,25 @@ A analise detalhada de mecanica interna, como ataques perigosos, chutes no gol, 
 ANATOMIA_DA_ESTRATEGIA_V1
 ```
 
-Ela deve ser aplicada apenas nas familias/variacoes que sobreviverem a comparacao 2024 x 2025.
+Ela deve ser aplicada apenas nas familias/variacoes que sobreviverem ao ranking e a validacao operacional final.
 
 ---
 
 ## Proximas Etapas
 
-- [ ] Finalizar/validar `PIPELINE_TEMPORADA_COMPLETA_V1`.
-- [ ] Garantir que 2024 e 2025 tenham artefatos equivalentes.
-- [ ] Gerar prompt para `COMPARACAO_BI_TEMPORADA_QUALIDADE_E_OSCILACAO_V1`.
-- [ ] Executar comparacao 2024 x 2025.
-- [ ] Separar estrategias em confirmadas, oscilantes, reprovadas e inconclusivas.
-- [ ] Atualizar GitHub com a comparacao.
-- [ ] Somente depois preparar `RANKING_OPERACIONAL_FINAL_V1`.
+- [ ] Gerar prompt para `RANKING_OPERACIONAL_FINAL_V1`.
+- [ ] Executar ranking conservador das candidatas.
+- [ ] Penalizar familias/variacoes com oscilacao forte em phase6/phase8.
+- [ ] Separar candidatas fortes, candidatas com ressalva, oscilantes e reprovadas.
+- [ ] Atualizar GitHub com o ranking.
+- [ ] Preparar `VALIDACAO_OPERACIONAL_FINAL_V1`.
+- [ ] Somente depois preparar `ANATOMIA_DA_ESTRATEGIA_V1`.
 
 ---
 
 ## Decisao Operacional Atual
 
-Nenhuma estrategia, time, perfil de favorito, rodada ou fase deve ser aprovado operacionalmente antes da comparacao 2024 x 2025 e da validacao operacional final.
+Nenhuma estrategia, time, perfil de favorito, rodada ou fase deve ser aprovado operacionalmente durante o ranking.
 
 A selecao futura deve priorizar:
 
@@ -229,7 +183,7 @@ lucro final + ROI + EV + drawdown + sequencia maxima de perdas + maturidade por 
 - Nao fazer backtesting financeiro real.
 - Nao usar odds live nao timestampadas.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
-- Nao aprovar operacao final durante comparacao exploratoria 2024 x 2025.
+- Nao aprovar operacao final durante montagem do ranking.
 
 Todas as simulacoes com odds medias devem ser classificadas como:
 
