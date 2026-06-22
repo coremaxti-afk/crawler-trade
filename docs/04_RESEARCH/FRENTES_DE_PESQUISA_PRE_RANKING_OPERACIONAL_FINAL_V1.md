@@ -2,7 +2,7 @@
 
 ## Status
 
-`ROADMAP EXPLORATORIO CONCLUIDO — SEGUIR PARA PIPELINE E COMPARACAO 2024 X 2025`
+`COMPARACAO BI-TEMPORADA CONCLUIDA — SEGUIR PARA RANKING_OPERACIONAL_FINAL_V1`
 
 ## Diretriz obrigatoria relacionada
 
@@ -13,23 +13,6 @@ docs/00_AGENTS/GOVERNANCE_V2.md
 ```
 
 Regra central: nenhum agente deve concordar com o usuario apenas para agradar. Se uma solicitacao pular etapas, misturar objetivos ou fragilizar a metodologia, o agente deve discordar primeiro, explicar o risco tecnico e propor o caminho correto.
-
-## Fase atual
-
-A fase atual do projeto passou a ser:
-
-```text
-ORQUESTRACAO DE TEMPORADA E COMPARACAO BI-TEMPORADA 2024 X 2025
-```
-
-Motivo:
-
-```text
-O acesso SportMonks atual limita o historico ate 2024.
-A validacao fora da amostra sera inicialmente Serie A 2024 x Serie A 2025.
-```
-
-Nao construir ranking operacional final antes dessa comparacao.
 
 ---
 
@@ -47,7 +30,7 @@ As cinco frentes exploratorias foram executadas:
 
 ---
 
-## Script que processa uma temporada completa
+## Pipeline de temporada
 
 ### PIPELINE_TEMPORADA_COMPLETA_V1
 
@@ -78,139 +61,113 @@ Cada script continua gerando seus proprios artefatos nas respectivas pastas.
 Nao gerar MD/CSV consolidado com todos os resultados analiticos.
 ```
 
-Artefatos proprios do pipeline:
+---
+
+## Comparacao bi-temporada 2024 x 2025
+
+Analise concluida:
 
 ```text
-INVENTARIO_PIPELINE_TEMPORADA_COMPLETA_V1.csv
-pipeline_temporada_completa_v1.log
-pipeline_temporada_completa_v1_manifest.json
-PIPELINE_TEMPORADA_COMPLETA_V1_RELATORIO.md
+COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
+```
+
+Documento:
+
+```text
+docs/04_RESEARCH/comparacao_multi_liga_temporada_qualidade_e_oscilacao_v1/COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1_SERIE_A_2024__VS__SERIE_A_2025.md
+```
+
+Status:
+
+```text
+APROVADA COMO TRIAGEM BI-TEMPORADA
+NAO APROVA OPERACAO FINAL
 ```
 
 ---
 
-## Resultado das cinco frentes de 2025
+## Resultado consolidado da triagem
 
-### 1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-
-Status:
+### Direcao de mercado
 
 ```text
-APROVADA COMO V1 EXPLORATORIA
+No Goal/Under superior nas duas temporadas.
+Goal/Over reprovado no agregado das duas temporadas.
 ```
 
-Conclusao:
+### Maturidade
 
 ```text
-Nao somar lucro de variacoes da mesma familia como se fossem estrategias independentes.
+As principais familias No Goal amadureceram na rodada 5 em 2024 e 2025.
 ```
 
-### 2. ANALISE_REGIME_POR_FASE_V1
-
-Status:
+### Phase6 e Phase8
 
 ```text
-APROVADA COMO V1 EXPLORATORIA
-```
-
-Conclusao:
-
-```text
-Goal/Over foi negativo em todas as fases.
-No Goal/Under foi positivo em todas as fases.
-```
-
-### 3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-
-Status:
-
-```text
-APROVADA COMO V1 EXPLORATORIA
-```
-
-Conclusao:
-
-```text
-A liga geral pode enganar por misturar Goal ruim com No Goal bom.
-No Goal amadurece cedo nas melhores familias.
-A V1 testou apenas rodadas 5 a 12.
-```
-
-### 4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-
-Status:
-
-```text
-APROVADA COMO V1 EXPLORATORIA COM RESSALVA DE INTERPRETACAO
-```
-
-Conclusao atualizada apos comparacao preliminar com 2024:
-
-```text
-A forca do favorito importa, mas a melhor faixa ainda e inconclusiva.
-Em 2025 jogo parelho foi muito forte.
-Em 2024 favorito medio foi melhor.
-Favorito forte nao deve ser privilegiado automaticamente.
-```
-
-### 5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
-
-Status:
-
-```text
-APROVADA COMO V1_1 EXPLORATORIA
-```
-
-Conclusao atualizada:
-
-```text
-A leitura por time e util, mas deve ser secundaria na comparacao 2024 x 2025.
-Times mudam muito entre temporadas.
-O foco deve ficar em familia, variacao, rodada, phase6, phase8 e oscilacao.
+As familias No Goal aprovadas sao lucrativas nas duas temporadas, mas apresentam oscilacao por fase.
+A maior parte recebeu OSCILANTE_PHASE6 e OSCILANTE_PHASE8.
 ```
 
 ---
 
-## Hipoteses congeladas para comparacao 2024 x 2025
+## Familias consistentes para entrada no ranking
+
+```text
+1. team_winning_by_1_no_sot_against__no_goal — score 82,8
+2. opponent_no_big_chances__no_goal — score 82,5
+3. both_teams_cold_2of3__no_goal — score 78,7
+4. opponent_no_recent_key_passes__no_goal — score 73,4
+5. team_winning_by_1_low_dangerous_attacks_against__no_goal — score 71,1
+```
+
+Familias oscilantes:
+
+```text
+team_winning_by_1_opp_cold_2of3__no_goal
+favorite_winning_by_1_opp_cold_2of3__no_goal
+```
+
+Todas as familias Goal/Over ficaram reprovadas ou inconclusivas.
+
+---
+
+## Hipoteses atualizadas
 
 ```text
 1. Familias No Goal sao superiores a Goal/Over no agregado.
-2. No Goal e lucrativo em varias fases da temporada.
-3. As melhores familias No Goal amadurecem cedo.
-4. A rodada de maturidade deve ser parecida entre 2024 e 2025.
-5. A curva phase6 deve ser medida para estabilidade.
-6. A curva phase8 deve ser medida para oscilacao.
-7. A segmentacao por favorito importa, mas a melhor faixa ainda e inconclusiva.
-8. Favorito forte nao deve ser automaticamente privilegiado.
-9. Time especifico nao deve dominar a validacao porque muda muito entre temporadas.
-10. Perfis/contextos podem ser mantidos como variaveis auxiliares.
+2. Goal/Over permanece estruturalmente pior que No Goal.
+3. No Goal amadurece cedo nas duas temporadas comparadas.
+4. A rodada 5 aparece como ponto forte para as familias No Goal analisadas.
+5. A curva phase6/phase8 revela oscilacao importante.
+6. A segmentacao por favorito importa, mas a melhor faixa ainda e inconclusiva.
+7. Favorito forte nao deve ser automaticamente privilegiado.
+8. Time especifico nao deve dominar a validacao porque muda muito entre temporadas.
+9. O ranking final deve considerar familia + variacao + rodada + fase + oscilacao + drawdown, e nao apenas lucro agregado.
 ```
 
 ---
 
-# Proxima fase analitica oficial
+# Proxima fase oficial
 
 ```text
-COMPARACAO_BI_TEMPORADA_QUALIDADE_E_OSCILACAO_V1
+RANKING_OPERACIONAL_FINAL_V1
 ```
 
 ## Objetivo
 
-Comparar Serie A 2024 x Serie A 2025 para medir se as familias e variacoes mantem qualidade entre temporadas.
+Construir ranking conservador das familias/variacoes candidatas, sem aprovar operacao final.
 
 ## Perguntas obrigatorias
 
 ```text
-1. As estrategias validam nas mesmas rodadas?
-2. No Goal continua superior ao Goal nas duas temporadas?
-3. A curva phase6 e estavel entre 2024 e 2025?
-4. A curva phase8 revela oscilacao perigosa?
-5. O lucro esta concentrado em poucas fases?
-6. O drawdown explode em alguma fase?
-7. A qualidade de ROI e lucro e parecida entre temporadas?
-8. Quais familias validam nas duas temporadas?
-9. Quais familias validam so em uma temporada?
-10. Quais variacoes devem ser rebaixadas por instabilidade?
+1. Quais familias/variacoes mantem melhor combinacao de lucro, ROI, EV e N?
+2. Quais tem drawdown e max losing streak aceitaveis?
+3. Quais amadurecem cedo e de forma recorrente?
+4. Quais sofrem maior penalizacao por phase6/phase8?
+5. Quais devem ser candidatas fortes?
+6. Quais devem ser candidatas com ressalva?
+7. Quais devem ser rebaixadas por oscilacao?
+8. Quais devem ser descartadas?
 ```
 
 ## Saida esperada da proxima fase
@@ -218,20 +175,11 @@ Comparar Serie A 2024 x Serie A 2025 para medir se as familias e variacoes mante
 Separar familias/variacoes em:
 
 ```text
-VALIDA_NAS_DUAS_TEMPORADAS
-VALIDA_SO_2025
-VALIDA_SO_2024
-OSCILANTE
-REPROVADA_NAS_DUAS
+CANDIDATA_FORTE
+CANDIDATA_COM_RESSALVA
+OSCILANTE_REBAIXADA
+REPROVADA
 INCONCLUSIVA
-```
-
-E maturidade em:
-
-```text
-MADURA_CEDO_NAS_DUAS
-MADURA_SO_EM_UMA
-INSTAVEL_POR_RODADA
 ```
 
 ---
@@ -261,21 +209,19 @@ fica para:
 ANATOMIA_DA_ESTRATEGIA_V1
 ```
 
-Essa etapa deve vir depois da comparacao 2024 x 2025 e antes do playbook operacional final, apenas para familias/variacoes que sobreviverem.
+Essa etapa deve vir depois do ranking e da validacao operacional final, apenas para familias/variacoes que sobreviverem.
 
 ---
 
 ## Roadmap posterior
 
 ```text
-1. PIPELINE_TEMPORADA_COMPLETA_V1
-2. COMPARACAO_BI_TEMPORADA_QUALIDADE_E_OSCILACAO_V1
-3. RANKING_OPERACIONAL_FINAL_V1
-4. VALIDACAO_OPERACIONAL_FINAL_V1
-5. ANATOMIA_DA_ESTRATEGIA_V1
-6. PLAYBOOK_OPERACIONAL_FINAL
+1. RANKING_OPERACIONAL_FINAL_V1
+2. VALIDACAO_OPERACIONAL_FINAL_V1
+3. ANATOMIA_DA_ESTRATEGIA_V1
+4. PLAYBOOK_OPERACIONAL_FINAL
 ```
 
 ## Regra final
 
-Nenhuma estrategia, filtro, perfil de time, contexto de favorito, rodada ou fase deve entrar como regra operacional definitiva antes da comparacao 2024 x 2025 e da validacao operacional final.
+Nenhuma estrategia, filtro, perfil de time, contexto de favorito, rodada ou fase deve entrar como regra operacional definitiva antes do ranking e da validacao operacional final.
