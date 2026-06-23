@@ -5,23 +5,18 @@
 FASE ATUAL:
 
 ```text
-PREPARACAO DO RANKING_OPERACIONAL_FINAL_V1
+POS-PLAYBOOK_OPERACIONAL_V1 — PREPARACAO DA ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
 ```
 
-A fase de comparacao bi-temporada entre Serie A 2024 e Serie A 2025 foi concluida como triagem exploratoria.
+O projeto concluiu o ciclo de pesquisa e consolidacao operacional da Serie A 2024/2025 e ja iniciou validacoes em Premier League 2024/25 x 2025/26.
 
-Status da entrega:
-
-```text
-COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
-APROVADA COMO TRIAGEM BI-TEMPORADA
-NAO APROVA OPERACAO FINAL
-```
-
-Documento registrado:
+Status oficial:
 
 ```text
-docs/04_RESEARCH/comparacao_multi_liga_temporada_qualidade_e_oscilacao_v1/COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1_SERIE_A_2024__VS__SERIE_A_2025.md
+PLAYBOOK_OPERACIONAL_V1 GERADO COMO DOCUMENTO OPERACIONAL CANDIDATO
+GERADOR_PLAYBOOK_OPERACIONAL_V1 PLANEJADO/EM IMPLEMENTACAO PARA AUTOMATIZAR FUTURAS LIGAS
+ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1 APROVADA COMO PROXIMA FRENTE
+NENHUMA OPERACAO REAL APROVADA
 ```
 
 ---
@@ -40,195 +35,187 @@ Regra central ativa:
 Nenhum agente deve concordar com o usuario apenas para agradar.
 ```
 
-Se uma solicitacao pular etapas, misturar objetivos, fragilizar a metodologia ou gerar falsa confianca operacional, o agente deve discordar primeiro, explicar o risco tecnico e propor o caminho correto.
+Se uma solicitacao pular etapas, misturar objetivos, fragilizar a metodologia, inflar lucro/ROI/robustez ou gerar falsa confianca operacional, o agente deve discordar primeiro, explicar o risco tecnico e propor o caminho correto.
 
 ---
 
-## Roadmap Exploratorio Serie A 2025 — Concluido
+## Ordem oficial do pipeline analitico
 
-Ordem executada:
+A ordem logica dos scripts/etapas do projeto, do Discovery ate o Playbook, e:
 
 ```text
-1. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-2. ANALISE_REGIME_POR_FASE_V1
-3. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-4. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-5. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
+1. DISCOVERY_V4
+2. NORMALIZACAO_FIXTURE_LEVEL
+3. DRAWDOWN_V4
+4. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+5. ANALISE_REGIME_POR_FASE_V1_GLOBAL
+6. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+7. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+8. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
+9. COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
+10. ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
+11. SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
+12. VALIDACAO_OPERACIONAL_FINAL_V1
+13. PLAYBOOK_OPERACIONAL_V1
+14. GERADOR_PLAYBOOK_OPERACIONAL_V1
+15. ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
 ```
 
----
-
-## Temporadas comparadas
+Observacao:
 
 ```text
-Serie A 2024
-Serie A 2025
-```
-
-Motivo do escopo:
-
-```text
-O acesso atual da SportMonks limita o historico ate 2024.
-A primeira validacao fora da amostra foi feita como comparacao 2024 x 2025.
-```
-
----
-
-## Script orquestrador de temporada
-
-Script planejado/necessario:
-
-```text
-PIPELINE_TEMPORADA_COMPLETA_V1
-```
-
-Papel:
-
-```text
-Executar automaticamente todos os scripts aprovados para uma temporada, preservando a organizacao atual de pastas e artefatos.
-```
-
-Importante:
-
-```text
-O PIPELINE_TEMPORADA_COMPLETA_V1 nao e uma nova analise.
-Ele e um orquestrador.
-Cada etapa continua gerando seus proprios CSVs, JSONs e MDs nas respectivas pastas.
-O pipeline gera apenas log, manifest e relatorio de execucao.
+ANALISE_REGIME_POR_FASE_V1_GLOBAL serve para ler o regime geral da liga por Goal/No Goal e por familia.
+ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1 deve servir para decisao operacional: olhar apenas carteira principal + observacao + familias Goal/Over menos piores ou dependentes de fase.
 ```
 
 ---
 
-## Resultado da comparacao bi-temporada V1.1
-
-### Goal vs No Goal
+## Entregas ja realizadas e que devem constar no projeto
 
 ```text
-Goal/Over: reprovado no agregado das duas temporadas.
-No Goal/Under: superior nas duas temporadas.
+AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+ANALISE_REGIME_POR_FASE_V1
+ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
+ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
+COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
+ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
+SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
+VALIDACAO_OPERACIONAL_FINAL_V1
+PLAYBOOK_OPERACIONAL_V1
+GERADOR_PLAYBOOK_OPERACIONAL_V1
 ```
 
-### Maturidade
-
-As principais familias No Goal amadureceram cedo nas duas temporadas:
+Correcoes de documentacao:
 
 ```text
-maturity_2024 = rodada 5
-maturity_2025 = rodada 5
-delta_rounds = 0
-```
-
-### Phase6 e Phase8
-
-```text
-As familias No Goal aprovadas sao lucrativas nas duas temporadas, mas nao sao estaveis por fase.
-A maioria ficou classificada como OSCILANTE_PHASE6 e OSCILANTE_PHASE8.
-```
-
-Interpretação:
-
-```text
-A oscilacao por fase nao reprova automaticamente a familia.
-Mas impede aprovacao operacional direta.
-O ranking operacional deve penalizar familias com maior risco por fase.
+VALIDACAO_OPERACIONAL_FINAL_V1 incorporou a logica explicita auditada pela V1.1.
+VALIDACAO_OPERACIONAL_FINAL_V1_1 fica como auditoria historica, nao como frente oficial separada.
 ```
 
 ---
 
-## Familias No Goal consistentes na triagem
+## Modelo mental oficial atualizado
 
-Top familias aprovadas como consistentes:
+O projeto deve analisar uma liga/temporada em cinco dimensoes principais:
 
 ```text
-1. team_winning_by_1_no_sot_against__no_goal — score 82,8
-2. opponent_no_big_chances__no_goal — score 82,5
-3. both_teams_cold_2of3__no_goal — score 78,7
-4. opponent_no_recent_key_passes__no_goal — score 73,4
-5. team_winning_by_1_low_dangerous_attacks_against__no_goal — score 71,1
+1. Tendencia da liga
+   A liga puxa mais para Goal/Over ou No Goal/Under?
+
+2. Comportamento dos favoritos
+   Favorito forte, medio, fraco ou jogo parelho muda o padrao?
+
+3. Comparacao entre temporadas
+   A familia sobrevive, oscila ou quebra entre temporadas?
+
+4. Maturidade / previsibilidade
+   A partir de qual rodada a liga ou familia fornece sinal confiavel?
+
+5. Regime por fase
+   Em quais fases do calendario cada direcao/familia funciona ou quebra?
 ```
 
-Familias No Goal classificadas como oscilantes:
+Interpretacao importante:
 
 ```text
-team_winning_by_1_opp_cold_2of3__no_goal
-favorite_winning_by_1_opp_cold_2of3__no_goal
-```
-
----
-
-## Hipoteses atualizadas apos comparacao 2024 x 2025
-
-```text
-1. Familias No Goal sao superiores a Goal/Over no agregado.
-2. Goal/Over permanece estruturalmente pior que No Goal.
-3. No Goal amadurece cedo nas duas temporadas comparadas.
-4. A rodada 5 aparece como ponto forte para as familias No Goal analisadas.
-5. A curva phase6/phase8 revela oscilacao importante.
-6. A segmentacao por favorito importa, mas a melhor faixa ainda e inconclusiva.
-7. Favorito forte nao deve ser automaticamente privilegiado.
-8. Perfis de time sao informativos, mas nao devem dominar a validacao.
-9. Ranking final deve considerar lucro + ROI + EV + DD + max losing streak + maturidade + oscilacao phase6/phase8.
+Uma estrategia Goal/Over pode ser ruim no agregado anual e ainda assim ser lucrativa em uma fase especifica.
+Portanto Goal/Over nao deve ser descartado apenas pela temporada inteira; deve ser classificado como potencialmente DEPENDENTE_DE_REGIME quando houver fase forte recorrente.
 ```
 
 ---
 
-## Frente atual
+## Status das conclusoes principais
+
+### Serie A 2024 x 2025
 
 ```text
-RANKING_OPERACIONAL_FINAL_V1
+No Goal/Under foi superior no agregado das duas temporadas.
+Goal/Over foi fraco no agregado anual.
+Familias No Goal amadureceram cedo.
+Favorito forte nao deve ser usado como filtro automatico.
+Padrões por time sao informativos, mas nao devem virar blacklist automatica.
+```
+
+Carteira candidata consolidada da Serie A:
+
+```text
+CARTEIRA_PRINCIPAL:
+- opponent_no_big_chances__no_goal
+- team_winning_by_1_no_sot_against__no_goal
+- both_teams_cold_2of3__no_goal
+
+CARTEIRA_OBSERVACAO:
+- team_winning_by_1_opp_cold_2of3__no_goal
+- opponent_no_recent_key_passes__no_goal
+- favorite_winning_by_1_opp_cold_2of3__no_goal
+- team_winning_by_1_low_dangerous_attacks_against__no_goal
+```
+
+### Premier League 2024/25 x 2025/26
+
+```text
+O pipeline ja foi executado em multiplas frentes da Premier League.
+A validacao operacional final da Premier League 2025/26 retornou 0 familias em carteira principal e 7 em observacao.
+Isso indica que o framework esta conservador e que a liga ainda exige validacao por regime/familia antes de qualquer playbook operacional forte.
+```
+
+Achado importante em Premier League:
+
+```text
+Goal/Over e muito dependente de regime.
+Na Premier League 2024/25 e 2025/26, fases intermediarias repetiram lucro forte para Goal/Over, apesar do agregado anual ser fraco/instavel.
+```
+
+---
+
+## Nova frente oficial aprovada
+
+```text
+ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
 ```
 
 Objetivo:
 
 ```text
-Construir um ranking conservador das familias/variacoes candidatas, usando a triagem 2024 x 2025 como base, sem aprovar operacao final ainda.
+Analisar apenas familias/variacoes selecionadas ou candidatas, separando:
+- carteira principal;
+- carteira observacao;
+- familias Goal/Over dependentes de fase;
+- familias menos piores por regime.
 ```
 
-Pergunta principal:
+Perguntas principais:
 
 ```text
-Quais familias/variacoes merecem virar candidatas operacionais considerando lucro, ROI, EV, drawdown, max losing streak, maturidade e oscilacao por fase?
+1. Em quais fases cada familia selecionada funciona melhor?
+2. A fase forte se repete entre temporadas?
+3. Quais fases devem ser evitadas?
+4. Existem familias Goal/Over ruins no agregado, mas lucrativas em fases recorrentes?
+5. O regime por fase melhora a leitura operacional sem criar filtro artificial?
+```
+
+Status:
+
+```text
+APROVADA COMO PROXIMA ETAPA
+NAO EXECUTADA AINDA
+NAO APROVA OPERACAO REAL
 ```
 
 ---
 
-## Anatomia da estrategia — etapa futura
-
-A analise detalhada da mecanica interna de cada estrategia, por exemplo:
+## Papel do regime global vs regime das selecionadas
 
 ```text
-both_teams_cold_2of3
-```
+REGIME GLOBAL:
+Serve para entender o clima da liga e a direcao Goal/No Goal por fase.
+Pode ser contaminado por familias ruins.
+Nao deve decidir operacao sozinho.
 
-com estatisticas como:
-
-```text
-ataques perigosos
-chutes no gol
-chutes para fora
-escanteios
-posse
-pressao
-comportamento no placar
-```
-
-fica registrada como etapa futura:
-
-```text
-ANATOMIA_DA_ESTRATEGIA_V1
-```
-
-Essa etapa deve ocorrer somente depois que o ranking operacional identificar quais familias/variacoes realmente merecem virar candidatas operacionais.
-
----
-
-## Roadmap a partir de agora
-
-```text
-1. RANKING_OPERACIONAL_FINAL_V1
-2. VALIDACAO_OPERACIONAL_FINAL_V1
-3. ANATOMIA_DA_ESTRATEGIA_V1
-4. PLAYBOOK_OPERACIONAL_FINAL
+REGIME DAS FAMILIAS SELECIONADAS:
+Serve para olhar apenas candidatas relevantes e entender onde cada uma funciona.
+E a camada operacional do estudo de regime.
 ```
 
 ---
@@ -263,7 +250,7 @@ Classificar como ESTIMATIVA OPERACIONAL COM ODDS MEDIAS.
 
 ## Decisao Operacional Atual
 
-Nenhuma estrategia, time, perfil de favorito, fase, rodada ou filtro deve ser aprovado operacionalmente antes do ranking, da validacao operacional final e da futura leitura de anatomia da estrategia.
+Nenhuma estrategia, time, perfil de favorito, fase, rodada ou filtro esta aprovado para operacao real.
 
 A escolha futura deve priorizar:
 
@@ -274,11 +261,12 @@ A escolha futura deve priorizar:
 - sequencia maxima de perdas;
 - consistencia por temporada;
 - maturidade por rodada;
-- estabilidade em phase6;
-- estabilidade em phase8;
+- comportamento em phase6;
+- comportamento em phase8;
 - oscilacao de lucro/ROI/DD;
 - contexto de favorito como variavel, nao filtro automatico;
-- duplicidades por familia/variacao.
+- duplicidades por familia/variacao;
+- regime por fase apenas quando houver repeticao e justificativa.
 
 ---
 
@@ -289,4 +277,5 @@ A escolha futura deve priorizar:
 - Nao chamar simulacao com odds medias de backtesting financeiro real.
 - Nao usar odds live inexistentes.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
-- Nao aprovar operacao final durante a montagem do ranking.
+- Nao transformar fase forte isolada em regra operacional sem validacao.
+- Nao aprovar operacao real durante a montagem do playbook ou dos estudos de regime.
