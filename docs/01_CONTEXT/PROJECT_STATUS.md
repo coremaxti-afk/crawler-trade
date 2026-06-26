@@ -5,19 +5,21 @@
 FASE ATUAL:
 
 ```text
-POS-PLAYBOOK_OPERACIONAL_V1 — PREPARACAO DA ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
+PESQUISA_GOLS_TARDIOS_V1_ENCERRADA_COM_RESSALVAS_ESTATISTICAS
 ```
-
-O projeto concluiu o ciclo de pesquisa e consolidacao operacional da Serie A 2024/2025 e ja iniciou validacoes em Premier League 2024/25 x 2025/26.
 
 Status oficial:
 
 ```text
-PLAYBOOK_OPERACIONAL_V1 GERADO COMO DOCUMENTO OPERACIONAL CANDIDATO
-GERADOR_PLAYBOOK_OPERACIONAL_V1 PLANEJADO/EM IMPLEMENTACAO PARA AUTOMATIZAR FUTURAS LIGAS
-ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1 APROVADA COMO PROXIMA FRENTE
+ENCERRAMENTO_CIENTIFICO_GOLS_TARDIOS_V1 CONCLUIDO
+SEM EVIDENCIA DE LEAKAGE CRITICO NOS ARTEFATOS AUDITADOS
+RADAR_PREDITIVO_DE_TEMPORADA_V1 CORRIGIDO PARA USAR APENAS METRICAS INICIAIS ini_*
+VALIDACAO_PROSPECTIVA_DO_RADAR_V1 REEXECUTADA APOS CORRECAO ANTI-LEAKAGE
 NENHUMA OPERACAO REAL APROVADA
+PROXIMA FRENTE SUGERIDA: GOLS_1_TEMPO_DISCOVERY_V1
 ```
+
+O projeto de gols tardios V1 esta encerrado como pesquisa retrospectiva e prospectiva simulada, com ressalvas estatisticas. A arquitetura permanece reutilizavel para novos projetos, mas nenhum resultado deve ser interpretado como autorizacao operacional, recomendacao de trading, sistema lucrativo garantido ou validacao financeira real.
 
 ---
 
@@ -39,243 +41,178 @@ Se uma solicitacao pular etapas, misturar objetivos, fragilizar a metodologia, i
 
 ---
 
-## Ordem oficial do pipeline analitico
+## Escopo final analisado
 
-A ordem logica dos scripts/etapas do projeto, do Discovery ate o Playbook, e:
+As execucoes finais foram estruturadas por `season_id`:
 
 ```text
-1. DISCOVERY_V4
-2. NORMALIZACAO_FIXTURE_LEVEL
-3. DRAWDOWN_V4
-4. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-5. ANALISE_REGIME_POR_FASE_V1_GLOBAL
-6. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-7. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-8. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
-9. COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
-10. ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
-11. SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
-12. VALIDACAO_OPERACIONAL_FINAL_V1
+Premier League 2024/2025 — season_id 23614
+Premier League 2025/2026 — season_id 25583
+2. Bundesliga 2024/2025 — season_id 23745
+2. Bundesliga 2025/2026 — season_id 25652
+```
+
+---
+
+## Ordem final do pipeline de Gols Tardios V1
+
+```text
+1. DISCOVERY
+2. DRAWDOWN
+3. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+4. ANALISE_MATURIDADE_LIGA_POR_RODADA_V1
+5. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+6. COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1
+7. ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
+8. SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
+9. VALIDACAO_OPERACIONAL_FINAL_V1
+10. RADAR_PREDITIVO_DE_TEMPORADA_V1 SEM LEAKAGE
+11. VALIDACAO_PROSPECTIVA_DO_RADAR_V1
+12. AUDITORIA_FINAL_ANTI_LEAKAGE_V1
 13. PLAYBOOK_OPERACIONAL_V1
-14. GERADOR_PLAYBOOK_OPERACIONAL_V1
-15. ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
+14. ENCERRAMENTO_CIENTIFICO_GOLS_TARDIOS_V1
 ```
 
-Observacao:
+Observacao cientifica:
 
 ```text
-ANALISE_REGIME_POR_FASE_V1_GLOBAL serve para ler o regime geral da liga por Goal/No Goal e por familia.
-ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1 deve servir para decisao operacional: olhar apenas carteira principal + observacao + familias Goal/Over menos piores ou dependentes de fase.
+O Radar Preditivo V1 inicialmente apresentou leakage porque usava post_* na emissao de sinais.
+A versao corrigida removeu post_* da tomada de decisao e passou a emitir sinais usando apenas ini_*.
+post_* fica restrito a confirmacao posterior retrospectiva.
 ```
 
 ---
 
-## Entregas ja realizadas e que devem constar no projeto
+## Entregas finais oficiais
 
 ```text
-AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-ANALISE_REGIME_POR_FASE_V1
-ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
-COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
-ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
-SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
 VALIDACAO_OPERACIONAL_FINAL_V1
+RADAR_PREDITIVO_DE_TEMPORADA_V1
+VALIDACAO_PROSPECTIVA_DO_RADAR_V1
+AUDITORIA_FINAL_ANTI_LEAKAGE_V1
 PLAYBOOK_OPERACIONAL_V1
-GERADOR_PLAYBOOK_OPERACIONAL_V1
-```
-
-Correcoes de documentacao:
-
-```text
-VALIDACAO_OPERACIONAL_FINAL_V1 incorporou a logica explicita auditada pela V1.1.
-VALIDACAO_OPERACIONAL_FINAL_V1_1 fica como auditoria historica, nao como frente oficial separada.
-```
-
----
-
-## Modelo mental oficial atualizado
-
-O projeto deve analisar uma liga/temporada em cinco dimensoes principais:
-
-```text
-1. Tendencia da liga
-   A liga puxa mais para Goal/Over ou No Goal/Under?
-
-2. Comportamento dos favoritos
-   Favorito forte, medio, fraco ou jogo parelho muda o padrao?
-
-3. Comparacao entre temporadas
-   A familia sobrevive, oscila ou quebra entre temporadas?
-
-4. Maturidade / previsibilidade
-   A partir de qual rodada a liga ou familia fornece sinal confiavel?
-
-5. Regime por fase
-   Em quais fases do calendario cada direcao/familia funciona ou quebra?
-```
-
-Interpretacao importante:
-
-```text
-Uma estrategia Goal/Over pode ser ruim no agregado anual e ainda assim ser lucrativa em uma fase especifica.
-Portanto Goal/Over nao deve ser descartado apenas pela temporada inteira; deve ser classificado como potencialmente DEPENDENTE_DE_REGIME quando houver fase forte recorrente.
-```
-
----
-
-## Status das conclusoes principais
-
-### Serie A 2024 x 2025
-
-```text
-No Goal/Under foi superior no agregado das duas temporadas.
-Goal/Over foi fraco no agregado anual.
-Familias No Goal amadureceram cedo.
-Favorito forte nao deve ser usado como filtro automatico.
-Padrões por time sao informativos, mas nao devem virar blacklist automatica.
-```
-
-Carteira candidata consolidada da Serie A:
-
-```text
-CARTEIRA_PRINCIPAL:
-- opponent_no_big_chances__no_goal
-- team_winning_by_1_no_sot_against__no_goal
-- both_teams_cold_2of3__no_goal
-
-CARTEIRA_OBSERVACAO:
-- team_winning_by_1_opp_cold_2of3__no_goal
-- opponent_no_recent_key_passes__no_goal
-- favorite_winning_by_1_opp_cold_2of3__no_goal
-- team_winning_by_1_low_dangerous_attacks_against__no_goal
-```
-
-### Premier League 2024/25 x 2025/26
-
-```text
-O pipeline ja foi executado em multiplas frentes da Premier League.
-A validacao operacional final da Premier League 2025/26 retornou 0 familias em carteira principal e 7 em observacao.
-Isso indica que o framework esta conservador e que a liga ainda exige validacao por regime/familia antes de qualquer playbook operacional forte.
-```
-
-Achado importante em Premier League:
-
-```text
-Goal/Over e muito dependente de regime.
-Na Premier League 2024/25 e 2025/26, fases intermediarias repetiram lucro forte para Goal/Over, apesar do agregado anual ser fraco/instavel.
-```
-
----
-
-## Nova frente oficial aprovada
-
-```text
-ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
-```
-
-Objetivo:
-
-```text
-Analisar apenas familias/variacoes selecionadas ou candidatas, separando:
-- carteira principal;
-- carteira observacao;
-- familias Goal/Over dependentes de fase;
-- familias menos piores por regime.
-```
-
-Perguntas principais:
-
-```text
-1. Em quais fases cada familia selecionada funciona melhor?
-2. A fase forte se repete entre temporadas?
-3. Quais fases devem ser evitadas?
-4. Existem familias Goal/Over ruins no agregado, mas lucrativas em fases recorrentes?
-5. O regime por fase melhora a leitura operacional sem criar filtro artificial?
+ENCERRAMENTO_CIENTIFICO_GOLS_TARDIOS_V1
 ```
 
 Status:
 
 ```text
-APROVADA COMO PROXIMA ETAPA
-NAO EXECUTADA AINDA
-NAO APROVA OPERACAO REAL
+PESQUISA V1 CONCLUIDA COM RESSALVAS ESTATISTICAS
+SEM AUTORIZACAO PARA OPERACAO REAL
 ```
 
 ---
 
-## Papel do regime global vs regime das selecionadas
+## Resultado consolidado por temporada
 
 ```text
-REGIME GLOBAL:
-Serve para entender o clima da liga e a direcao Goal/No Goal por fase.
-Pode ser contaminado por familias ruins.
-Nao deve decidir operacao sozinho.
+season_id 23614 — Premier League 24/25
+Status: VALIDACAO INCONCLUSIVA
+Motivo: sem sinais suficientes na melhor janela.
 
-REGIME DAS FAMILIAS SELECIONADAS:
-Serve para olhar apenas candidatas relevantes e entender onde cada uma funciona.
-E a camada operacional do estudo de regime.
+season_id 25583 — Premier League 25/26
+Status: VALIDADO COM BAIXA AMOSTRA
+Motivo: sinais iniciais confirmados, mas com volume reduzido.
+
+season_id 23745 — 2. Bundesliga 24/25
+Status: VALIDADO COM BAIXA AMOSTRA
+Motivo: sinal isolado confirmado.
+
+season_id 25652 — 2. Bundesliga 25/26
+Status: VALIDADO COM BAIXA AMOSTRA
+Motivo: dois sinais iniciais confirmados, com ressalva de amostra.
 ```
+
+---
+
+## Principais descobertas consolidadas
+
+```text
+1. Os clusters mais relevantes ficaram concentrados em familias No Goal/Under tardias.
+2. O padrao recorrente e jogo frio/desacelerado, adversario sem pressao real e baixa criacao ofensiva na reta final.
+3. O Radar sem leakage funciona como filtro conservador, nao como aprovador operacional.
+4. A validacao prospectiva confirmou sinais em baixa amostra.
+5. A auditoria anti-leakage nao encontrou evidencia de leakage critico nos artefatos auditados apos a correcao.
+6. As familias possuem sobreposicao relevante e nao devem ter lucros somados como estrategias independentes sem deduplicacao.
+```
+
+---
+
+## Familias finais observaveis
+
+Status cientifico final:
+
+```text
+OBSERVACAO_PROSPECTIVA / CANDIDATA_COM_RESSALVAS
+```
+
+Familias No Goal relevantes:
+
+```text
+both_teams_cold_2of3__no_goal
+team_winning_by_1_low_dangerous_attacks_against__no_goal
+team_winning_by_1_opp_cold_2of3__no_goal
+favorite_winning_by_1_opp_cold_2of3__no_goal
+team_winning_by_1_no_sot_against__no_goal
+opponent_no_recent_key_passes__no_goal
+opponent_no_big_chances__no_goal
+```
+
+Nenhuma familia esta aprovada para operacao real.
 
 ---
 
 ## Politica Oficial de Odds
 
-O projeto seguira com:
+Todos os resultados financeiros seguem como:
 
 ```text
-SIMULACOES OPERACIONAIS BASEADAS EM ODDS MEDIAS OBSERVADAS
+ESTIMATIVA OPERACIONAL COM ODDS MEDIAS
 ```
 
-Curva operacional atual:
-
-```text
-60 = 1.50
-65 = 1.60
-70 = 1.80
-75 = 2.00
-80 = 2.45
-85 = 3.35
-```
-
-Ressalva obrigatoria:
+Ressalvas obrigatorias:
 
 ```text
 Nao constitui backtesting financeiro real.
-Classificar como ESTIMATIVA OPERACIONAL COM ODDS MEDIAS.
+Nao usa odds live reais por timestamp.
+Nao considera liquidez, spread, delay, slippage, suspensao de mercado ou comissao real.
+Nao constitui recomendacao de trading.
+Nao autoriza operacao real.
 ```
 
 ---
 
 ## Decisao Operacional Atual
 
-Nenhuma estrategia, time, perfil de favorito, fase, rodada ou filtro esta aprovado para operacao real.
+Nenhuma estrategia, time, perfil de favorito, fase, rodada, filtro, alerta, carteira ou familia esta aprovado para operacao real.
 
-A escolha futura deve priorizar:
-
-- lucro final;
-- ROI;
-- EV por trade;
-- drawdown maximo;
-- sequencia maxima de perdas;
-- consistencia por temporada;
-- maturidade por rodada;
-- comportamento em phase6;
-- comportamento em phase8;
-- oscilacao de lucro/ROI/DD;
-- contexto de favorito como variavel, nao filtro automatico;
-- duplicidades por familia/variacao;
-- regime por fase apenas quando houver repeticao e justificativa.
+O projeto esta encerrado como pesquisa V1. Qualquer reaproveitamento futuro deve recomecar no Discovery do novo mercado.
 
 ---
 
-## Restricoes
+## Proxima frente sugerida
 
-- Nao criar robo.
-- Nao criar producao.
+```text
+GOLS_1_TEMPO_DISCOVERY_V1
+```
+
+Status:
+
+```text
+SUGERIDO
+NAO INICIADO
+DEVE COMECAR DO ZERO NO DISCOVERY
+```
+
+---
+
+## Restricoes permanentes
+
+- Nao criar robo a partir desta pesquisa.
+- Nao criar producao operacional.
 - Nao chamar simulacao com odds medias de backtesting financeiro real.
 - Nao usar odds live inexistentes.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
-- Nao transformar fase forte isolada em regra operacional sem validacao.
-- Nao aprovar operacao real durante a montagem do playbook ou dos estudos de regime.
+- Nao transformar baixa amostra em robustez.
+- Nao comercializar sinais derivados do pipeline.
+- Nao generalizar para outras ligas ou mercados sem reexecutar a esteira completa.
