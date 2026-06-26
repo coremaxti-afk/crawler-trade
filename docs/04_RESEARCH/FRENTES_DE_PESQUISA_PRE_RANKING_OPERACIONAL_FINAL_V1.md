@@ -3,11 +3,12 @@
 ## Status
 
 ```text
-PLAYBOOK_OPERACIONAL_V1 CONCLUIDO COMO CANDIDATO
-PROXIMA FRENTE: ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
+GOLS_TARDIOS_V1 ENCERRADO COMO PESQUISA
+DECISAO FINAL: PESQUISA V1 CONCLUIDA COM RESSALVAS ESTATISTICAS
+PROXIMA FRENTE SUGERIDA: GOLS_1_TEMPO_DISCOVERY_V1
 ```
 
-Este documento substitui a leitura antiga de pre-ranking. O projeto ja passou por ranking/selecao, validacao operacional, anatomia e playbook candidato.
+Este documento substitui a leitura antiga de pre-ranking. O projeto de gols tardios ja passou por discovery, ranking/selecao, validacao operacional, radar preditivo sem leakage, validacao prospectiva, auditoria anti-leakage, playbook e encerramento cientifico.
 
 ---
 
@@ -23,24 +24,23 @@ Regra central: nenhum agente deve concordar com o usuario apenas para agradar. S
 
 ---
 
-## Pipeline oficial atualizado
+## Pipeline final de gols tardios V1
 
 ```text
-1. DISCOVERY_V4
-2. NORMALIZACAO_FIXTURE_LEVEL
-3. DRAWDOWN_V4
-4. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
-5. ANALISE_REGIME_POR_FASE_V1_GLOBAL
-6. ANALISE_MATURIDADE_DA_LIGA_POR_RODADA_V1
-7. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
-8. ANALISE_PADROES_PREJUIZO_POR_TIME_V1_1
-9. COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
-10. ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
-11. SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
-12. VALIDACAO_OPERACIONAL_FINAL_V1
+1. DISCOVERY
+2. DRAWDOWN
+3. AGRUPAMENTO_POR_FAMILIA_E_VARIACOES_V1
+4. ANALISE_MATURIDADE_LIGA_POR_RODADA_V1
+5. ANALISE_FORCA_FAVORITO_POR_ESTRATEGIA_V1
+6. COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1
+7. ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
+8. SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
+9. VALIDACAO_OPERACIONAL_FINAL_V1
+10. RADAR_PREDITIVO_DE_TEMPORADA_V1 SEM LEAKAGE
+11. VALIDACAO_PROSPECTIVA_DO_RADAR_V1
+12. AUDITORIA_FINAL_ANTI_LEAKAGE_V1
 13. PLAYBOOK_OPERACIONAL_V1
-14. GERADOR_PLAYBOOK_OPERACIONAL_V1
-15. ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
+14. ENCERRAMENTO_CIENTIFICO_GOLS_TARDIOS_V1
 ```
 
 ---
@@ -57,213 +57,144 @@ COMPARACAO_MULTI_LIGA_TEMPORADA_QUALIDADE_E_OSCILACAO_V1.1
 ANATOMIA_NUMERICA_DAS_FAMILIAS_APROVADAS_V1
 SELECAO_DAS_VARIACOES_OFICIAIS_POR_FAMILIA_V1
 VALIDACAO_OPERACIONAL_FINAL_V1
+RADAR_PREDITIVO_DE_TEMPORADA_V1
+VALIDACAO_PROSPECTIVA_DO_RADAR_V1
+AUDITORIA_FINAL_ANTI_LEAKAGE_V1
 PLAYBOOK_OPERACIONAL_V1
 GERADOR_PLAYBOOK_OPERACIONAL_V1
+ENCERRAMENTO_CIENTIFICO_GOLS_TARDIOS_V1
 ```
 
-Observacao:
+Observacoes:
 
 ```text
-VALIDACAO_OPERACIONAL_FINAL_V1_1 foi uma auditoria/correcao documental.
-A logica foi incorporada na V1.
-Nao deve ser tratada como frente oficial separada.
+VALIDACAO_OPERACIONAL_FINAL_V1_1 foi auditoria/correcao documental historica.
+RADAR_PREDITIVO_DE_TEMPORADA_V1 anterior com leakage foi substituido pela versao corrigida sem post_* na emissao de sinais.
+VALIDACAO_PROSPECTIVA_DO_RADAR_V1 foi reexecutada apos correcao anti-leakage.
 ```
 
 ---
 
-## Resultado consolidado da Serie A
-
-### Carteira principal candidata
+## Resultado consolidado da pesquisa V1
 
 ```text
-opponent_no_big_chances__no_goal
-team_winning_by_1_no_sot_against__no_goal
+Status cientifico: PESQUISA V1 CONCLUIDA COM RESSALVAS ESTATISTICAS
+Status anti-leakage: SEM EVIDENCIA DE LEAKAGE CRITICO NOS ARTEFATOS AUDITADOS
+Status operacional: NENHUMA OPERACAO REAL APROVADA
+```
+
+Escopo final por `season_id`:
+
+```text
+23614 — Premier League 2024/25 — validacao inconclusiva por ausencia de sinais suficientes
+25583 — Premier League 2025/26 — validado com baixa amostra
+23745 — 2. Bundesliga 2024/25 — validado com baixa amostra
+25652 — 2. Bundesliga 2025/26 — validado com baixa amostra
+```
+
+---
+
+## Familias finais observaveis
+
+As familias finais permanecem apenas como observacao cientifica ou candidatas com ressalvas:
+
+```text
 both_teams_cold_2of3__no_goal
-```
-
-### Carteira observacao
-
-```text
-team_winning_by_1_opp_cold_2of3__no_goal
-opponent_no_recent_key_passes__no_goal
-favorite_winning_by_1_opp_cold_2of3__no_goal
 team_winning_by_1_low_dangerous_attacks_against__no_goal
+team_winning_by_1_opp_cold_2of3__no_goal
+favorite_winning_by_1_opp_cold_2of3__no_goal
+team_winning_by_1_no_sot_against__no_goal
+opponent_no_recent_key_passes__no_goal
+opponent_no_big_chances__no_goal
 ```
 
-Status:
+Status permitido:
 
 ```text
-CARTEIRA CANDIDATA
-NAO APROVA OPERACAO REAL
+OBSERVACAO_PROSPECTIVA
+CANDIDATA_COM_RESSALVAS
+CANDIDATA_FRACA_POR_BAIXO_ROI
+```
+
+Status proibido:
+
+```text
+APROVADA_PARA_OPERAR
 ```
 
 ---
 
-## Resultado consolidado da Premier League
-
-A Premier League ja possui execucoes para as principais frentes do pipeline, incluindo comparacao 2024/25 x 2025/26, anatomia, selecao e validacao operacional.
-
-Leitura atual:
-
-```text
-Carteira principal Premier League 2025/26: 0 familias.
-Carteira observacao Premier League 2025/26: 7 familias.
-```
-
-Interpretacao:
-
-```text
-A Premier League ainda nao deve gerar playbook operacional forte sem analisar regime das familias selecionadas.
-```
-
----
-
-## Modelo mental oficial do projeto
-
-O projeto deve avaliar uma estrategia/familia em cinco camadas:
-
-```text
-1. Tendencia da liga
-   Goal/Over ou No Goal/Under predomina?
-
-2. Comportamento dos favoritos
-   Favorito forte, medio, fraco ou jogo parelho muda o padrao?
-
-3. Comparacao entre temporadas
-   A familia sobrevive, oscila ou quebra?
-
-4. Maturidade / previsibilidade
-   A partir de qual rodada ha sinal confiavel?
-
-5. Regime por fase
-   Em quais fases da temporada a familia funciona ou quebra?
-```
-
----
-
-## Regime global vs regime das familias selecionadas
-
-### Regime global
-
-Objetivo:
-
-```text
-Entender o clima geral da liga por fase.
-```
-
-Uso correto:
-
-```text
-Leitura macro de Goal/No Goal e da mudanca de comportamento da temporada.
-```
-
-Limite:
-
-```text
-Pode estar contaminado por estrategias ruins.
-Nao deve ser usado sozinho para decisao operacional.
-```
-
-### Regime das familias selecionadas
-
-Objetivo:
-
-```text
-Analisar apenas familias/variacoes que passaram por filtros anteriores.
-```
-
-Uso correto:
-
-```text
-Identificar fases fortes, fracas, proibidas e recorrentes para cada familia candidata.
-```
-
----
-
-## Nova frente oficial
-
-```text
-ANALISE_REGIME_DAS_FAMILIAS_SELECIONADAS_V1
-```
-
-### Objetivo
-
-Analisar regime por fase apenas em subconjuntos relevantes:
-
-```text
-1. Carteira principal
-2. Carteira observacao
-3. Familias Goal/Over dependentes de fase
-4. Variacoes oficiais selecionadas
-5. Estrategias Goal menos piores quando houver evidencia de fase forte
-```
-
-### Perguntas obrigatorias
-
-```text
-1. Qual fase e forte por familia?
-2. Qual fase e fraca/proibida por familia?
-3. A fase forte se repete entre temporadas?
-4. Existem estrategias Goal ruins no agregado, mas lucrativas em fase recorrente?
-5. No Goal e estrutural ou tambem depende de fase?
-6. O regime melhora a decisao sem criar overfitting?
-```
-
-### Saida esperada
-
-Classificar por familia/variacao:
-
-```text
-REGIME_FORTE_RECORRENTE
-REGIME_FORTE_ISOLADO
-REGIME_OSCILANTE
-REGIME_RISCO
-REGIME_INCONCLUSIVO
-```
-
----
-
-## Observacao sobre Goal/Over
-
-Goal/Over nao deve ser descartado apenas pelo agregado anual.
-
-Nova regra interpretativa:
-
-```text
-Se Goal/Over for negativo no ano todo, mas tiver fase forte recorrente entre temporadas, classificar como DEPENDENTE_DE_REGIME, nao como REPROVADA definitiva.
-```
-
-Essa regra nao aprova operacao. Ela apenas preserva a hipotese para analise de regime das familias selecionadas.
-
----
-
-## Ideia futura — nao aprovada ainda
-
-```text
-PADROES_MACRO_OPERACIONAIS_V1
-```
-
-Status:
-
-```text
-HIPOTESE FUTURA
-NAO EXECUTAR AGORA
-```
-
-Motivo:
-
-```text
-Ainda falta consolidar o regime das familias selecionadas antes de agrupar familias em padroes macro como "time vencendo e adversario sem ataque real".
-```
-
----
-
-## Regra final
-
-Nenhuma estrategia, filtro, perfil de time, contexto de favorito, rodada ou fase deve entrar como regra operacional definitiva antes de validacao suficiente.
+## Regra final sobre odds e resultado financeiro
 
 Todos os resultados com odds medias devem permanecer rotulados como:
 
 ```text
 ESTIMATIVA OPERACIONAL COM ODDS MEDIAS
 ```
+
+Nao usar:
+
+```text
+BACKTESTING FINANCEIRO REAL
+ODDS LIVE REAIS
+SISTEMA LUCRATIVO VALIDADO
+OPERACAO APROVADA
+```
+
+---
+
+## Pos-pesquisa de gols tardios
+
+Apos o encerramento cientifico, o unico caminho aceitavel para gols tardios seria uma fase futura separada de:
+
+```text
+MONITORAMENTO_PROSPECTIVO_SEM_DINHEIRO_REAL
+```
+
+Status:
+
+```text
+NAO INICIADO
+NAO OBRIGATORIO
+NAO DEVE BLOQUEAR NOVOS PROJETOS
+```
+
+---
+
+## Proxima frente sugerida
+
+```text
+GOLS_1_TEMPO_DISCOVERY_V1
+```
+
+Objetivo inicial sugerido:
+
+```text
+Iniciar pesquisa exploratoria do zero para gols no 1º tempo, reaproveitando a esteira metodologica de separacao temporal e anti-leakage, mas sem carregar familias, filtros ou conclusoes de gols tardios.
+```
+
+---
+
+## Ideias futuras — nao aprovadas ainda
+
+```text
+MONITORAMENTO_PROSPECTIVO_GOLS_TARDIOS_SEM_DINHEIRO_REAL
+DASHBOARD_DE_OBSERVACAO_PROSPECTIVA
+ALERTAS_INFORMATIVOS_SEM_EXECUCAO
+PADROES_MACRO_OPERACIONAIS_V1
+```
+
+Status:
+
+```text
+HIPOTESES FUTURAS
+NAO EXECUTAR AGORA SEM SOLICITACAO EXPLICITA
+```
+
+---
+
+## Regra final
+
+Nenhuma estrategia, filtro, perfil de time, contexto de favorito, rodada ou fase deve entrar como regra operacional definitiva.
+
+O projeto de gols tardios V1 esta encerrado como pesquisa. Qualquer novo mercado deve recomecar no Discovery.
