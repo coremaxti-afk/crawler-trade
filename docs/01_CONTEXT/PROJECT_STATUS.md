@@ -6,6 +6,7 @@ FASE ATUAL:
 
 ```text
 PESQUISA_GOLS_TARDIOS_V1_ENCERRADA_COM_RESSALVAS_ESTATISTICAS
+FRENTE_COMPLEMENTAR_ATIVA: ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1
 ```
 
 Status oficial:
@@ -16,10 +17,11 @@ SEM EVIDENCIA DE LEAKAGE CRITICO NOS ARTEFATOS AUDITADOS
 RADAR_PREDITIVO_DE_TEMPORADA_V1 CORRIGIDO PARA USAR APENAS METRICAS INICIAIS ini_*
 VALIDACAO_PROSPECTIVA_DO_RADAR_V1 REEXECUTADA APOS CORRECAO ANTI-LEAKAGE
 NENHUMA OPERACAO REAL APROVADA
-PROXIMA FRENTE SUGERIDA: GOLS_1_TEMPO_DISCOVERY_V1
+FRENTE_COMPLEMENTAR_ATIVA: VALIDACAO_MATRIZ_FORCA_ESTADO_TEMPERATURA_JOGO_V1
+PROXIMA FRENTE MACRO SUGERIDA: GOLS_1_TEMPO_DISCOVERY_V1
 ```
 
-O projeto de gols tardios V1 esta encerrado como pesquisa retrospectiva e prospectiva simulada, com ressalvas estatisticas. A arquitetura permanece reutilizavel para novos projetos, mas nenhum resultado deve ser interpretado como autorizacao operacional, recomendacao de trading, sistema lucrativo garantido ou validacao financeira real.
+O projeto de gols tardios V1 permanece encerrado como pesquisa retrospectiva e prospectiva simulada, com ressalvas estatisticas. A nova frente de forca/estado/temperatura e uma validacao complementar metodologica, nao uma reabertura operacional e nao uma autorizacao de trading.
 
 ---
 
@@ -41,7 +43,7 @@ Se uma solicitacao pular etapas, misturar objetivos, fragilizar a metodologia, i
 
 ---
 
-## Escopo final analisado
+## Escopo final analisado no encerramento Gols Tardios V1
 
 As execucoes finais foram estruturadas por `season_id`:
 
@@ -162,6 +164,60 @@ Nenhuma familia esta aprovada para operacao real.
 
 ---
 
+## Frente complementar ativa — Forca, Estado e Temperatura do Jogo
+
+Documento de planejamento:
+
+```text
+docs/04_RESEARCH/PLANO_ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1.md
+```
+
+Status:
+
+```text
+FRENTE_COMPLEMENTAR_ATIVA
+PLANEJAMENTO_ESTRUTURADO
+NAO OPERACIONAL
+NAO INVALIDA O ENCERRAMENTO_CIENTIFICO_GOLS_TARDIOS_V1
+```
+
+Tese a validar:
+
+```text
+FAVORITO_FORTE/MEDIO + JOGO_QUENTE + ESTADO DO FAVORITO -> Goal
+FAVORITO_FRACO/SEM_FAVORITO_CLARO + JOGO_FRIO + ESTADO DO LADO/TIME -> No Goal
+```
+
+Cronograma oficial:
+
+```text
+1. classificar_contexto_forca_estado_temperatura_v1.py
+2. validacao_matriz_forca_estado_temperatura_v1.py
+3. analise_familias_blocos_matriz_v1.py
+4. analise_mandante_visitante_blocos_v1.py
+5. agregar_estudo_forca_estado_temperatura_temporada_v1.py
+6. analise_times_blocos_promissores_v1.py, somente depois
+7. executar_pipeline_estudo_forca_estado_temperatura_v1.py, somente depois das etapas 1 a 5 validadas
+```
+
+Regra metodologica:
+
+```text
+primeiro provar o fenomeno macro
+depois explicar por familia
+depois investigar casa/fora
+depois investigar time especifico apenas nos blocos sobreviventes
+```
+
+Cashout:
+
+```text
+FORA DO ESCOPO DA V1
+HOLD COMO BASE PRINCIPAL
+```
+
+---
+
 ## Politica Oficial de Odds
 
 Todos os resultados financeiros seguem como:
@@ -186,11 +242,11 @@ Nao autoriza operacao real.
 
 Nenhuma estrategia, time, perfil de favorito, fase, rodada, filtro, alerta, carteira ou familia esta aprovado para operacao real.
 
-O projeto esta encerrado como pesquisa V1. Qualquer reaproveitamento futuro deve recomecar no Discovery do novo mercado.
+A frente de forca/estado/temperatura e apenas pesquisa complementar com deduplicacao obrigatoria e isolamento por `season_id`.
 
 ---
 
-## Proxima frente sugerida
+## Proxima frente macro sugerida
 
 ```text
 GOLS_1_TEMPO_DISCOVERY_V1
@@ -200,8 +256,8 @@ Status:
 
 ```text
 SUGERIDO
-NAO INICIADO
-DEVE COMECAR DO ZERO NO DISCOVERY
+PAUSADO ENQUANTO A FRENTE COMPLEMENTAR DE FORCA/ESTADO/TEMPERATURA E ESTRUTURADA
+DEVE COMECAR DO ZERO NO DISCOVERY QUANDO FOR ABERTO
 ```
 
 ---
@@ -216,3 +272,5 @@ DEVE COMECAR DO ZERO NO DISCOVERY
 - Nao transformar baixa amostra em robustez.
 - Nao comercializar sinais derivados do pipeline.
 - Nao generalizar para outras ligas ou mercados sem reexecutar a esteira completa.
+- Nao usar time especifico como filtro antes de validar blocos macro.
+- Nao transformar melhor cutoff retrospectivo em regra final.
