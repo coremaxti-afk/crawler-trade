@@ -5,10 +5,13 @@
 ```text
 GOLS_TARDIOS_V1 ENCERRADO COMO PESQUISA
 DECISAO FINAL: PESQUISA V1 CONCLUIDA COM RESSALVAS ESTATISTICAS
-PROXIMA FRENTE SUGERIDA: GOLS_1_TEMPO_DISCOVERY_V1
+FRENTE_COMPLEMENTAR_ATIVA: ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1
+PROXIMA FRENTE MACRO SUGERIDA: GOLS_1_TEMPO_DISCOVERY_V1
 ```
 
 Este documento substitui a leitura antiga de pre-ranking. O projeto de gols tardios ja passou por discovery, ranking/selecao, validacao operacional, radar preditivo sem leakage, validacao prospectiva, auditoria anti-leakage, playbook e encerramento cientifico.
+
+A frente ativa de forca/estado/temperatura e complementar, metodologica e nao operacional. Ela nao invalida o encerramento cientifico de Gols Tardios V1.
 
 ---
 
@@ -124,6 +127,119 @@ APROVADA_PARA_OPERAR
 
 ---
 
+## Frente ativa — Estudo Forca, Estado e Temperatura do Jogo V1
+
+Documento de planejamento:
+
+```text
+docs/04_RESEARCH/PLANO_ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1.md
+```
+
+Status:
+
+```text
+FRENTE_COMPLEMENTAR_ATIVA
+PLANEJAMENTO_ESTRUTURADO
+NAO OPERACIONAL
+```
+
+Tese inicial:
+
+```text
+Favorito forte/medio + jogo quente + estado do favorito -> Goal
+Favorito fraco/sem favorito claro + jogo frio + estado do lado/time -> No Goal
+```
+
+A frente deve seguir uma ordem hierarquica:
+
+```text
+1. classificar contexto
+2. validar matriz macro
+3. abrir familias explicativas apenas em blocos sobreviventes
+4. avaliar mandante/visitante como diagnostico auxiliar
+5. agregar a temporada em 5 relatorios
+6. investigar times especificos somente depois
+7. criar pipeline apenas depois das etapas 1 a 5
+```
+
+Arquitetura planejada:
+
+```text
+classificar_contexto_forca_estado_temperatura_v1.py
+validacao_matriz_forca_estado_temperatura_v1.py
+analise_familias_blocos_matriz_v1.py
+analise_mandante_visitante_blocos_v1.py
+agregar_estudo_forca_estado_temperatura_temporada_v1.py
+analise_times_blocos_promissores_v1.py
+executar_pipeline_estudo_forca_estado_temperatura_v1.py
+```
+
+Regra de escopo:
+
+```text
+Nao executar uma unica matriz total como decisao principal com:
+forca x estado x temperatura x direcao x cutoff x familia x casa/fora x time.
+```
+
+Motivo:
+
+```text
+risco de milhares de combinacoes, N baixo e falso positivo.
+```
+
+---
+
+## Diretrizes da frente ativa
+
+### Deduplicacao
+
+Todo estudo deve separar:
+
+```text
+N_trades_bruto
+fixtures_unicos
+N_pos_deduplicacao_por_cutoff
+N_pos_deduplicacao_por_fixture
+exposicoes_por_fixture
+```
+
+Leitura final preferencial:
+
+```text
+resultado deduplicado por fixture
+```
+
+### Cutoff
+
+```text
+cutoff individual = diagnostico
+agregado deduplicado = leitura principal
+melhor cutoff = hipotese futura
+```
+
+### Hold e cashout
+
+```text
+HOLD = base principal da V1
+CASHOUT = fora do escopo da V1
+```
+
+### Casa/fora
+
+```text
+mandante/visitante = camada auxiliar
+nao e criterio principal de aprovacao da tese na V1
+```
+
+### Times especificos
+
+```text
+somente depois dos blocos macro/familia sobreviverem
+nao testar todos os times em todos os cenarios desde o inicio
+```
+
+---
+
 ## Regra final sobre odds e resultado financeiro
 
 Todos os resultados com odds medias devem permanecer rotulados como:
@@ -145,7 +261,7 @@ OPERACAO APROVADA
 
 ## Pos-pesquisa de gols tardios
 
-Apos o encerramento cientifico, o unico caminho aceitavel para gols tardios seria uma fase futura separada de:
+Apos o encerramento cientifico, o unico caminho aceitavel para gols tardios operacional seria uma fase futura separada de:
 
 ```text
 MONITORAMENTO_PROSPECTIVO_SEM_DINHEIRO_REAL
@@ -161,7 +277,7 @@ NAO DEVE BLOQUEAR NOVOS PROJETOS
 
 ---
 
-## Proxima frente sugerida
+## Proxima frente macro sugerida
 
 ```text
 GOLS_1_TEMPO_DISCOVERY_V1
@@ -173,6 +289,13 @@ Objetivo inicial sugerido:
 Iniciar pesquisa exploratoria do zero para gols no 1º tempo, reaproveitando a esteira metodologica de separacao temporal e anti-leakage, mas sem carregar familias, filtros ou conclusoes de gols tardios.
 ```
 
+Status atual:
+
+```text
+SUGERIDO
+PAUSADO ENQUANTO A FRENTE COMPLEMENTAR DE FORCA/ESTADO/TEMPERATURA E ESTRUTURADA
+```
+
 ---
 
 ## Ideias futuras — nao aprovadas ainda
@@ -182,6 +305,7 @@ MONITORAMENTO_PROSPECTIVO_GOLS_TARDIOS_SEM_DINHEIRO_REAL
 DASHBOARD_DE_OBSERVACAO_PROSPECTIVA
 ALERTAS_INFORMATIVOS_SEM_EXECUCAO
 PADROES_MACRO_OPERACIONAIS_V1
+VALIDACAO_POLITICA_SAIDA_CASHOUT_V1
 ```
 
 Status:
@@ -197,4 +321,4 @@ NAO EXECUTAR AGORA SEM SOLICITACAO EXPLICITA
 
 Nenhuma estrategia, filtro, perfil de time, contexto de favorito, rodada ou fase deve entrar como regra operacional definitiva.
 
-O projeto de gols tardios V1 esta encerrado como pesquisa. Qualquer novo mercado deve recomecar no Discovery.
+O projeto de gols tardios V1 esta encerrado como pesquisa. A frente de forca/estado/temperatura e complementar, deve preservar deduplicacao, isolamento por `season_id` e status nao operacional.
