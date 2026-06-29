@@ -6,7 +6,8 @@ FASE ATUAL:
 
 ```text
 PESQUISA_GOLS_TARDIOS_V1_ENCERRADA_COM_RESSALVAS_ESTATISTICAS
-FRENTE_COMPLEMENTAR_ATIVA: ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1
+FRENTE_COMPLEMENTAR_FORCA_ESTADO_TEMPERATURA_ENCERRADA_SEM_PRIORIZACAO_OPERACIONAL
+FRENTE_ATIVA: ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1
 ```
 
 Status oficial:
@@ -17,11 +18,17 @@ SEM EVIDENCIA DE LEAKAGE CRITICO NOS ARTEFATOS AUDITADOS
 RADAR_PREDITIVO_DE_TEMPORADA_V1 CORRIGIDO PARA USAR APENAS METRICAS INICIAIS ini_*
 VALIDACAO_PROSPECTIVA_DO_RADAR_V1 REEXECUTADA APOS CORRECAO ANTI-LEAKAGE
 NENHUMA OPERACAO REAL APROVADA
-FRENTE_COMPLEMENTAR_ATIVA: VALIDACAO_MATRIZ_FORCA_ESTADO_TEMPERATURA_JOGO_V1
-PROXIMA FRENTE MACRO SUGERIDA: GOLS_1_TEMPO_DISCOVERY_V1
+NENHUM ROBO OPERACIONAL APROVADO
+NOVA_FRENTE_ATIVA: ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1
 ```
 
-O projeto de gols tardios V1 permanece encerrado como pesquisa retrospectiva e prospectiva simulada, com ressalvas estatisticas. A nova frente de forca/estado/temperatura e uma validacao complementar metodologica, nao uma reabertura operacional e nao uma autorizacao de trading.
+Documento da frente ativa:
+
+```text
+docs/04_RESEARCH/ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1.md
+```
+
+O projeto de gols tardios V1 permanece encerrado como pesquisa retrospectiva e prospectiva simulada, com ressalvas estatisticas. A frente de Forca + Estado + Temperatura/Favorito foi encerrada sem priorizacao operacional imediata. A nova frente ativa passa a ser a analise de trajetorias do primeiro tempo, com foco em fluxo de jogo, padroes estatisticos e preparacao futura para alertas paper na plataforma Corner Pro.
 
 ---
 
@@ -85,7 +92,7 @@ post_* fica restrito a confirmacao posterior retrospectiva.
 
 ---
 
-## Entregas finais oficiais
+## Entregas finais oficiais de Gols Tardios V1
 
 ```text
 VALIDACAO_OPERACIONAL_FINAL_V1
@@ -105,29 +112,7 @@ SEM AUTORIZACAO PARA OPERACAO REAL
 
 ---
 
-## Resultado consolidado por temporada
-
-```text
-season_id 23614 — Premier League 24/25
-Status: VALIDACAO INCONCLUSIVA
-Motivo: sem sinais suficientes na melhor janela.
-
-season_id 25583 — Premier League 25/26
-Status: VALIDADO COM BAIXA AMOSTRA
-Motivo: sinais iniciais confirmados, mas com volume reduzido.
-
-season_id 23745 — 2. Bundesliga 24/25
-Status: VALIDADO COM BAIXA AMOSTRA
-Motivo: sinal isolado confirmado.
-
-season_id 25652 — 2. Bundesliga 25/26
-Status: VALIDADO COM BAIXA AMOSTRA
-Motivo: dois sinais iniciais confirmados, com ressalva de amostra.
-```
-
----
-
-## Principais descobertas consolidadas
+## Principais descobertas consolidadas de Gols Tardios V1
 
 ```text
 1. Os clusters mais relevantes ficaram concentrados em familias No Goal/Under tardias.
@@ -136,16 +121,6 @@ Motivo: dois sinais iniciais confirmados, com ressalva de amostra.
 4. A validacao prospectiva confirmou sinais em baixa amostra.
 5. A auditoria anti-leakage nao encontrou evidencia de leakage critico nos artefatos auditados apos a correcao.
 6. As familias possuem sobreposicao relevante e nao devem ter lucros somados como estrategias independentes sem deduplicacao.
-```
-
----
-
-## Familias finais observaveis
-
-Status cientifico final:
-
-```text
-OBSERVACAO_PROSPECTIVA / CANDIDATA_COM_RESSALVAS
 ```
 
 Familias No Goal relevantes:
@@ -164,56 +139,72 @@ Nenhuma familia esta aprovada para operacao real.
 
 ---
 
-## Frente complementar ativa — Forca, Estado e Temperatura do Jogo
-
-Documento de planejamento:
-
-```text
-docs/04_RESEARCH/PLANO_ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1.md
-```
+## Frente complementar encerrada — Forca, Estado e Temperatura/Favorito
 
 Status:
 
 ```text
-FRENTE_COMPLEMENTAR_ATIVA
-PLANEJAMENTO_ESTRUTURADO
-NAO OPERACIONAL
-NAO INVALIDA O ENCERRAMENTO_CIENTIFICO_GOLS_TARDIOS_V1
+FRENTE_COMPLEMENTAR_ENCERRADA_SEM_PRIORIZACAO_OPERACIONAL
+NAO_SEGUIR_PARA_ETAPA_3
+NAO_GERAR_FAMILIAS
+NAO_VALIDAR_OPERACAO
+NAO_USAR_CASHOUT
 ```
 
-Tese a validar:
+Conclusao:
 
 ```text
-FAVORITO_FORTE/MEDIO + JOGO_QUENTE + ESTADO DO FAVORITO -> Goal
-FAVORITO_FRACO/SEM_FAVORITO_CLARO + JOGO_FRIO + ESTADO DO LADO/TIME -> No Goal
+A frente Forca + Estado + Temperatura nao gerou evidencia suficiente para virar eixo principal de pesquisa. Os achados mais uteis foram diagnosticos, especialmente a pista de JOGO_FRIO + NO_GOAL, mas sem forca bastante para justificar continuidade imediata.
 ```
 
-Cronograma oficial:
+---
+
+## Frente ativa — ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1
+
+Status:
 
 ```text
-1. classificar_contexto_forca_estado_temperatura_v1.py
-2. validacao_matriz_forca_estado_temperatura_v1.py
-3. analise_familias_blocos_matriz_v1.py
-4. analise_mandante_visitante_blocos_v1.py
-5. agregar_estudo_forca_estado_temperatura_temporada_v1.py
-6. analise_times_blocos_promissores_v1.py, somente depois
-7. executar_pipeline_estudo_forca_estado_temperatura_v1.py, somente depois das etapas 1 a 5 validadas
+FRENTE_ATIVA_DE_PESQUISA
+DISCOVERY_DE_FLUXO_DO_PRIMEIRO_TEMPO
+HOLD_ONLY
+SEM_OPERACAO_REAL_APROVADA
+SEM_CASHOUT
+SEM_ROBO_OPERACIONAL_NESTA_ETAPA
 ```
 
-Regra metodologica:
+Objetivo:
 
 ```text
-primeiro provar o fenomeno macro
-depois explicar por familia
-depois investigar casa/fora
-depois investigar time especifico apenas nos blocos sobreviventes
+Analisar todo o primeiro tempo como fluxo de jogo para encontrar padroes estatisticos que possam futuramente ser convertidos em regras objetivas de alerta paper na plataforma Corner Pro.
 ```
 
-Cashout:
+Pergunta principal:
 
 ```text
-FORA DO ESCOPO DA V1
-HOLD COMO BASE PRINCIPAL
+Quais padroes de trajetoria do primeiro tempo distinguem jogos que terminam 0x0 no intervalo de jogos que produzem gol antes do intervalo?
+```
+
+O estudo deve analisar:
+
+```text
+trajetoria completa do 1T
+ritmo ofensivo por fase
+aceleracao/desaceleracao
+volume vs qualidade
+tipo de 0x0
+pressao real vs pressao falsa
+pressao unilateral vs bilateral
+risco condicional de gol ate o intervalo
+```
+
+Roadmap oficial:
+
+```text
+1. Reconstrucao do filme do primeiro tempo.
+2. Criacao de features de trajetoria.
+3. Classificacao de trajetorias e tipos de 0x0.
+4. Conversao de perfis em estrategias candidatas.
+5. Validacao estatistica e preparacao para alertas Corner Pro paper.
 ```
 
 ---
@@ -240,37 +231,29 @@ Nao autoriza operacao real.
 
 ## Decisao Operacional Atual
 
-Nenhuma estrategia, time, perfil de favorito, fase, rodada, filtro, alerta, carteira ou familia esta aprovado para operacao real.
+Nenhuma estrategia, time, perfil, fase, rodada, filtro, alerta, carteira ou familia esta aprovado para operacao real.
 
-A frente de forca/estado/temperatura e apenas pesquisa complementar com deduplicacao obrigatoria e isolamento por `season_id`.
-
----
-
-## Proxima frente macro sugerida
+A futura configuracao de alertas no Corner Pro deve ser tratada somente como:
 
 ```text
-GOLS_1_TEMPO_DISCOVERY_V1
-```
-
-Status:
-
-```text
-SUGERIDO
-PAUSADO ENQUANTO A FRENTE COMPLEMENTAR DE FORCA/ESTADO/TEMPERATURA E ESTRUTURADA
-DEVE COMECAR DO ZERO NO DISCOVERY QUANDO FOR ABERTO
+ALERTA_PAPER
+OBSERVACAO_PROSPECTIVA
+NAO_OPERACIONAL
 ```
 
 ---
 
 ## Restricoes permanentes
 
-- Nao criar robo a partir desta pesquisa.
+- Nao criar robo operacional a partir desta pesquisa.
+- Nao configurar alerta Corner Pro como entrada real antes de validacao prospectiva.
 - Nao criar producao operacional.
 - Nao chamar simulacao com odds medias de backtesting financeiro real.
-- Nao usar odds live inexistentes.
+- Nao usar odds live inexistentes ou nao timestampadas como se fossem reais.
 - Nao agregar estrategias parecidas sem deduplicacao e auditoria.
 - Nao transformar baixa amostra em robustez.
 - Nao comercializar sinais derivados do pipeline.
 - Nao generalizar para outras ligas ou mercados sem reexecutar a esteira completa.
 - Nao usar time especifico como filtro antes de validar blocos macro.
-- Nao transformar melhor cutoff retrospectivo em regra final.
+- Nao transformar melhor fase/minuto retrospectivo em regra final.
+- Nao usar cashout nesta V1.
