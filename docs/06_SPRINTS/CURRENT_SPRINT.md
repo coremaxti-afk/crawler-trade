@@ -5,78 +5,74 @@
 Status:
 
 ```text
-ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1_EM_PLANEJAMENTO_ESTRUTURADO
+ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1_EM_PLANEJAMENTO_ESTRUTURADO
 ```
 
 Fase atual:
 
 ```text
-FRENTE_COMPLEMENTAR_DE_GOLS_TARDIOS
-VALIDACAO_MATRIZ_FORCA_ESTADO_TEMPERATURA_JOGO_V1
+NOVA_FRENTE_MACRO_DE_PESQUISA
+DISCOVERY_DE_FLUXO_DO_PRIMEIRO_TEMPO
 ```
 
 Frente oficial ativa:
 
 ```text
-ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1
+ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1
 ```
 
 Documento de planejamento:
 
 ```text
-docs/04_RESEARCH/PLANO_ESTUDO_FORCA_ESTADO_TEMPERATURA_JOGO_V1.md
+docs/04_RESEARCH/ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1.md
 ```
 
 Status operacional:
 
 ```text
 NENHUMA OPERACAO REAL APROVADA
+NENHUM ROBO OPERACIONAL APROVADO
+ALERTAS CORNER PRO SOMENTE COMO FASE FUTURA PAPER/OBSERVACAO
+```
+
+---
+
+## Decisao registrada
+
+O usuario decidiu seguir a recomendacao de abrir a frente:
+
+```text
+ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1
+```
+
+Objetivo:
+
+```text
+Analisar todo o primeiro tempo como fluxo de jogo, buscando padroes estatisticos que possam futuramente virar regras objetivas de notificacao na plataforma Corner Pro.
+```
+
+A frente nao deve repetir mecanicamente o estudo de Gols Tardios trocando cutoffs tardios por minutos do primeiro tempo. A proposta e aprimorar a pesquisa estudando:
+
+```text
+trajetoria completa do 1T
+ritmo por fase
+aceleracao e desaceleracao
+volume vs qualidade
+pressao real vs pressao falsa
+pressao unilateral vs bilateral
+tipos de 0x0
+risco condicional de gol ate HT
 ```
 
 ---
 
 ## Contexto
 
-O projeto de gols tardios V1 permanece encerrado como pesquisa retrospectiva e prospectiva simulada, com ressalvas estatisticas.
+O projeto de Gols Tardios V1 permanece encerrado como pesquisa retrospectiva/prospectiva simulada, com ressalvas estatisticas e sem autorizacao operacional.
 
-A frente atual nao reabre operacao real. Ela organiza uma validacao complementar da tese:
+A frente Forca + Estado + Temperatura/Favorito deve permanecer encerrada/arquivada sem priorizacao operacional imediata.
 
-```text
-forca do favorito
-+ estado do favorito/time no placar
-+ temperatura do jogo
-+ direcao Goal / No Goal
-+ cutoff
-```
-
-A tese nasceu da validacao de segmentacao por forca do favorito, na qual ligas originalmente mais Under no agregado passaram a mostrar alguns blocos Over/Goal quando segmentadas por favorito forte ou medio.
-
----
-
-## Tese ativa
-
-Hipotese macro:
-
-```text
-FAVORITO_FORTE/MEDIO + JOGO_QUENTE + ESTADO DO FAVORITO -> Goal
-FAVORITO_FRACO/SEM_FAVORITO_CLARO + JOGO_FRIO + ESTADO DO LADO/TIME -> No Goal
-```
-
-Estados obrigatorios:
-
-```text
-FAVORITO_GANHANDO
-FAVORITO_EMPATANDO
-FAVORITO_PERDENDO
-```
-
-Para jogos sem favorito claro:
-
-```text
-LADO_ANALISADO_GANHANDO
-EMPATE
-LADO_ANALISADO_PERDENDO
-```
+A nova frente ativa e independente e deve iniciar como discovery metodologico, sem cashout, sem playbook operacional e sem robo de entrada real.
 
 ---
 
@@ -98,18 +94,23 @@ Se uma solicitacao pular etapas, misturar objetivos, fragilizar a metodologia, i
 
 ---
 
-## Cronograma oficial da frente
+## Cronograma oficial da frente em 5 etapas
 
-### Etapa 1 — Classificador base
-
-```text
-classificar_contexto_forca_estado_temperatura_v1.py
-```
+### Etapa 1 — Reconstrucao do filme do primeiro tempo
 
 Objetivo:
 
 ```text
-criar base unica classificada com forca do favorito, estado do placar, temperatura, mandante/visitante, direcao e cutoff.
+Construir uma base fixture-level e phase-level que descreva o comportamento ofensivo do primeiro tempo completo.
+```
+
+Fases naturais:
+
+```text
+0-10
+11-20
+21-30
+31-45+
 ```
 
 Status:
@@ -120,16 +121,31 @@ PROXIMA ACAO
 
 ---
 
-### Etapa 2 — Validacao da matriz macro
-
-```text
-validacao_matriz_forca_estado_temperatura_v1.py
-```
+### Etapa 2 — Criacao de features de trajetoria
 
 Objetivo:
 
 ```text
-testar forca x estado x temperatura x direcao x cutoff sem quebrar por familia como decisao principal.
+Transformar estatisticas brutas em features de fluxo, qualidade, mudanca de ritmo, pressao real/falsa e assimetria ofensiva.
+```
+
+Features esperadas:
+
+```text
+volume_total_1t
+qualidade_total_1t
+intensidade_por_fase
+slope_intensidade_1t
+aceleracao_intensidade_1t
+pico_pressao_1t
+queda_pos_pico_1t
+pressao_recente_vs_pressao_media
+assimetria_ofensiva
+conversao_pressao_em_finalizacao
+conversao_finalizacao_em_sot
+big_chance_rate
+key_pass_rate
+corner_pressure_rate
 ```
 
 Status:
@@ -140,16 +156,40 @@ AGUARDANDO ETAPA 1
 
 ---
 
-### Etapa 3 — Familias explicativas
-
-```text
-analise_familias_blocos_matriz_v1.py
-```
+### Etapa 3 — Classificacao de trajetorias e tipos de 0x0
 
 Objetivo:
 
 ```text
-abrir por familia apenas os blocos macro sobreviventes.
+Classificar perfis de fluxo do primeiro tempo antes de transformar qualquer perfil em estrategia.
+```
+
+Perfis candidatos:
+
+```text
+FRIO_CONSTANTE
+AQUECIMENTO_PROGRESSIVO
+QUENTE_CONSTANTE
+PICO_ISOLADO
+DESACELERACAO
+PRESSAO_UNILATERAL_CRESCENTE
+PRESSAO_BILATERAL_CRESCENTE
+CAOS_SEM_QUALIDADE
+BAIXO_VOLUME_ALTA_QUALIDADE
+ALTO_VOLUME_BAIXA_QUALIDADE
+```
+
+Tipos de 0x0:
+
+```text
+0X0_MORTO
+0X0_FALSO_FRIO
+0X0_PRESSAO_UNILATERAL
+0X0_PRESSAO_BILATERAL
+0X0_CAOTICO_SEM_PRECISAO
+0X0_COM_CHANCES_REAIS
+0X0_COM_PICO_RECENTE
+0X0_ESFRIANDO
 ```
 
 Status:
@@ -160,16 +200,23 @@ AGUARDANDO ETAPA 2
 
 ---
 
-### Etapa 4 — Mandante/visitante auxiliar
-
-```text
-analise_mandante_visitante_blocos_v1.py
-```
+### Etapa 4 — Conversao de perfis em estrategias candidatas
 
 Objetivo:
 
 ```text
-avaliar favorito mandante/visitante ou lado analisado mandante/visitante apenas como diagnostico auxiliar.
+Converter apenas perfis com evidencia estatistica minima em regras objetivas testaveis.
+```
+
+Exemplos futuros:
+
+```text
+HT_GOAL_AQUECIMENTO_PROGRESSIVO_COM_QUALIDADE_V1
+HT_GOAL_PRESSAO_BILATERAL_CRESCENTE_V1
+HT_GOAL_PRESSAO_UNILATERAL_COM_SOT_RECENTE_V1
+HT_NO_GOAL_FRIO_CONSTANTE_V1
+HT_NO_GOAL_PRESSAO_FALSA_V1
+HT_NO_GOAL_SEM_QUALIDADE_OFENSIVA_V1
 ```
 
 Status:
@@ -180,89 +227,76 @@ AGUARDANDO ETAPA 3
 
 ---
 
-### Etapa 5 — Agregador da temporada
-
-```text
-agregar_estudo_forca_estado_temperatura_temporada_v1.py
-```
+### Etapa 5 — Validacao estatistica e preparacao para alertas Corner Pro
 
 Objetivo:
 
 ```text
-gerar 5 relatorios por temporada: favorito forte, favorito medio, favorito fraco, sem favorito claro e agregado da temporada.
+Identificar quais estrategias candidatas possuem evidencia suficiente para virar alertas de observacao/paper na plataforma Corner Pro.
+```
+
+Metricas obrigatorias:
+
+```text
+N bruto
+fixtures_unicos
+N dedup fixture
+exposicoes_por_fixture
+hit rate
+baseline da liga/temporada
+lift vs baseline
+odds media, se disponivel
+break-even
+EV estimado
+lucro estimado
+ROI estimado
+drawdown
+max losing streak
+estabilidade por liga
+estabilidade por temporada
+overlap com estrategias parecidas
 ```
 
 Status:
 
 ```text
-AGUARDANDO ETAPAS 1 A 4
+AGUARDANDO ETAPA 4
 ```
 
 ---
 
-### Etapa 6 — Times especificos
+## Fase posterior — Corner Pro
+
+A configuracao do robo Corner Pro so deve ocorrer depois da Etapa 5 e apenas como:
 
 ```text
-analise_times_blocos_promissores_v1.py
+ALERTA_PAPER
+OBSERVACAO_PROSPECTIVA
+NAO_OPERACIONAL
 ```
 
-Objetivo:
+Proibido:
 
 ```text
-avaliar concentracao por time apenas nos blocos macro/familia ja promissores.
+ENTRADA_AUTOMATICA
+OPERACAO_REAL_APROVADA
+SINAL_COMERCIAL
+CARTEIRA_APROVADA
 ```
 
-Status:
+Formato futuro desejado para regra de alerta:
 
 ```text
-POSTERIOR
-NAO EXECUTAR NA PRIMEIRA RODADA
-```
-
----
-
-### Etapa 7 — Pipeline do estudo
-
-```text
-executar_pipeline_estudo_forca_estado_temperatura_v1.py
-```
-
-Objetivo:
-
-```text
-rodar a esteira completa por season_id somente depois das etapas 1 a 5 existirem e validarem.
-```
-
-Status:
-
-```text
-FUTURO
-NAO CRIAR AGORA
-```
-
----
-
-## Regras metodologicas da sprint
-
-A frente deve ser hierarquica:
-
-```text
-1. primeiro provar o fenomeno macro.
-2. depois explicar por familia.
-3. depois investigar mandante/visitante.
-4. depois investigar time especifico apenas nos blocos sobreviventes.
-```
-
-Evitar matriz total como decisao principal:
-
-```text
-forca x estado x temperatura x direcao x cutoff x familia x casa/fora x time
-```
-
-Motivo:
-
-```text
-risco de milhares de combinacoes, N baixo e falso positivo.
+Nome do alerta
+Mercado observado
+Minuto/fase de observacao
+Placar exigido
+Condicoes live obrigatorias
+Condicoes live auxiliares
+Direcao sugerida para estudo: HT_GOAL ou HT_NO_GOAL
+Target de avaliacao
+Mensagem de alerta
+Status: PAPER/OBSERVACAO
 ```
 
 ---
@@ -274,7 +308,7 @@ Todo script deve separar:
 ```text
 N_trades_bruto
 fixtures_unicos
-N_pos_deduplicacao_por_cutoff
+N_pos_deduplicacao_por_fase
 N_pos_deduplicacao_por_fixture
 exposicoes_por_fixture
 ```
@@ -287,88 +321,34 @@ resultado deduplicado por fixture
 
 ---
 
-## Cutoff
+## Politica de odds e resultados financeiros
 
-A analise deve conter:
-
-```text
-cutoff individual
-agregado de cutoffs
-melhor cutoff apenas como hipotese futura
-```
-
-Proibido:
-
-```text
-escolher o melhor cutoff retrospectivo e declarar aprovacao.
-```
-
----
-
-## Hold e cashout
-
-Regra da V1:
-
-```text
-HOLD COMO BASE PRINCIPAL
-CASHOUT FORA DO ESCOPO DA V1
-```
-
-Cashout deve ser estudo futuro separado apenas se a tese macro sobreviver.
-
----
-
-## Relatorios esperados por temporada
-
-Quando o agregador existir, gerar:
-
-```text
-relatorio_favorito_forte.md
-relatorio_favorito_medio.md
-relatorio_favorito_fraco.md
-relatorio_sem_favorito_claro.md
-relatorio_agregado_temporada.md
-```
-
-O relatorio agregado deve responder:
-
-```text
-o que funcionou
-o que falhou
-onde Goal melhora
-onde No Goal melhora
-onde ha N baixo
-onde ha overlap alto
-onde a deduplicacao destruiu resultado
-onde cutoff e consistente
-onde familia explica o bloco
-onde mandante/visitante ajuda
-se vale avancar para a proxima etapa
-```
-
----
-
-## Decisao Operacional Atual
-
-Nenhuma estrategia, time, perfil de favorito, rodada, fase, familia, alerta ou carteira deve ser aprovado operacionalmente.
-
-Todas as simulacoes com odds medias devem ser classificadas como:
+Todos os resultados com odds, N, lucro, ROI, EV, drawdown, hit rate ou taxa devem ser classificados como:
 
 ```text
 ESTIMATIVA OPERACIONAL COM ODDS MEDIAS
+```
+
+Proibido chamar de:
+
+```text
+BACKTESTING FINANCEIRO REAL
+ODDS LIVE REAIS
+SISTEMA LUCRATIVO VALIDADO
+OPERACAO APROVADA
 ```
 
 ---
 
 ## Restricoes
 
-- Nao criar robo.
-- Nao criar producao.
-- Nao fazer backtesting financeiro real com odds medias.
-- Nao usar odds live nao timestampadas.
-- Nao agregar estrategias parecidas sem deduplicacao e auditoria.
+- Nao criar robo antes de encontrar padrao estatistico.
+- Nao configurar alerta Corner Pro como entrada real.
+- Nao criar producao operacional.
+- Nao usar cashout nesta V1.
+- Nao escolher thresholds por intuicao sem validar historico.
+- Nao transformar discovery em validacao.
+- Nao somar lucros de estrategias parecidas sem deduplicacao e auditoria.
 - Nao transformar baixa amostra em robustez.
 - Nao comercializar sinais derivados do pipeline.
-- Nao transformar time especifico em filtro antes de validar blocos macro.
-- Nao usar cashout nesta V1.
-- Nao criar pipeline antes das etapas 1 a 5.
+- Nao transformar melhor fase/minuto retrospectivo em regra final.
