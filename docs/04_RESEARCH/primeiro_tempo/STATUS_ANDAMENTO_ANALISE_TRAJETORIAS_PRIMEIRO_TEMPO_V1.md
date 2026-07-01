@@ -5,17 +5,30 @@
 ```text
 FRENTE_ATIVA_DE_PESQUISA
 DISCOVERY_DE_FLUXO_DO_PRIMEIRO_TEMPO
-HOLD_ONLY
+ETAPA_5_APROVADA_COM_RESSALVAS
+PROXIMA_ETAPA: ETAPA_6_CLASSIFICACAO_FRIO_QUENTE_POR_CUTOFF_V1
 SEM_OPERACAO_REAL_APROVADA
-SEM_CASHOUT
 SEM_ROBO_OPERACIONAL_NESTA_ETAPA
 ```
 
 ## Decisao registrada
 
-O usuario decidiu seguir o roadmap atual da frente de primeiro tempo sem incluir odds e sem incluir filtros de favorito/pre-live nesta fase.
+O usuario decidiu dar continuidade ao estudo de trajetorias do primeiro tempo a partir da Etapa 5, adicionando uma camada de classificacao frio/quente por cutoff.
 
-A frente deve continuar ate a etapa que deixaria as regras prontas para configuracao futura de alerta paper, mas sem configurar robo, sem ativar alerta real e sem aprovar operacao.
+A proxima etapa correta nao e preparar diretamente alertas paper. Antes disso, a frente deve testar se o estado do jogo melhora ou piora as candidatas sobreviventes da Etapa 5.
+
+Tese registrada:
+
+```text
+HT Goal nao deve ser avaliado apenas porque o preco parece atrativo.
+HT Goal deve ser avaliado quando o estado do jogo justifica o preco observado.
+```
+
+Documento complementar criado:
+
+```text
+docs/04_RESEARCH/primeiro_tempo/ROADMAP_CONTINUACAO_FRIO_QUENTE_HT_GOAL_V1.md
+```
 
 ## Entregas ja realizadas
 
@@ -120,68 +133,65 @@ HT_GOAL_AQUECIMENTO_MODERADO_COM_QUALIDADE_V1 observada_ate_35
 HT_GOAL_QUALIDADE_PONTUAL_PRECOCE_V1 observada_ate_30
 ```
 
-## Ressalva sobre odds
-
-Foi registrada a critica metodologica de que sem odds nao existe aprovacao financeira de uma estrategia de trade esportivo.
-
-A frente atual valida apenas sinal estatistico, target restante, baseline, lift, N, leakage e overlap.
-
-Ela nao valida lucro, ROI, EV, break-even, drawdown ou operacao real.
-
-Status correto das candidatas atuais:
+## Roadmap de continuidade
 
 ```text
-CANDIDATA_ESTATISTICA_SEM_ODDS
-NAO_VALIDADA_FINANCEIRAMENTE
-NAO_OPERACIONAL
+Etapa 6 — Classificacao frio/quente por cutoff
+Etapa 7 — Cruzamento das sobreviventes da Etapa 5 com estado do jogo
+Etapa 8 — Avaliacao com odds medias por cutoff e por estado
+Etapa 9 — Reclassificacao das sobreviventes
+Etapa 10 — Analise dinamica de mudanca de estado
+Etapa 11 — Simulacao manter vs sair
+Etapa 12 — Paper trading com regras de entrada e reavaliacao
 ```
 
-## Ressalva sobre segmentacao futura
-
-Tambem foi registrada a possibilidade de que uma estrategia negativa no macro possa se tornar positiva em segmentos especificos, como favorito forte, favorito medio, odd pre-live 1x2 ate 1.60, mandante/visitante favorito, 0x0 aos 30, favorito vencendo, empatando ou perdendo.
-
-Esses filtros nao entram na frente atual.
-
-Status:
-
-```text
-PENDENCIA_FUTURA
-ESTUDO_SEGMENTADO_POSTERIOR
-NAO_INCLUIR_NA_FRENTE_ATUAL
-```
-
-## Proxima etapa sugerida dentro do roadmap atual
-
-Nome sugerido:
-
-```text
-ETAPA_6_PREPARACAO_REGRAS_ALERTA_PAPER_CORNER_PRO_V1
-```
+## Etapa 6 — escopo da proxima execucao
 
 Objetivo:
 
 ```text
-Transformar as candidatas sobreviventes ao target restante em especificacoes objetivas de alerta paper, sem configurar robo e sem aprovar operacao.
+Classificar o estado do jogo por cutoff para separar frio, morno, quente, caotico, aquecendo, esfriando, pressao real e pressao falsa.
 ```
 
-Permitido:
+Cutoffs:
 
 ```text
-formatar regra
-listar condicoes observaveis
-listar minuto/fase
-listar target de acompanhamento
-listar campos necessarios na plataforma
-criar checklist de observacao paper
+15,20,25,30,35,40
 ```
 
-Proibido:
+Indicadores esperados:
 
 ```text
-configurar robo real
-aprovar entrada
-calcular ROI/lucro/EV/drawdown
-usar odds nesta etapa
-usar favorito/pre-live nesta etapa
-emitir sinal comercial
+attacks
+dangerous_attacks
+shots_total
+shots_on_target
+corners
+key_passes
+big_chances
+ritmo recente
+aceleracao
+volume com qualidade
+volume sem qualidade
+assimetria entre times
+```
+
+## Ressalva sobre odds
+
+Odds medias por cutoff podem ser usadas a partir da Etapa 8 para break-even, EV, ROI, resultado estimado, drawdown e DDD, mas sempre como:
+
+```text
+ESTIMATIVA_OPERACIONAL_COM_ODDS_MEDIAS
+NAO_BACKTEST_FINANCEIRO_REAL
+NAO_OPERACIONAL
+```
+
+## Proibicoes mantidas
+
+```text
+NAO_APROVAR_OPERACAO_REAL
+NAO_CONFIGURAR_ROBO_OPERACIONAL
+NAO_CHAMAR_ODDS_MEDIAS_DE_BACKTEST_REAL
+NAO_REFAZER_DISCOVERY_BRUTO_NESTA_CONTINUIDADE
+NAO_MISTURAR_COM_ADAPTACAO_COMPLETA_LATEGOAL_PARA_HT_GOAL
 ```
