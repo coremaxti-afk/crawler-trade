@@ -7,7 +7,7 @@ Status:
 ```text
 ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1_EM_ANDAMENTO
 ETAPA_5_TARGETS_RESTANTES_CONCLUIDA_COM_RESSALVAS
-PROXIMA_ETAPA: PREPARACAO_REGRAS_ALERTA_PAPER_CORNER_PRO_V1
+PROXIMA_ETAPA: ETAPA_6_CLASSIFICACAO_FRIO_QUENTE_POR_CUTOFF_V1
 ```
 
 Frente oficial ativa:
@@ -21,31 +21,31 @@ Documentos principais:
 ```text
 docs/04_RESEARCH/ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1.md
 docs/04_RESEARCH/primeiro_tempo/STATUS_ANDAMENTO_ANALISE_TRAJETORIAS_PRIMEIRO_TEMPO_V1.md
+docs/04_RESEARCH/primeiro_tempo/ROADMAP_CONTINUACAO_FRIO_QUENTE_HT_GOAL_V1.md
 ```
 
 Status operacional:
 
 ```text
-NENHUMA OPERACAO REAL APROVADA
-NENHUM ROBO OPERACIONAL APROVADO
-ALERTAS CORNER PRO SOMENTE COMO FASE FUTURA PAPER/OBSERVACAO
-SEM_CASHOUT
+NENHUMA_OPERACAO_REAL_APROVADA
+NENHUM_ROBO_OPERACIONAL_APROVADO
+PAPER_APENAS_EM_FASE_FUTURA
 ```
 
 ---
 
 ## Decisao atual registrada
 
-O usuario decidiu seguir o roadmap atual da frente de primeiro tempo **sem odds** e **sem filtros de favorito/pre-live** nesta fase.
+A continuidade da frente de trajetorias do primeiro tempo deve partir da Etapa 5 ja concluida e seguir para uma camada de classificacao de estado do jogo.
 
-O objetivo e chegar ate a etapa que deixaria as regras prontas para configuracao futura de alerta paper, mas:
+Tese da continuidade:
 
 ```text
-NAO_CONFIGURAR_ROBO_AGORA
-NAO_ATIVAR_ALERTA_REAL
-NAO_APROVAR_ENTRADA
-NAO_CALCULAR_ROI_EV_LUCRO_DRAWDOWN_NESTA_FRENTE
+HT Goal nao deve ser avaliado apenas porque o preco parece atrativo.
+HT Goal deve ser avaliado quando o estado do jogo justifica o preco observado.
 ```
+
+A proxima etapa nao e a preparacao direta de alertas paper. Antes disso, a frente deve cruzar as sobreviventes da Etapa 5 com estados como frio, morno, quente, caotico, aquecendo, esfriando, pressao real e pressao falsa.
 
 ---
 
@@ -61,7 +61,7 @@ Etapa 4 — Estrategias candidatas: APROVADA_COM_RESSALVAS
 Etapa 5 — Targets restantes: APROVADA_COM_RESSALVAS
 ```
 
-Candidatas sobreviventes ao target restante para considerar na proxima etapa paper:
+Sobreviventes da Etapa 5:
 
 ```text
 HT_NO_GOAL_BAIXA_QUALIDADE_REAL_V1 observada_ate_30
@@ -72,90 +72,37 @@ HT_GOAL_QUALIDADE_PONTUAL_PRECOCE_V1 observada_ate_20
 HT_GOAL_AQUECIMENTO_MODERADO_COM_QUALIDADE_V1 observada_ate_30
 ```
 
-Leituras inconclusivas por concentracao de estado:
+---
+
+## Roadmap de continuidade
 
 ```text
-HT_GOAL_AQUECIMENTO_MODERADO_COM_QUALIDADE_V1 observada_ate_35
-HT_GOAL_QUALIDADE_PONTUAL_PRECOCE_V1 observada_ate_30
+Etapa 6 — Classificacao frio/quente por cutoff
+Etapa 7 — Cruzamento das sobreviventes da Etapa 5 com estado do jogo
+Etapa 8 — Avaliacao com odds medias por cutoff e por estado
+Etapa 9 — Reclassificacao das sobreviventes
+Etapa 10 — Analise dinamica de mudanca de estado
+Etapa 11 — Simulacao manter vs sair
+Etapa 12 — Paper trading com regras de entrada e reavaliacao
 ```
 
 ---
 
 ## Proxima acao
 
-Criar a etapa:
+Criar prompt/execucao da:
 
 ```text
-ETAPA_6_PREPARACAO_REGRAS_ALERTA_PAPER_CORNER_PRO_V1
+ETAPA_6_CLASSIFICACAO_FRIO_QUENTE_POR_CUTOFF_V1
 ```
 
-Objetivo:
+Escopo:
 
 ```text
-Transformar candidatas sobreviventes ao target restante em especificacoes objetivas de alerta paper, sem configuracao real e sem aprovacao operacional.
-```
-
-Permitido:
-
-```text
-formatar regra
-listar condicoes observaveis
-listar minuto/fase
-listar target de acompanhamento
-listar campos necessarios na plataforma
-criar checklist de observacao paper
-```
-
-Proibido:
-
-```text
-configurar robo real
-aprovar entrada
-calcular ROI/lucro/EV/drawdown
-usar odds nesta etapa
-usar favorito/pre-live nesta etapa
-emitir sinal comercial
-```
-
----
-
-## Ressalva sobre odds
-
-Sem odds, nao existe aprovacao financeira de estrategia de trade esportivo.
-
-As candidatas atuais devem ser tratadas como:
-
-```text
-CANDIDATA_ESTATISTICA_SEM_ODDS
-NAO_VALIDADA_FINANCEIRAMENTE
-NAO_OPERACIONAL
-```
-
-Odds, break-even, EV, ROI, lucro e drawdown ficam para frente futura especifica, caso autorizada.
-
----
-
-## Ressalva sobre segmentacao futura
-
-Fica registrada a possibilidade de estudos segmentados posteriores usando a base ja construida, incluindo:
-
-```text
-favorito forte
-favorito medio
-odd pre-live 1x2 ate 1.60
-mandante/visitante favorito
-0x0 aos 30
-favorito vencendo/empatando/perdendo
-```
-
-Esses filtros nao entram na frente atual.
-
-Status:
-
-```text
-PENDENCIA_FUTURA
-ESTUDO_SEGMENTADO_POSTERIOR
-NAO_INCLUIR_NA_FRENTE_ATUAL
+Usar as features ja construidas nas Etapas 1-5.
+Nao refazer discovery bruto.
+Nao misturar com a adaptacao completa LateGoal para HT Goal.
+Classificar estados do jogo por cutoff e preparar base para cruzar com as candidatas sobreviventes da Etapa 5.
 ```
 
 ---
