@@ -43,11 +43,11 @@ O estudo comeca com tres ligas:
 
 | Liga | Uso |
 | --- | --- |
-| Premier League | base e comparacao |
-| La Liga | replicacao/comparacao |
-| Serie A Italia | replicacao/comparacao |
+| Premier League | discovery separado e referencia comparativa |
+| La Liga | discovery separado e validacao cruzada |
+| Serie A Italia | discovery separado e validacao cruzada |
 
-O resultado deve ser separado por liga e tambem consolidado em visao global.
+O resultado deve ser separado por liga antes de qualquer consolidacao global.
 
 Objetivo da comparacao:
 
@@ -57,7 +57,54 @@ Entender se cada liga exige padrao proprio ou se existe sinal replicavel entre l
 
 ---
 
-## 4. Cutoffs e final do HT
+## 4. Metodo oficial por liga
+
+O metodo oficial da frente e:
+
+```text
+discovery separado por liga + validacao cruzada entre ligas
+```
+
+A analise global nao vem primeiro. Ela so pode nascer depois da leitura individual de cada liga.
+
+Fluxo correto:
+
+```text
+1. Rodar discovery da Premier League.
+2. Rodar discovery da La Liga.
+3. Rodar discovery da Serie A Italia.
+4. Comparar padroes entre ligas.
+5. Classificar replicabilidade.
+6. Criar leitura global apenas se houver consistencia entre ligas.
+```
+
+Regra proibitiva:
+
+```text
+Nao criar candidato global apenas pela media das tres ligas.
+```
+
+Motivo:
+
+```text
+A media global pode esconder que o lucro veio de apenas uma liga ou que uma liga lucrativa mascarou outra negativa.
+```
+
+Classificacoes obrigatorias dos padroes:
+
+| Status | Significado |
+| --- | --- |
+| GLOBAL_REPLICAVEL | Funciona de forma consistente nas tres ligas ou quase |
+| SEMI_REPLICAVEL | Funciona em duas de tres ligas |
+| ESPECIFICO_DA_LIGA | Funciona bem em uma liga, mas nao replica |
+| CONFLITANTE_ENTRE_LIGAS | Funciona em uma liga e falha/perde em outra |
+| BLOQUEADO_GLOBALMENTE | Media global pode parecer boa, mas distribuicao por liga e ruim |
+
+A Premier League pode ser usada como referencia comparativa, mas nao como verdade absoluta.
+
+---
+
+## 5. Cutoffs e final do HT
 
 Cutoffs de entrada:
 
@@ -78,7 +125,7 @@ Final do primeiro tempo:
 
 ---
 
-## 5. Mercados
+## 6. Mercados
 
 | Mercado | Operacao | Exposicao |
 | --- | --- | --- |
@@ -94,7 +141,7 @@ Regras:
 
 ---
 
-## 6. Modos financeiros
+## 7. Modos financeiros
 
 A frente compara dois modos.
 
@@ -120,7 +167,7 @@ entrada 15 -> saida 25, 30, 35 ou 40
 
 ---
 
-## 7. Matriz de entrada e saida
+## 8. Matriz de entrada e saida
 
 | Entrada | Cashout estimado | OLD |
 | ---: | --- | ---: |
@@ -135,7 +182,7 @@ Entradas 35 e 40 ficam apenas em OLD porque nao ha janela minima de 10 minutos p
 
 ---
 
-## 8. Logica do cashout estimado
+## 9. Logica do cashout estimado
 
 ### Back Over HT
 
@@ -155,7 +202,7 @@ O calculo precisa ser auditavel e separado para Back e Lay.
 
 ---
 
-## 9. Janelas antes da entrada
+## 10. Janelas antes da entrada
 
 Para cada cutoff, estudar:
 
@@ -192,7 +239,7 @@ Para robo futuro, cada perfil precisara virar regra numerica exata.
 
 ---
 
-## 10. Regra sobre scripts
+## 11. Regra sobre scripts
 
 Esta frente nao deve repetir a sujeira de versoes paralelas.
 
@@ -227,7 +274,7 @@ Nao criar novo script para cada correcao metodologica.
 
 ---
 
-## 11. Runner obrigatorio
+## 12. Runner obrigatorio
 
 A frente deve nascer com runner oficial:
 
@@ -259,11 +306,11 @@ python scripts/research/primeiro_tempo/ht_janelas_cashout/run_ht_janelas_cashout
 
 ---
 
-## 12. Roadmap
+## 13. Roadmap
 
 ### ETAPA 00 — Contrato do projeto
 
-Registrar escopo, ligas, cutoffs, modos financeiros, stake, responsabilidade, cashout e regras de diretorio.
+Registrar escopo, ligas, cutoffs, modos financeiros, stake, responsabilidade, cashout, metodo league-first e regras de diretorio.
 
 ### ETAPA 01 — Catalogo multi season_id
 
@@ -299,41 +346,64 @@ Calcular cashout estimado para saidas intermediarias.
 
 Criar tabela oficial de odds medias por liga/minuto.
 
-### ETAPA 08 — Descoberta de candidatos
+### ETAPA 08 — Discovery por liga
 
-Cruzar liga, cutoff, janela, perfil, mercado, modo e saida.
+Rodar descoberta separada para Premier League, La Liga e Serie A.
 
-### ETAPA 09 — Validacao financeira OLD
+Nao consolidar antes de validar cada liga isoladamente.
 
-Validar lucro, ROI, EV, DD e sequencia negativa segurando ate HT.
+### ETAPA 09 — Validacao financeira OLD por liga
 
-### ETAPA 10 — Validacao financeira CASHOUT
+Validar lucro, ROI, EV, DD e sequencia negativa segurando ate HT para cada liga.
 
-Validar lucro, ROI, EV e DD para saidas estimadas.
+### ETAPA 10 — Validacao financeira CASHOUT por liga
 
-### ETAPA 11 — OLD vs CASHOUT
+Validar lucro, ROI, EV e DD para saidas estimadas em cada liga.
 
-Comparar se e melhor segurar ate HT ou sair antes.
+### ETAPA 11 — OLD vs CASHOUT por liga
 
-### ETAPA 12 — Comparacao por liga
+Comparar se e melhor segurar ate HT ou sair antes dentro de cada liga.
 
-Separar resultados de Premier League, La Liga e Serie A.
+### ETAPA 12 — Validacao cruzada entre ligas
+
+Comparar Premier League, La Liga e Serie A.
+
+Classificar cada padrao como:
+
+```text
+GLOBAL_REPLICAVEL
+SEMI_REPLICAVEL
+ESPECIFICO_DA_LIGA
+CONFLITANTE_ENTRE_LIGAS
+BLOQUEADO_GLOBALMENTE
+```
 
 ### ETAPA 13 — Selecao final
 
-Selecionar candidatos por lucro, ROI, EV, DD, N, sensibilidade e consistencia por liga.
+Selecionar candidatos por lucro, ROI, EV, DD, N, sensibilidade, consistencia por liga e replicabilidade.
+
+Candidato global so pode existir se passar pela validacao cruzada.
 
 ### ETAPA 14 — Relatorio financeiro final
 
 Gerar Markdown legivel com aliases, tabelas curtas e foco financeiro.
 
+O relatorio final deve separar:
+
+```text
+candidatos por liga
+candidatos semi-replicaveis
+candidatos globais replicaveis
+candidatos bloqueados globalmente
+```
+
 ### ETAPA 15 — Checklist de reprodutibilidade
 
-Registrar scripts, outputs, ordem oficial e proibicoes metodologicas.
+Registrar scripts, outputs, ordem oficial, proibicoes metodologicas e regra contra media global cega.
 
 ---
 
-## 13. Outputs esperados
+## 14. Outputs esperados
 
 Markdown:
 
@@ -362,7 +432,7 @@ CSV = tabela auditavel
 
 ---
 
-## 14. Limitacoes iniciais
+## 15. Limitacoes iniciais
 
 1. Odds medias, nao odds reais.
 2. Cashout estimado, nao cashout real.
@@ -371,11 +441,12 @@ CSV = tabela auditavel
 5. Sem operacao real.
 6. Sem staking.
 7. Sem carteira.
+8. Sem candidato global por media cega das ligas.
 
 ---
 
-## 15. Status
+## 16. Status
 
 ```text
-HT_JANELAS_CASHOUT_V1_ABERTO_COM_ROADMAP
+HT_JANELAS_CASHOUT_V1_ABERTO_COM_ROADMAP_LEAGUE_FIRST
 ```
